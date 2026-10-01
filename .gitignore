@@ -1,2 +1,7 @@
-/data/
-config.php
+config-dev.php
+config-prod.php
+logs/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
