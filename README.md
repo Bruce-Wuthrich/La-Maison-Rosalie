@@ -1,44 +1,33 @@
-# La Maison Rosalie
+# La-Maison-Rosalie
 
 ## Point de départ
 
-Après une lecture individuelle puis collective du cahier des charges, nous avons défini l’architecture du projet, conçu le modèle de la base de données et choisi les technologies à utiliser.
+Le modèle et les 10 tables ont été créés ; l'import MariaDB fonctionne d'après les essais de bruce et Bryan. L'arborescence existe. Ces résultats ne signifient pas encore que T03 (toutes les contraintes) et T06 (import avec données, rejouable) sont terminés. Le dernier ZIP examiné contenait des fichiers PHP vides ; vérifier les changements de chaque membre avant de répartir le travail.
 
-Nous avons réalisé le modèle avec MySQL Workbench, puis importé le script SQL dans MariaDB.
+Stack de préparation : PHP objet sans framework, PDO, MariaDB, HTML5, Bootstrap 5, CSS et JavaScript natif. Faire confirmer le choix objet par l'équipe et l'inscrire au README. Les maquettes sont fournies par les designers selon votre organisation : coordonner T04/T05 avec eux.
 
-Nous avons ensuite rencontré l’équipe de designers pour découvrir les deux propositions de maquettes qui seront présentées au client.
 
-## Choix de la base de données
+## Choix de DB 
 
-Nous avons choisi MariaDB, un système de gestion de base de données relationnelle libre et gratuit.
+Notre choix c'est porté sur MariaDB pour plusieur raison : 
+- elle est gratuite
+- elle fonctionne très bien avec PHP (Fonctionnement du backend uniquement en PHP)
+- elle utilise le langage SQL qui est le langage utilisé pour la base de donnée de ce projet
+- elle permet de protéger les données avec des utilisateurs et des mots de passe
+- elle est majoritairement utilisé en Europe
 
-Il fonctionne avec PHP via PDO et utilise SQL, que nous avons étudié en formation. Ses clés étrangères et ses contraintes permettent de garantir la cohérence des relations entre les recettes, les ingrédients, les utilisateurs et les notes.
+## Choix des liaisons de la base de donnée
+En résumé :
 
-MariaDB est également disponible dans notre environnement de développement WampServer.
+- Utilisateur:
+- peut écrire plusieurs recettes
+- peut écrire plusieurs commentaires et les cacher
+- peut noter les recettes disponibles sauf la sienne 
+- 
 
-## Relations et droits des utilisateurs
 
-### Relations entre les données
 
-- Un utilisateur peut être l’auteur de plusieurs recettes.
-- Un utilisateur peut être l’auteur de plusieurs commentaires.
-- Un utilisateur peut noter plusieurs recettes, avec une seule note par recette.
 
-### Droits envisagés — à confirmer avec le formateur
+- Admin
+-  peut supprimer ou modifier les commentaires et recettes. 
 
-- Un utilisateur peut masquer ses propres commentaires.
-- Un utilisateur ne peut pas noter sa propre recette.
-- Un administrateur peut supprimer ou modifier les commentaires et les recettes.
-
-Ces règles complémentaires doivent être distinguées des exigences obligatoires du cahier des charges, qui prévoient notamment la suppression d’un commentaire par son auteur ou par un administrateur.
-
-## Notes et changements
-
-### 25 septembre 2026
-
-Après confirmation du formateur, le scénario 17 de la section 13,
-« Scénarios de recette finale », est retiré :
-
-> ~~Sur une base vide, le script d’import et le README suffisent à obtenir un site fonctionnel.~~
-
-L’exigence BE-73 concernant la documentation de l’API reste à clarifier.
