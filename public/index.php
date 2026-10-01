@@ -23,3 +23,21 @@ try {
     exit('Le site est momentanément indisponible. Merci de réessayer plus tard.');
 }
 
+// routeur 
+
+$page = $_GET['pg'] ?? 'accueil';
+
+$controller = match ($page){
+    'accueil', 'a-propos' => 'HomeController',
+    'recettes', 'recette' => 'RecipeController',
+    'contact'             => 'ContactController', 
+    default               => null,
+}; 
+
+if ($controller === null){
+    http_response_code(404);
+    require RACINE_PATH . '/view/PublicView/404View.php';
+    exit; 
+}
+
+require RACINE_PATH . '/controller/' . $controller . '.php'; 
