@@ -1,5 +1,6 @@
 Options -MultiViews
 RewriteEngine On
+ErrorDocument 404 /index.php?pg=404
 
 # Ne rien réécrire si le fichier ou le dossier existe (css, js, images)
 RewriteCond %{REQUEST_FILENAME} !-d
