@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use model\manager\RecipeManager;
 use model\manager\StepManager;
+use model\manager\RecipeIngredientManager;
 
 // renvoie au javascript les données demander toujours de la meme facon
 function sendRecipeJsonSuccess(mixed $data, int $status = 200): never
@@ -146,6 +147,15 @@ if ($page === 'recette') {
         $steps = $stepManager->getByRecipeId($recipe->getId());
     } catch (Throwable $error){
         error_log('Impossible de charger les étapes : ' . $error->getMessage());
+    }
+
+    // les ingrédients de la recette, dans l'ordre
+    $ingredients = [];
+    try {
+        $ingredientManager = new RecipeIngredientManager($db);
+        $ingredients = $ingredientManager->getByRecipeId($recipe->getId());
+    } catch (Throwable $error) {
+        error_log('Impossible de charger les ingrédients : ' . $error->getMessage());
     }
 
     require RACINE_PATH . '/view/publicView/recipeDetailView.php';
