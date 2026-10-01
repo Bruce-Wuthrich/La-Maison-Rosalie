@@ -1,0 +1,12 @@
+Options -MultiViews
+RewriteEngine On
+
+# Ne rien réécrire si le fichier ou le dossier existe (css, js, images)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# /recette/brownie  devient  index.php?pg=recette&slug=brownie
+RewriteRule ^([\w-]+)/([\w-]+)/?$ index.php?pg=$1&slug=$2 [QSA,L]
+
+# /recettes  devient  index.php?pg=recettes
+RewriteRule ^([\w-]+)/?$ index.php?pg=$1 [QSA,L]
