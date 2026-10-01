@@ -1,5 +1,5 @@
 <?php
-
+// path: model/mapping/RecipeMapping.php
 declare(strict_types=1);
 
 namespace model\mapping;
@@ -19,6 +19,7 @@ class RecipeMapping extends AbstractMapping{
     protected ?int $servings = null;
     protected ?int $author_id = null;
     protected ?string $created_at = null;
+    protected ?string $updated_at = null;
 
 
     public function getId(): ?int{
@@ -94,11 +95,21 @@ class RecipeMapping extends AbstractMapping{
         $this->difficulty = $difficulty;
     }
 
+    public function getDifficultyLabel(): string{
+        return match ($this->difficulty) {
+            'easy' => 'Facile',
+            'medium' => 'Moyen',
+            'hard' => 'Difficile',
+            default => '',
+        };
+    }
+
     public function getDescription(): ?string{
         return $this->description; 
     }
 
     public function setDescription(string $description):void{
+        $description = trim($description);
         if($description === ''){
             throw new Exception('La description ne peut être vide');
         }
@@ -110,11 +121,50 @@ class RecipeMapping extends AbstractMapping{
     }
 
     public function setMainImage(string $mainImage):void{
-        if(mb_strlen($main_image)>500){
-            throw new Exception('');
+        $mainImage = trim($mainImage);
+        $length = mb_strlen($mainImage);
+        if($length === 0 || $length > 500){
+            throw new Exception("Le chemin de l'image doit faire entre 1 et 500 caractères");
         }
-        
+        $this->main_image = $mainImage;
+    }
+
+    public function getServings(): ?int{
+        return $this->servings; 
+    }
+
+    public function setServings(int $servings):void{
+        if($servings <= 0){
+            throw new Exception("Le nombre de portions doit être supérieur à 0");
+        }
+        $this->servings = $servings;
+    }
+
+    public function getAuthorId(): ?int{
+        return $this->author_id; 
+    }
+
+    public function setAuthorId(int $authorId): void{
+        if($authorId <= 0){
+            throw new Exception("L'identifiant de l'auteur doit être positif");
+        }
+        $this->author_id = $authorId;
+    }
+
+    public function getCreatedAt(): ?string{
+        return $this->created_at; 
+    }
+
+    public function setCreatedAt(string $createdAt): void{
+        $this->created_at = $createdAt;
+    }
+
+    public function getUpdatedAt(): ?string{
+        return $this->updated_at; 
+    }
+
+    public function setUpdatedAt(string $updatedAt): void{
+        $this->updated_at = $updatedAt;
     }
    
-
 }
