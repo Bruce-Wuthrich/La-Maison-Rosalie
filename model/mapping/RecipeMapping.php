@@ -20,6 +20,10 @@ class RecipeMapping extends AbstractMapping{
     protected ?int $author_id = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
+    protected ?float $average_rating = null;
+    protected ?int $rating_count = null;
+    protected ?int $user_rating = null;
+    
 
 
     public function getId(): ?int{
@@ -166,5 +170,41 @@ class RecipeMapping extends AbstractMapping{
     public function setUpdatedAt(string $updatedAt): void{
         $this->updated_at = $updatedAt;
     }
-   
+
+    public function setAverageRating(?string $averageRating): void {
+        $this->average_rating = $averageRating === null ? null : (float) $averageRating;
+    }
+
+    public function setRatingCount(int $ratingCount): void{
+        if ($ratingCount < 0){
+            throw new Exception("Le nombre de votes ne peut pas être négatif");
+        }
+        $this->rating_count = $ratingCount; 
+    }
+
+    public function setUserRating(?int $userRating): void{
+        if ($userRating !== null && ($userRating < 1 || $userRating > 5)){
+            throw new Exception("La note doit être comprise entre 1 et 5");
+        }
+        $this->user_rating = $userRating; 
+    }
+
+    public function getAverageRating(): ?float{
+        return $this->average_rating;
+    }
+
+    public function getRatingCount(): ?int{
+        return $this->rating_count; 
+    }
+
+    public function getUserRating(): ?int{
+        return $this->user_rating;
+    }
+
+    public function getFormattedAverage(): string{
+        if($this->average_rating === null){
+            return '';
+        }
+        return number_format($this->average_rating, 1,',','');
+    }
 }

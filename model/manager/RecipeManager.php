@@ -6,7 +6,8 @@ namespace model\manager;
 
 use model\interface\ManagerInterface; 
 use model\mapping\RecipeMapping; 
-use model\MyPDO; 
+use model\MyPDO;
+use PDO;  
 
 class RecipeManager implements ManagerInterface{
     private MyPDO $db; 
@@ -30,10 +31,18 @@ class RecipeManager implements ManagerInterface{
 
     public function getBySlug(string $slug, ?int $userId = null): ?RecipeMapping{
         $query = $this->db->prepare(
-            'SELECT id, title, slug, description, main_image, prep_time_minutes, cook_time_minutes, servings,
-            difficulty, author_id, created_at, updated_at FROM recipes WHERE slug = :slug' 
+            'SELECT r.id, r.title, r.slug, r.description, r.main_image, r.prep_time_minutes,
+                    r.cook_time_minutes, r.servings, r.difficulty, r.author_id, r.created_at, r.updated_at,
+                    ROUND(AVG(ra.rating), 1) AS average_rating,
+                    COUNT(ra.id) AS rating_count,
+                    (SELECT rating FROM ratings WHERE recipe_id = r.id AND user_id = :user_id) AS user_rating
+             FROM recipes r
+             LEFT JOIN ratings ra ON ra.recipe_id = r.id
+             WHERE r.slug = :slug
+             GROUP BY r.id'
         );
         $query->bindValue(':slug', $slug);
+        $query->bindValue(':user_id', $userId, $userId === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
         $query->execute();
 
         $row = $query->fetch();
