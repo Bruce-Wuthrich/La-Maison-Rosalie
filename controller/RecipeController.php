@@ -5,6 +5,7 @@ declare(strict_types=1);
 use model\manager\RecipeManager;
 use model\manager\StepManager;
 use model\manager\RecipeIngredientManager;
+use model\manager\CategoryManager; 
 
 // renvoie au javascript les données demander toujours de la meme facon
 function sendRecipeJsonSuccess(mixed $data, int $status = 200): never
@@ -156,6 +157,15 @@ if ($page === 'recette') {
         $ingredients = $ingredientManager->getByRecipeId($recipe->getId());
     } catch (Throwable $error) {
         error_log('Impossible de charger les ingrédients : ' . $error->getMessage());
+    }
+
+    // Catégorie des recettes 
+    $categories = [];
+    try {
+        $categoryManager = new CategoryManager($db);
+        $categories = $categoryManager->getByRecipeId($recipe->getId());
+    } catch (\Throwable $error) {
+        error_log("Impossible de charger les catégories : " . $error->getMessage());
     }
 
     require RACINE_PATH . '/view/publicView/recipeDetailView.php';
