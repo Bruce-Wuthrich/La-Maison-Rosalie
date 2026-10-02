@@ -23,8 +23,8 @@ class RecipeMapping extends AbstractMapping{
     protected ?float $average_rating = null;
     protected ?int $rating_count = null;
     protected ?int $user_rating = null;
+    protected ?string $category_titles = null; 
     
-
 
     public function getId(): ?int{
         return $this->id; 
@@ -206,5 +206,22 @@ class RecipeMapping extends AbstractMapping{
             return '';
         }
         return number_format($this->average_rating, 1,',','');
+    }
+
+    public function getCategoryTitles(): ?string{
+        return $this->category_titles; 
+    }
+
+    public function setCategoryTitles(?string $categoryTitles): void{
+        $this->category_titles = $categoryTitles; 
+    }
+
+    // ajoute valeur calculé pour le json
+    public function toArray(): array{
+        return array_merge(parent::toArray(),[
+            'total_time' => $this->getTotalTime(),
+            'difficulty_label' => $this->getDifficultyLabel(),
+            'formatted_average' => $this->getFormattedAverage(),
+        ]);
     }
 }

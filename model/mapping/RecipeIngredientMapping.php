@@ -111,4 +111,10 @@ class RecipeIngredientMapping extends AbstractMapping{
         }
         $this->sort_order = $sortOrder;
     }
+
+    public function toArray(): array{
+        return array_merge(parent::toArray(),[
+            'formatted_quantity' => $this->getFormattedQuantity(),
+        ]);
+    }
 }

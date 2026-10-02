@@ -9,7 +9,7 @@ session_start();
 
 require_once file_exists(__DIR__ . '/../config-prod.php')
     ? __DIR__ . '/../config-prod.php'
-    : __DIR__ . '/../config-dev-exemple.php';
+    : __DIR__ . '/../config-dev.php';
 
 spl_autoload_register(function ($class){
     $class = str_replace('\\', '/', $class);

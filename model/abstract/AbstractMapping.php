@@ -1,9 +1,13 @@
 <?php
-// path : \model\abstract\AbstractMapping.php
+// path: model/abstract/AbstractMapping.php
+
+declare(strict_types=1); 
 
 namespace model\abstract; 
 
-abstract class AbstractMapping{
+use JsonSerializable; 
+
+abstract class AbstractMapping implements JsonSerializable{
     public function __construct(array $datas){
         $this->hydrate($datas);
     }
@@ -17,4 +21,14 @@ abstract class AbstractMapping{
             }
         }
     } 
+
+    // toutes propriété de l'object en tab 
+    public function toArray(): array{
+        return get_object_vars($this);
+    }
+
+    //appel auto par json_encode
+    public function jsonSerialize(): array{
+        return $this->toArray();
+    }
 }
