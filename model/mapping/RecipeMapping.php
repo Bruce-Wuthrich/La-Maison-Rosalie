@@ -215,4 +215,13 @@ class RecipeMapping extends AbstractMapping{
     public function setCategoryTitles(?string $categoryTitles): void{
         $this->category_titles = $categoryTitles; 
     }
+
+    // ajoute valeur calculé pour le json
+    public function toArray(): array{
+        return array_merge(parent::toArray(),[
+            'total_time' => $this->getTotalTime(),
+            'difficulty_label' => $this->getDifficultyLabel(),
+            'formatted_average' => $this->getFormattedAverage(),
+        ]);
+    }
 }
