@@ -247,121 +247,133 @@ main {
     animation-duration: 0.01ms;
 }
 
-.recipes-header {
-    padding: 1rem 0 2rem;
+.about-hero {
+    padding: clamp(3rem, 7vw, 7rem) 0;
 }
 
-.recipes-header h1 {
+.about-hero .container,
+.about-story .container,
+.about-values .container {
+    max-width: 1100px;
+}
+
+.about-hero-content {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 4rem;
+}
+
+.about-eyebrow {
     margin-bottom: 0.75rem;
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.about-hero h1 {
+    margin-bottom: 1rem;
     font-family: Georgia, serif;
-    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
     color: var(--color-brown);
 }
 
-.recipes-eyebrow {
-    margin-bottom: 0.75rem;
-    color: var(--color-gold);
-    font-weight: 500;
+.about-introduction {
+    max-width: 620px;
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.8;
 }
 
-.recipes-introduction {
-    max-width: 680px;
+.about-logo {
+    display: block;
+    width: min(100%, 380px);
+    height: auto;
+    justify-self: end;
+}
+
+.about-story {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+    background-color: var(--color-white);
+}
+
+.about-year {
+    margin: 0;
+    color: rgba(241, 179, 0, 0.25);
+    font-family: Georgia, serif;
+    font-size: clamp(7rem, 18vw, 14rem);
+    line-height: 0.8;
+    text-align: center;
+}
+
+.about-story-content {
+    max-width: 520px;
+}
+
+.about-story-content h2 {
+    margin-bottom: 1.25rem;
+    color: var(--color-brown);
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+}
+
+.about-story-content p {
+    line-height: 1.8;
+}
+
+.about-values {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+}
+
+.about-values>.container>h2 {
+    margin-bottom: 2.5rem;
+    color: var(--color-brown);
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-align: center;
+}
+
+.about-value {
+    height: 100%;
+    padding: 1.75rem;
+    border-top: 3px solid var(--color-gold);
+    background-color: var(--color-white);
+}
+
+.about-value span {
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.about-value h3 {
+    margin: 0.75rem 0;
+    color: var(--color-brown);
+    font-size: 1.4rem;
+}
+
+.about-value p {
     margin: 0;
     line-height: 1.7;
 }
 
-.recipes-catalog {
-    padding: 1rem 0 5rem;
+.about-action {
+    margin-top: 3rem;
+    text-align: center;
 }
 
-.recipe-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 3rem;
-}
-
-.recipe-filter {
-    padding: 0.55rem 1.1rem;
-    border: 1px solid var(--color-gold);
+.about-action a {
+    display: inline-block;
+    padding: 0.85rem 1.5rem;
     border-radius: 2rem;
-    color: var(--color-brown);
-    text-decoration: none;
-}
-
-.recipe-filter:hover,
-.recipe-filter:focus-visible,
-.recipe-filter.is-active {
     background-color: var(--color-gold);
     color: var(--color-white);
-}
-
-.recipes-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 2rem;
-}
-
-.recipe-card {
-    overflow: hidden;
-    border-radius: 1.25rem;
-    background-color: var(--color-white);
-    box-shadow: 0 0.75rem 2rem rgba(90, 57, 43, 0.12);
-}
-
-.recipe-card-image-link {
-    display: block;
-    overflow: hidden;
-}
-
-.recipe-card-image {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.recipe-card:hover .recipe-card-image {
-    transform: scale(1.04);
-}
-
-.recipe-card-content {
-    padding: 1.25rem;
-}
-
-.recipe-card-category {
-    margin-bottom: 0.5rem;
-    color: var(--color-gold);
-    font-size: 0.8rem;
     font-weight: 600;
-    text-transform: uppercase;
-}
-
-.recipe-card h2 {
-    margin-bottom: 0.75rem;
-    font-size: 1.35rem;
-}
-
-.recipe-card h2 a {
-    color: var(--color-brown);
     text-decoration: none;
 }
 
-.recipe-card h2 a:hover,
-.recipe-card h2 a:focus {
-    color: var(--color-gold);
-}
-
-.recipe-card-description {
-    line-height: 1.6;
-}
-
-.recipe-card-footer {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    color: var(--color-gold);
+.about-action a:hover,
+.about-action a:focus-visible {
+    background-color: var(--color-brown);
 }
 
 @keyframes category-name-reveal {
@@ -741,8 +753,20 @@ main {
         font-size: 0.875rem;
     }
 
-    .recipes-grid {
+    .about-hero-content {
         grid-template-columns: 1fr;
+        gap: 2.5rem;
+        text-align: center;
+    }
+
+    .about-logo {
+        width: min(75vw, 300px);
+        justify-self: center;
+    }
+
+    .about-story-content {
+        margin: 0 auto;
+        text-align: center;
     }
 }
 
