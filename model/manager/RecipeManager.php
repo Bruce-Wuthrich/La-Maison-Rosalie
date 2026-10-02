@@ -53,4 +53,27 @@ class RecipeManager implements ManagerInterface{
         }
         return new RecipeMapping($row); 
     }
+
+    public function getTopThree(): array{
+        $query = $this->db->query(
+            'SELECT r.id, r.title, r.slug, r.main_image, r.prep_time_minutes, r.cook_time_minutes,
+                    r.difficulty, r.created_at,
+                    ROUND(AVG(ra.rating), 1) AS average_rating,
+                    COUNT(ra.id) AS rating_count
+             FROM recipes r
+             LEFT JOIN ratings ra ON ra.recipe_id = r.id
+             GROUP BY r.id
+             ORDER BY COUNT(ra.id) > 0 DESC,
+                      AVG(ra.rating) DESC,
+                      COUNT(ra.id) DESC,
+                      r.created_at DESC
+             LIMIT 3'
+        );
+
+        $recipes = []; 
+        foreach ($query->fetchAll() as $row){
+            $recipes[] = new RecipeMapping($row);
+        }
+        return $recipes; 
+    }
 }
