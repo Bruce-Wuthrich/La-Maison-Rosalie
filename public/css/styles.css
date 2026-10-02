@@ -247,6 +247,123 @@ main {
     animation-duration: 0.01ms;
 }
 
+.recipes-header {
+    padding: 1rem 0 2rem;
+}
+
+.recipes-header h1 {
+    margin-bottom: 0.75rem;
+    font-family: Georgia, serif;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    color: var(--color-brown);
+}
+
+.recipes-eyebrow {
+    margin-bottom: 0.75rem;
+    color: var(--color-gold);
+    font-weight: 500;
+}
+
+.recipes-introduction {
+    max-width: 680px;
+    margin: 0;
+    line-height: 1.7;
+}
+
+.recipes-catalog {
+    padding: 1rem 0 5rem;
+}
+
+.recipe-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+}
+
+.recipe-filter {
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--color-gold);
+    border-radius: 2rem;
+    color: var(--color-brown);
+    text-decoration: none;
+}
+
+.recipe-filter:hover,
+.recipe-filter:focus-visible,
+.recipe-filter.is-active {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+}
+
+.recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+}
+
+.recipe-card {
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background-color: var(--color-white);
+    box-shadow: 0 0.75rem 2rem rgba(90, 57, 43, 0.12);
+}
+
+.recipe-card-image-link {
+    display: block;
+    overflow: hidden;
+}
+
+.recipe-card-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.recipe-card:hover .recipe-card-image {
+    transform: scale(1.04);
+}
+
+.recipe-card-content {
+    padding: 1.25rem;
+}
+
+.recipe-card-category {
+    margin-bottom: 0.5rem;
+    color: var(--color-gold);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.recipe-card h2 {
+    margin-bottom: 0.75rem;
+    font-size: 1.35rem;
+}
+
+.recipe-card h2 a {
+    color: var(--color-brown);
+    text-decoration: none;
+}
+
+.recipe-card h2 a:hover,
+.recipe-card h2 a:focus {
+    color: var(--color-gold);
+}
+
+.recipe-card-description {
+    line-height: 1.6;
+}
+
+.recipe-card-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--color-gold);
+}
+
 @keyframes category-name-reveal {
     from {
         opacity: 0;
@@ -325,6 +442,10 @@ main {
         right: 0.75rem;
         padding-bottom: 2.35rem;
         font-size: 0.875rem;
+    }
+
+    .recipes-grid {
+        grid-template-columns: 1fr;
     }
 }
 
