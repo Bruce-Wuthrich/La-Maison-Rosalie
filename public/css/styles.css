@@ -247,133 +247,309 @@ main {
     animation-duration: 0.01ms;
 }
 
-.about-hero {
-    padding: clamp(3rem, 7vw, 7rem) 0;
+.recipes-header {
+    padding: 1rem 0 2rem;
 }
 
-.about-hero .container,
-.about-story .container,
-.about-values .container {
-    max-width: 1100px;
+.recipes-header h1 {
+    margin-bottom: 0.75rem;
+    font-family: Georgia, serif;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    color: var(--color-brown);
 }
 
-.about-hero-content {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    align-items: center;
-    gap: 4rem;
-}
-
-.about-eyebrow {
+.recipes-eyebrow {
     margin-bottom: 0.75rem;
     color: var(--color-gold);
-    font-weight: 600;
+    font-weight: 500;
 }
 
-.about-hero h1 {
-    margin-bottom: 1rem;
-    font-family: Georgia, serif;
-    font-size: clamp(3rem, 7vw, 6rem);
-    line-height: 1;
-    color: var(--color-brown);
-}
-
-.about-introduction {
-    max-width: 620px;
-    margin: 0;
-    font-size: 1.1rem;
-    line-height: 1.8;
-}
-
-.about-logo {
-    display: block;
-    width: min(100%, 380px);
-    height: auto;
-    justify-self: end;
-}
-
-.about-story {
-    padding: clamp(3rem, 7vw, 6rem) 0;
-    background-color: var(--color-white);
-}
-
-.about-year {
-    margin: 0;
-    color: rgba(241, 179, 0, 0.25);
-    font-family: Georgia, serif;
-    font-size: clamp(7rem, 18vw, 14rem);
-    line-height: 0.8;
-    text-align: center;
-}
-
-.about-story-content {
-    max-width: 520px;
-}
-
-.about-story-content h2 {
-    margin-bottom: 1.25rem;
-    color: var(--color-brown);
-    font-family: Georgia, serif;
-    font-size: clamp(2rem, 4vw, 3.25rem);
-}
-
-.about-story-content p {
-    line-height: 1.8;
-}
-
-.about-values {
-    padding: clamp(3rem, 7vw, 6rem) 0;
-}
-
-.about-values>.container>h2 {
-    margin-bottom: 2.5rem;
-    color: var(--color-brown);
-    font-family: Georgia, serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    text-align: center;
-}
-
-.about-value {
-    height: 100%;
-    padding: 1.75rem;
-    border-top: 3px solid var(--color-gold);
-    background-color: var(--color-white);
-}
-
-.about-value span {
-    color: var(--color-gold);
-    font-weight: 600;
-}
-
-.about-value h3 {
-    margin: 0.75rem 0;
-    color: var(--color-brown);
-    font-size: 1.4rem;
-}
-
-.about-value p {
+.recipes-introduction {
+    max-width: 680px;
     margin: 0;
     line-height: 1.7;
 }
 
-.about-action {
-    margin-top: 3rem;
-    text-align: center;
+.recipes-catalog {
+    padding: 1rem 0 5rem;
 }
 
-.about-action a {
-    display: inline-block;
-    padding: 0.85rem 1.5rem;
+.recipe-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+}
+
+.recipe-filter {
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--color-gold);
     border-radius: 2rem;
-    background-color: var(--color-gold);
-    color: var(--color-white);
-    font-weight: 600;
+    color: var(--color-brown);
     text-decoration: none;
 }
 
-.about-action a:hover,
-.about-action a:focus-visible {
+.recipe-filter:hover,
+.recipe-filter:focus-visible,
+.recipe-filter.is-active {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+}
+
+.recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+}
+
+.recipe-card {
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background-color: var(--color-white);
+    box-shadow: 0 0.75rem 2rem rgba(90, 57, 43, 0.12);
+}
+
+.recipe-card-image-link {
+    display: block;
+    overflow: hidden;
+}
+
+.recipe-card-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.recipe-card:hover .recipe-card-image {
+    transform: scale(1.04);
+}
+
+.recipe-card-content {
+    padding: 1.25rem;
+}
+
+.recipe-card-category {
+    margin-bottom: 0.5rem;
+    color: var(--color-gold);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.recipe-card h2 {
+    margin-bottom: 0.75rem;
+    font-size: 1.35rem;
+}
+
+.recipe-card h2 a {
+    color: var(--color-brown);
+    text-decoration: none;
+}
+
+.recipe-card h2 a:hover,
+.recipe-card h2 a:focus {
+    color: var(--color-gold);
+}
+
+.recipe-card-description {
+    line-height: 1.6;
+}
+
+.recipe-card-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--color-gold);
+}
+
+.contact-section {
+    min-height: calc(100vh - 170px);
+    padding: clamp(2rem, 5vw, 4rem) 0;
+    background-image: url("../assets/img/contact/background-pattern.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.contact-section .container {
+    max-width: 1180px;
+}
+
+.contact-presentation h1 {
+    margin-bottom: 1rem;
+    color: var(--color-gold);
+    font-family: Georgia, serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
+}
+
+.contact-eyebrow {
+    margin-bottom: 0.5rem;
+    color: var(--color-brown);
+}
+
+.contact-eye {
+    position: relative;
+    width: min(100%, 383px);
+    margin: 1.5rem auto;
+}
+
+.contact-eye-base {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.contact-eye-pupil {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32%;
+    height: auto;
+    transform: translate(-50%, -50%);
+}
+
+.contact-information {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0 0;
+    font-style: normal;
+}
+
+.contact-information a {
+    color: var(--color-brown);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    text-decoration: none;
+}
+
+.contact-information a:hover,
+.contact-information a:focus {
+    color: var(--color-gold);
+    text-decoration: underline;
+}
+
+.contact-form-panel {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-radius: 1rem;
+    background-color: rgba(241, 179, 0, 0.15);
+}
+
+.contact-form-panel h2 {
+    margin-bottom: 1rem;
+    color: var(--color-brown);
+    font-family: Georgia, serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.contact-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.contact-field label {
+    color: var(--color-brown);
+    font-weight: 500;
+}
+
+.contact-field input,
+.contact-field textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.8rem;
+    background-color: var(--color-white);
+    color: var(--color-brown);
+    font: inherit;
+}
+
+.contact-field textarea {
+    min-height: 190px;
+    resize: vertical;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+    border-color: var(--color-gold);
+    outline: 3px solid rgba(241, 179, 0, 0.2);
+}
+
+.contact-counter {
+    align-self: flex-start;
+    color: var(--color-brown);
+    font-size: 0.75rem;
+}
+
+.contact-submit {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    border: 0;
+    border-radius: 0.75rem;
+    background-color: #ad7800;
+    color: var(--color-white);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.contact-submit:hover,
+.contact-submit:focus-visible {
     background-color: var(--color-brown);
+}
+
+.contact-information a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-brown);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    text-decoration: none;
+}
+
+.contact-information img {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+}
+
+.contact-social {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 2rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-gold);
+}
+
+.contact-social p {
+    min-width: 170px;
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--color-gold);
+    color: #ad7800;
+    font-weight: 600;
+    text-align: center;
+}
+
+.contact-social-icons {
+    min-width: 170px;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.contact-social-icons img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
 }
 
 @keyframes category-name-reveal {
@@ -698,9 +874,8 @@ main {
     font-size: clamp(1.35rem, 2.5vw, 1.8rem);
 }
 
-@media (max-width: 767.98px) {
+/* @media (max-width: 767.98px) {
 
-    /* règles mobiles */
     .navbar {
         padding: 0.5rem 0;
     }
@@ -747,12 +922,185 @@ main {
         font-size: clamp(1.2rem, 6vw, 1.7rem);
     }
 
+    .recipe-introduction {
+        text-align: center;
+    }
+
+    .recipe-meta {
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .recipe-actions {
+        justify-content: center;
+    }
+
     .hero-category-current {
         right: 0.75rem;
         padding-bottom: 2.35rem;
         font-size: 0.875rem;
     }
 
+    .recipes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-wheel {
+        transition-duration: 0.01ms;
+    }
+
+    .hero-category-line.is-visible {
+        animation-duration: 0.01ms;
+    }
+} */
+
+@media (max-width: 991.98px) {
+    .contact-presentation {
+        text-align: center;
+    }
+
+    .contact-information {
+        align-items: center;
+    }
+
+    .contact-social {
+        align-items: center;
+    }
+}
+
+/******************************* Page À propos ***************************************/
+.about-hero {
+    padding: clamp(3rem, 7vw, 7rem) 0;
+}
+
+.about-hero .container,
+.about-story .container,
+.about-values .container {
+    max-width: 1100px;
+}
+
+.about-hero-content {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 4rem;
+}
+
+.about-eyebrow {
+    margin-bottom: 0.75rem;
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.about-hero h1 {
+    margin-bottom: 1rem;
+    font-family: Georgia, serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
+    color: var(--color-brown);
+}
+
+.about-introduction {
+    max-width: 620px;
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.about-logo {
+    display: block;
+    width: min(100%, 380px);
+    height: auto;
+    justify-self: end;
+}
+
+.about-story {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+    background-color: var(--color-white);
+}
+
+.about-year {
+    margin: 0;
+    color: rgba(241, 179, 0, 0.25);
+    font-family: Georgia, serif;
+    font-size: clamp(7rem, 18vw, 14rem);
+    line-height: 0.8;
+    text-align: center;
+}
+
+.about-story-content {
+    max-width: 520px;
+}
+
+.about-story-content h2 {
+    margin-bottom: 1.25rem;
+    color: var(--color-brown);
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+}
+
+.about-story-content p {
+    line-height: 1.8;
+}
+
+.about-values {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+}
+
+.about-values>.container>h2 {
+    margin-bottom: 2.5rem;
+    color: var(--color-brown);
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-align: center;
+}
+
+.about-value {
+    height: 100%;
+    padding: 1.75rem;
+    border-top: 3px solid var(--color-gold);
+    background-color: var(--color-white);
+}
+
+.about-value span {
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.about-value h3 {
+    margin: 0.75rem 0;
+    color: var(--color-brown);
+    font-size: 1.4rem;
+}
+
+.about-value p {
+    margin: 0;
+    line-height: 1.7;
+}
+
+.about-action {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.about-action a {
+    display: inline-block;
+    padding: 0.85rem 1.5rem;
+    border-radius: 2rem;
+    background-color: var(--color-gold);
+    color: var(--color-white);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.about-action a:hover,
+.about-action a:focus-visible {
+    background-color: var(--color-brown);
+}
+
+@media (max-width: 767.98px) {
     .about-hero-content {
         grid-template-columns: 1fr;
         gap: 2.5rem;
@@ -767,15 +1115,5 @@ main {
     .about-story-content {
         margin: 0 auto;
         text-align: center;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .hero-wheel {
-        transition-duration: 0.01ms;
-    }
-
-    .hero-category-line.is-visible {
-        animation-duration: 0.01ms;
     }
 }
