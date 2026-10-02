@@ -1,5 +1,5 @@
 <?php
-
+// path : \model\abstract\AbstractMapping.php
 declare(strict_types=1); 
 
 namespace model\abstract; 
@@ -13,8 +13,8 @@ abstract class AbstractMapping{
         foreach ($datas as $key => $value) {
             $setterName = 'set' . str_replace('_', '', ucwords($key,'_')); 
 
-            if (method_exists(this, $setterName)){
-                $this->setterName($value);
+            if (method_exists($this, $setterName)){
+                $this->$setterName($value);
             }
         }
     } 

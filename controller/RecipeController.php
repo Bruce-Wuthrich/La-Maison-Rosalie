@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use model\manager\RecipeManager;
+use model\manager\StepManager;
+use model\manager\RecipeIngredientManager;
+use model\manager\CategoryManager; 
 
 // renvoie au javascript les données demander toujours de la meme facon
 function sendRecipeJsonSuccess(mixed $data, int $status = 200): never
@@ -136,6 +139,33 @@ if ($page === 'recette') {
         http_response_code(404);
         require RACINE_PATH . '/view/publicView/404View.php';
         return;
+    }
+
+    // les étapes de la recette dans l'ordre 
+    $steps = []; 
+    try{
+        $stepManager = new StepManager($db);
+        $steps = $stepManager->getByRecipeId($recipe->getId());
+    } catch (Throwable $error){
+        error_log('Impossible de charger les étapes : ' . $error->getMessage());
+    }
+
+    // les ingrédients de la recette, dans l'ordre
+    $ingredients = [];
+    try {
+        $ingredientManager = new RecipeIngredientManager($db);
+        $ingredients = $ingredientManager->getByRecipeId($recipe->getId());
+    } catch (Throwable $error) {
+        error_log('Impossible de charger les ingrédients : ' . $error->getMessage());
+    }
+
+    // Catégorie des recettes 
+    $categories = [];
+    try {
+        $categoryManager = new CategoryManager($db);
+        $categories = $categoryManager->getByRecipeId($recipe->getId());
+    } catch (\Throwable $error) {
+        error_log("Impossible de charger les catégories : " . $error->getMessage());
     }
 
     require RACINE_PATH . '/view/publicView/recipeDetailView.php';
