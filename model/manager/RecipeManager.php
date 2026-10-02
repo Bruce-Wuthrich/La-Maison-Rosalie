@@ -1,0 +1,56 @@
+<?php
+//path: model/manager/RecipeManager.php
+declare(strict_types=1); 
+
+namespace model\manager; 
+
+use model\interface\ManagerInterface; 
+use model\mapping\RecipeMapping; 
+use model\MyPDO;
+use PDO;  
+
+class RecipeManager implements ManagerInterface{
+    private MyPDO $db; 
+
+    public function __construct(MyPDO $connect){
+        $this->db = $connect;
+    }
+
+    // liste des recette menu déroulant 
+    public function getMenuList(): array{
+        $query = $this->db->query('SELECT id, title, slug FROM recipes ORDER BY title');
+
+        $recipes = [];
+        foreach ($query->fetchAll() as $row){
+            $recipes[] = new RecipeMapping($row);
+        }
+        return $recipes; 
+    }
+
+    // Recette depuis Slug 
+
+    public function getBySlug(string $slug, ?int $userId = null): ?RecipeMapping{
+        $query = $this->db->prepare(
+            'SELECT r.id, r.title, r.slug, r.description, r.main_image, r.prep_time_minutes,
+                    r.cook_time_minutes, r.servings, r.difficulty, r.author_id, r.created_at, r.updated_at,
+                    ROUND(AVG(ra.rating), 1) AS average_rating,
+                    COUNT(ra.id) AS rating_count,
+                    (SELECT rating FROM ratings WHERE recipe_id = r.id AND user_id = :user_id) AS user_rating
+             FROM recipes r
+             LEFT JOIN ratings ra ON ra.recipe_id = r.id
+             WHERE r.slug = :slug
+             GROUP BY r.id'
+        );
+        $query->bindValue(':slug', $slug);
+        $query->bindValue(':user_id', $userId, $userId === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+        $query->execute();
+
+        $row = $query->fetch();
+
+        //aucune recette avec ce slug 
+        if ($row === false){
+            return null;
+        }
+        return new RecipeMapping($row); 
+    }
+}
