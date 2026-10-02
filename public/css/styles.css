@@ -247,6 +247,135 @@ main {
     animation-duration: 0.01ms;
 }
 
+.about-hero {
+    padding: clamp(3rem, 7vw, 7rem) 0;
+}
+
+.about-hero .container,
+.about-story .container,
+.about-values .container {
+    max-width: 1100px;
+}
+
+.about-hero-content {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 4rem;
+}
+
+.about-eyebrow {
+    margin-bottom: 0.75rem;
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.about-hero h1 {
+    margin-bottom: 1rem;
+    font-family: Georgia, serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
+    color: var(--color-brown);
+}
+
+.about-introduction {
+    max-width: 620px;
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.about-logo {
+    display: block;
+    width: min(100%, 380px);
+    height: auto;
+    justify-self: end;
+}
+
+.about-story {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+    background-color: var(--color-white);
+}
+
+.about-year {
+    margin: 0;
+    color: rgba(241, 179, 0, 0.25);
+    font-family: Georgia, serif;
+    font-size: clamp(7rem, 18vw, 14rem);
+    line-height: 0.8;
+    text-align: center;
+}
+
+.about-story-content {
+    max-width: 520px;
+}
+
+.about-story-content h2 {
+    margin-bottom: 1.25rem;
+    color: var(--color-brown);
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+}
+
+.about-story-content p {
+    line-height: 1.8;
+}
+
+.about-values {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+}
+
+.about-values>.container>h2 {
+    margin-bottom: 2.5rem;
+    color: var(--color-brown);
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-align: center;
+}
+
+.about-value {
+    height: 100%;
+    padding: 1.75rem;
+    border-top: 3px solid var(--color-gold);
+    background-color: var(--color-white);
+}
+
+.about-value span {
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.about-value h3 {
+    margin: 0.75rem 0;
+    color: var(--color-brown);
+    font-size: 1.4rem;
+}
+
+.about-value p {
+    margin: 0;
+    line-height: 1.7;
+}
+
+.about-action {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.about-action a {
+    display: inline-block;
+    padding: 0.85rem 1.5rem;
+    border-radius: 2rem;
+    background-color: var(--color-gold);
+    color: var(--color-white);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.about-action a:hover,
+.about-action a:focus-visible {
+    background-color: var(--color-brown);
+}
+
 @keyframes category-name-reveal {
     from {
         opacity: 0;
@@ -325,6 +454,22 @@ main {
         right: 0.75rem;
         padding-bottom: 2.35rem;
         font-size: 0.875rem;
+    }
+
+    .about-hero-content {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        text-align: center;
+    }
+
+    .about-logo {
+        width: min(75vw, 300px);
+        justify-self: center;
+    }
+
+    .about-story-content {
+        margin: 0 auto;
+        text-align: center;
     }
 }
 
