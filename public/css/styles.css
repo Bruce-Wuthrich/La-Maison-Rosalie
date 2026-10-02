@@ -247,6 +247,194 @@ main {
     animation-duration: 0.01ms;
 }
 
+.contact-section {
+    min-height: calc(100vh - 170px);
+    padding: clamp(2rem, 5vw, 4rem) 0;
+    background-image: url("../assets/img/contact/background-pattern.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.contact-section .container {
+    max-width: 1180px;
+}
+
+.contact-presentation h1 {
+    margin-bottom: 1rem;
+    color: var(--color-gold);
+    font-family: Georgia, serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
+}
+
+.contact-eyebrow {
+    margin-bottom: 0.5rem;
+    color: var(--color-brown);
+}
+
+.contact-eye {
+    position: relative;
+    width: min(100%, 383px);
+    margin: 1.5rem auto;
+}
+
+.contact-eye-base {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.contact-eye-pupil {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32%;
+    height: auto;
+    transform: translate(-50%, -50%);
+}
+
+.contact-information {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0 0;
+    font-style: normal;
+}
+
+.contact-information a {
+    color: var(--color-brown);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    text-decoration: none;
+}
+
+.contact-information a:hover,
+.contact-information a:focus {
+    color: var(--color-gold);
+    text-decoration: underline;
+}
+
+.contact-form-panel {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-radius: 1rem;
+    background-color: rgba(241, 179, 0, 0.15);
+}
+
+.contact-form-panel h2 {
+    margin-bottom: 1rem;
+    color: var(--color-brown);
+    font-family: Georgia, serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.contact-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.contact-field label {
+    color: var(--color-brown);
+    font-weight: 500;
+}
+
+.contact-field input,
+.contact-field textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.8rem;
+    background-color: var(--color-white);
+    color: var(--color-brown);
+    font: inherit;
+}
+
+.contact-field textarea {
+    min-height: 190px;
+    resize: vertical;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+    border-color: var(--color-gold);
+    outline: 3px solid rgba(241, 179, 0, 0.2);
+}
+
+.contact-counter {
+    align-self: flex-start;
+    color: var(--color-brown);
+    font-size: 0.75rem;
+}
+
+.contact-submit {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    border: 0;
+    border-radius: 0.75rem;
+    background-color: #ad7800;
+    color: var(--color-white);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.contact-submit:hover,
+.contact-submit:focus-visible {
+    background-color: var(--color-brown);
+}
+
+.contact-information a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-brown);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    text-decoration: none;
+}
+
+.contact-information img {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+}
+
+.contact-social {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 2rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-gold);
+}
+
+.contact-social p {
+    min-width: 170px;
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--color-gold);
+    color: #ad7800;
+    font-weight: 600;
+    text-align: center;
+}
+
+.contact-social-icons {
+    min-width: 170px;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.contact-social-icons img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
 @keyframes category-name-reveal {
     from {
         opacity: 0;
@@ -335,5 +523,19 @@ main {
 
     .hero-category-line.is-visible {
         animation-duration: 0.01ms;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .contact-presentation {
+        text-align: center;
+    }
+
+    .contact-information {
+        align-items: center;
+    }
+
+    .contact-social {
+        align-items: center;
     }
 }
