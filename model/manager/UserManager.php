@@ -11,8 +11,9 @@ use model\MyPDO;
 use PDO;  
 use Exception; 
 use PDOException; 
+use model\interface\UserInterface; 
 
-class UserManager implements ManagerInterface{
+class UserManager implements ManagerInterface, UserInterface{
     private MyPDO $db; 
 
     public function __construct(MyPDO $connect){
@@ -113,5 +114,60 @@ class UserManager implements ManagerInterface{
         $user->setId((int) $this->db->lastInsertId());
         $user->setRole('member');
         return $user; 
+    }
+
+    public function connect(array $tab):bool {
+        if (!isset($tab['email'], $tab['password'])
+            || !is_string($tab['email'])
+            || !is_string($tab['password'])) {
+            return false;
+        }
+
+        try{
+            $user = new UserMapping(['email' => $tab['email']]);
+        } catch (Exception $e){
+            return false; 
+        }
+        // recherche par mail (unique endroit ou on select hash)
+        try{
+            $query = $this->db->prepare(
+                'SELECT id, username, role, password_hash FROM users WHERE email = :email'
+            );
+            $query->bindValue(':email', $user->getEmail());
+            $query->execute();
+            $row = $query->fetch();
+        } catch (PDOException $e){
+            error_log('Connexion impossible : ' . $e->getMessage());
+            return false; 
+        }
+
+        // email ou mdp faux : meme message 
+        if ($row === false || !password_verify($tab['password'], $row['password_hash'])){
+            return false ;
+        }
+
+        // new id session 
+        session_regenerate_id(true);
+
+        // ajout user à la session sans effacer le reste
+        $_SESSION['user_id'] = $row['id'];
+        $_SESSION['username'] = $row['username'];
+        $_SESSION['role'] = $row['role'];
+
+        return true; 
+    }
+
+    public function disconnect(): bool{
+        $_SESSION = [];
+
+        if (ini_get('session.use_cookies')){
+            $params = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 42000,
+                $params['path'], $params['domain'],
+                $params['secure'], $params['httponly']
+                );
+        }
+        return session_destroy();
+
     }
 }
