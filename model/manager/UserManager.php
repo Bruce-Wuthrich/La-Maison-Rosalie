@@ -9,6 +9,8 @@ use model\interface\ManagerInterface;
 use model\mapping\UserMapping; 
 use model\MyPDO;
 use PDO;  
+use Exception; 
+use PDOException; 
 
 class UserManager implements ManagerInterface{
     private MyPDO $db; 
@@ -52,5 +54,64 @@ class UserManager implements ManagerInterface{
         $query->execute();
 
         return $query->fetch() !== false; 
+    }
+
+    // inscritpion nouvel user 
+    public function register(array $data): UserMapping|bool{
+        foreach (['username', 'email', 'password', 'password_confirm'] as $field) {
+            if (!isset($data[$field]) || !is_string($data[$field])){
+                throw new Exception('Tous les champs sont obligatoires.');
+            }
+        }
+        // mdp identique 
+        if ($data['password'] !== $data['password_confirm']){
+            throw new Exception('Les mots de passe ne correspondent pas.');
+        }
+
+        // spec mdp 
+        $password = $data['password'];
+        if (mb_strlen($password) < 10
+        || !preg_match('/[A-Z]/', $password)
+        || !preg_match('/[a-z]/', $password)
+        || !preg_match('/[0-9]/', $password)){
+            throw new Exception('Le mot de passe doit faire au moins 10 caractères, avec une majuscule, une minuscule et un chiffre.');
+        }
+
+        // valide username + email
+        $user = new UserMapping([
+            'username' => $data['username'],
+            'email'    => $data['email'],
+        ]);
+
+        // check doublons 
+        if ($this->usernameExists($user->getUsername())) {
+            throw new Exception('Ce nom d\'utilisateur est déjà pris.');
+        }
+        if ($this->emailExists($user->getEmail())) {
+            throw new Exception('Cet email est déjà utilisé.');
+        }
+
+        // Hash mdp 
+        $user->setPasswordHash(password_hash($password, PASSWORD_DEFAULT));
+
+        // insertion 
+        try{
+            $query = $this->db->prepare(
+                'INSERT INTO users (username, email, password_hash) VALUES (:username, :email, :password_hash)'
+            );
+            $query->bindValue(':username', $user->getUsername());
+            $query->bindValue(':email', $user->getEmail());
+            $query->bindValue(':password_hash', $user->getPasswordHash());
+            $query->execute();
+            }   catch (PDOException $e) {
+                //détail journal 
+                error_log('Inscription impossible : ' . $e->getMessage());
+                return false; 
+                }
+
+        // map + envoie controlleur 
+        $user->setId((int) $this->db->lastInsertId());
+        $user->setRole('member');
+        return $user; 
     }
 }
