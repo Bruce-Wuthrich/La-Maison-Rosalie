@@ -15,9 +15,11 @@ $topRecipes = [];
 
 try {
     $topRecipes = $recipeManager->getTopThree();
-    } catch (Throwable $error) {
-    // garde l'erreur dans les logs sans la montrer au visiteur
-    error_log('Impossible de charger le top 3 : ' . $error->getMessage());}
+} catch (Exception $error) {
+    // Garde l'erreur dans les logs sans la montrer au visiteur.
+    error_log('Impossible de charger le top 3 : ' . $error->getMessage());
+    http_response_code(503);
+}
 
 
 require RACINE_PATH . '/view/publicView/homepageView.php';
