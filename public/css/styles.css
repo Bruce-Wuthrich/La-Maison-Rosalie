@@ -144,7 +144,7 @@ main {
     overflow: hidden;
     padding: clamp(2rem, 5vw, 5rem);
     background: linear-gradient(rgba(255, 250, 242, 0.32), rgba(255, 250, 242, 0.32)),
-        url("../assets/img/interface/hero-home.jpg") center / cover no-repeat;
+        url("../assets/img/interface/hero-home.png") center / cover no-repeat;
 }
 
 .hero-logo {
