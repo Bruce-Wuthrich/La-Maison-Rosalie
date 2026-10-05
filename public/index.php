@@ -5,7 +5,30 @@ declare(strict_types=1);
 use model\MyPDO;
 use model\manager\RecipeManager;
 
+$sessionTimeout = 1800;
+
+// securité session 
+ini_set('session.use_strict_mode', 1); // refuse id inventé
+ini_set('session.use_only_cookies', 1); // id passe par cookie par url
+ini_set('session.gc_maxlifetime',(string) $sessionTimeout); // serveur supp inactif
+
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'httponly' => true,
+    'samesite' => 'Lax', 
+    'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+]);
+
 session_start();
+
+// expiration inactif + vide session et change id 
+if(isset($_SESSION['last_activity']) && time() - $_SESSION['last_activity'] > $sessionTimeout){
+    $_SESSION = [];
+    session_regenerate_id(true);
+}
+
+$_SESSION['last_activity'] = time();
 
 require_once file_exists(__DIR__ . '/../config-prod.php')
     ? __DIR__ . '/../config-prod.php'
