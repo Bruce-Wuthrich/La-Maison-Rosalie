@@ -33,4 +33,16 @@ class CategoryManager implements ManagerInterface{
         }
         return $categories; 
     }
+
+    public function getAll(): array{
+        $query = $this->db->query(
+            'SELECT id, title, slug, description FROM categories ORDER BY title'
+        ); 
+
+        $categories = [];
+        foreach ($query->fetchAll() as $row){
+            $categories[] = new CategoryMapping($row);
+        }
+        return $categories; 
+    }
 }
