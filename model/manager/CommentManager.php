@@ -10,7 +10,7 @@ use model\mapping\CommentMapping;
 use model\MyPDO; 
 use PDO; 
 use PDOException; 
-use Exception;
+use InvalidArgumentException;
 
 // com des recettes
 class CommentManager implements ManagerInterface{
@@ -75,12 +75,12 @@ class CommentManager implements ManagerInterface{
     public function create(int $authorId, int $recipeId, array $data): CommentMapping|bool{
         //msg obligatoirement text et suj facult.
         if (!isset($data['message']) || !is_string($data['message'])){
-            throw new Exception("Le message est obligatoire.");
+            throw new InvalidArgumentException("Le message est obligatoire.");
         }
 
         $subject = $data['subject'] ?? null;
         if ($subject !== null && !is_string($subject)) {
-            throw new Exception('Le sujet est invalide.');
+            throw new InvalidArgumentException('Le sujet est invalide.');
         }
 
         // Mapping avec champs selectionnés (jms de new CommentMapping sur $data)

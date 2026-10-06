@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace model\mapping;
 
-use Exception;
+use InvalidArgumentException;
 use model\abstract\AbstractMapping;
 
 class CommentMapping extends AbstractMapping{
@@ -24,7 +24,7 @@ class CommentMapping extends AbstractMapping{
 
     public function setId(int $id): void{
         if($id <= 0){
-            throw new Exception("L'identifiant doit être positif.");
+            throw new InvalidArgumentException("L'identifiant doit être positif.");
         }
         $this->id = $id;
     }
@@ -35,7 +35,7 @@ class CommentMapping extends AbstractMapping{
 
     public function setAuthorId(int $authorId): void{
         if($authorId <= 0){
-            throw new Exception("L'identifiant de l'auteur doit être positif.");
+            throw new InvalidArgumentException("L'identifiant de l'auteur doit être positif.");
         }
         $this->author_id = $authorId;
     }
@@ -54,7 +54,7 @@ class CommentMapping extends AbstractMapping{
 
     public function setRecipeId(int $recipeId):void {
         if($recipeId <= 0){
-            throw new Exception("L'identifiant de la recette doit être positif.");
+            throw new InvalidArgumentException("L'identifiant de la recette doit être positif.");
         }
         $this->recipe_id = $recipeId;
     }
@@ -70,7 +70,7 @@ class CommentMapping extends AbstractMapping{
             if ($subject === ''){
                 $subject = null;
             } elseif (mb_strlen($subject) > 120){
-                throw new Exception('Le sujet ne doit pas dépasser 120 caractères.');
+                throw new InvalidArgumentException('Le sujet ne doit pas dépasser 120 caractères.');
             }
         }
         $this->subject = $subject; 
@@ -85,7 +85,7 @@ class CommentMapping extends AbstractMapping{
         $message = trim($message);
         $length = mb_strlen($message);
         if ($length < 3 || $length > 500){
-            throw new Exception('Le message doit faire entre 3 et 500 caractères.');
+            throw new InvalidArgumentException('Le message doit faire entre 3 et 500 caractères.');
         }
         $this->message = $message;         
     }
@@ -96,7 +96,7 @@ class CommentMapping extends AbstractMapping{
 
     public function setPublicationStatus(string $publicationStatus):void {
         if (!in_array($publicationStatus, ['pending', 'published', 'hidden'], true)){
-            throw new Exception('Le status doit être pending, published ou hidden.');
+            throw new InvalidArgumentException('Le status doit être pending, published ou hidden.');
         }
         $this->publication_status = $publicationStatus;
     }
