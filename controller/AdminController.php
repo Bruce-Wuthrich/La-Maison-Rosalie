@@ -12,7 +12,7 @@ $sessionUser = requireLogin('?pg=accueil');
 
 try {
     $connectedUser = (new UserManager($db))->getById($sessionUser['id']);
-} catch (Exception $exception) {
+} catch (Throwable $exception) {
     error_log('Vérification administrateur impossible : ' . $exception->getMessage());
     setFlashMessage('error', 'La vérification de votre compte est momentanément indisponible.');
     redirectTo('?pg=accueil');

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace model\mapping;
 
-use Exception; 
+use InvalidArgumentException;
 use model\abstract\AbstractMapping;
 
 class CategoryMapping extends AbstractMapping{
@@ -19,7 +19,7 @@ class CategoryMapping extends AbstractMapping{
     
     public function setId(int $id): void{
         if($id<=0){
-            throw new Exception("L'identifiant de catégorie doit être positif");
+            throw new InvalidArgumentException("L'identifiant de catégorie doit être positif");
             }
         $this->id = $id;
         }
@@ -32,7 +32,7 @@ class CategoryMapping extends AbstractMapping{
         $title = trim($title);
         $length = mb_strlen($title); 
         if($length === 0 || $length > 80){
-            throw new Exception("Le titre de catégorie doit faire entre 1 et 80 caractères");
+            throw new InvalidArgumentException("Le titre de catégorie doit faire entre 1 et 80 caractères");
         }
         $this->title = $title;
     }
@@ -43,7 +43,7 @@ class CategoryMapping extends AbstractMapping{
 
     public function setSlug(string $slug):void{
         if(!preg_match('/^[a-z0-9-]{1,100}$/', $slug)){
-            throw new Exception('Slug invalide');
+            throw new InvalidArgumentException('Slug invalide');
         }
         $this->slug = $slug;
     }
@@ -54,7 +54,7 @@ class CategoryMapping extends AbstractMapping{
 
     public function setDescription(?string $description):void{
         if($description !== null && mb_strlen($description) > 500){
-            throw new Exception('La description ne peut dépasser 500 caractères');
+            throw new InvalidArgumentException('La description ne peut dépasser 500 caractères');
         }
         $this->description = $description; 
     }

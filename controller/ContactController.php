@@ -4,7 +4,6 @@
 declare(strict_types=1);
 
 use model\manager\ContactMessageManager;
-use model\mapping\ContactMessageMapping;
 
 require_once RACINE_PATH . '/controller/ControllerHelpers.php';
 
@@ -28,26 +27,12 @@ try {
         throw new DomainException('Trop de messages ont été envoyés. Merci de réessayer plus tard.');
     }
 
-    // Le mapping centralise la validation du message de contact.
-    try {
-        $contactMessage = new ContactMessageMapping([
-            'name' => stringInput($_POST['name'] ?? null),
-            'email' => stringInput($_POST['email'] ?? null),
-            'subject' => stringInput($_POST['subject'] ?? null),
-            'message' => stringInput($_POST['message'] ?? null),
-            'ip_address' => $ipAddress,
-        ]);
-    } catch (Exception $exception) {
-        setFlashMessage('error', $exception->getMessage());
-        redirectTo($redirect);
-    }
-
-    $contactMessageManager->create($contactMessage);
+    $contactMessageManager->create($_POST, $ipAddress);
     unset($_SESSION['form_data']['contact']);
     setFlashMessage('success', 'Votre message a bien été envoyé.');
-} catch (DomainException $exception) {
+} catch (InvalidArgumentException|DomainException $exception) {
     setFlashMessage('error', $exception->getMessage());
-} catch (Exception $exception) {
+} catch (Throwable $exception) {
     error_log('Erreur dans ContactController : ' . $exception->getMessage());
     setFlashMessage('error', 'Le formulaire de contact est momentanément indisponible.');
 }

@@ -60,7 +60,7 @@ if ($page === 'recette') {
         $commentOffset = ($commentPage - 1) * $commentLimit;
         $comments = $commentManager->getByRecipeId($recipe->getId(), $commentLimit, $commentOffset);
         $commentHasNext = $commentOffset + count($comments) < $commentCount;
-    } catch (Exception $exception) {
+    } catch (Throwable $exception) {
         error_log('Impossible de charger la recette : ' . $exception->getMessage());
         http_response_code(503);
         exit('Le service des recettes est momentanément indisponible. Merci de réessayer plus tard.');
@@ -76,7 +76,7 @@ $error = null;
 
 try {
     $recipes = $recipeManager->getAll();
-} catch (Exception $exception) {
+} catch (Throwable $exception) {
     error_log('Impossible de charger les recettes : ' . $exception->getMessage());
     http_response_code(503);
     $error = 'Le service des recettes est momentanément indisponible. Merci de réessayer plus tard.';

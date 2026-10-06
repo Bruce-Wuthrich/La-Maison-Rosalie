@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace model\mapping;
 
-use Exception; 
+use InvalidArgumentException;
 use model\abstract\AbstractMapping;
 
 class UserMapping extends AbstractMapping{
@@ -22,7 +22,7 @@ class UserMapping extends AbstractMapping{
 
     public function setId(int $id): void{
         if($id<=0){
-            throw new Exception("L'identifiant de l'utilisateur doit être positif.");
+            throw new InvalidArgumentException("L'identifiant de l'utilisateur doit être positif.");
         }
         $this->id = $id;
     }
@@ -35,7 +35,7 @@ class UserMapping extends AbstractMapping{
         $username = trim($username);
         $length = mb_strlen($username);
         if (!preg_match('/^[\p{L}\p{N}_-]{3,50}$/u', $username)) {
-            throw new Exception("Le nom d'utilisateur doit faire entre 3 et 50 caractères : lettres, chiffres, - et _ uniquement.");
+            throw new InvalidArgumentException("Le nom d'utilisateur doit faire entre 3 et 50 caractères : lettres, chiffres, - et _ uniquement.");
         }
         $this->username = $username; 
     }
@@ -47,7 +47,7 @@ class UserMapping extends AbstractMapping{
     public function setEmail(string $email): void{
         $email = trim($email);
         if(filter_var($email, FILTER_VALIDATE_EMAIL) === false || mb_strlen($email) > 254){
-            throw new Exception("L'email de l'utilisateur doit être valide et ne pas dépasser 254 caractères.");
+            throw new InvalidArgumentException("L'email de l'utilisateur doit être valide et ne pas dépasser 254 caractères.");
         }
         $this->email = $email;
     }
@@ -66,7 +66,7 @@ class UserMapping extends AbstractMapping{
 
     public function setRole(string $role):void{
         if (!in_array($role, ['member', 'admin'], true)){
-            throw new Exception('Votre rôle doit être soit member ou admin.');
+            throw new InvalidArgumentException('Votre rôle doit être soit member ou admin.');
         }
         $this->role = $role;
     }

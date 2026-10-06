@@ -34,7 +34,9 @@ try {
     }
 
     $ratingManager = new RatingManager($db);
-    $ratingManager->rate($user['id'], $recipeId, $rating);
+    if (!$ratingManager->rate($user['id'], $recipeId, $rating)) {
+        throw new RuntimeException('L’enregistrement de la note a échoué.');
+    }
     $stats = $ratingManager->getStats($recipeId);
     $average = $stats['average'] === null ? 'aucune' : number_format($stats['average'], 1, ',', '') . '/5';
 
@@ -44,7 +46,7 @@ try {
     );
 } catch (InvalidArgumentException|DomainException $exception) {
     setFlashMessage('error', $exception->getMessage());
-} catch (Exception $exception) {
+} catch (Throwable $exception) {
     error_log('Erreur dans RatingController : ' . $exception->getMessage());
     setFlashMessage('error', 'Le service de notation est momentanément indisponible.');
 }
