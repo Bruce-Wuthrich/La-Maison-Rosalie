@@ -9,8 +9,6 @@ use model\manager\StepManager;
 
 require_once RACINE_PATH . '/controller/ControllerHelpers.php';
 
-// Le contrôleur reste procédural et appelle la couche modèle orientée objet.
-// Sans API : les données sont transmises directement aux vues PHP.
 
 // prepare et affiche la fiche complete d'une recette
 if ($page === 'recette') {
