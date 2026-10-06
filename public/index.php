@@ -39,6 +39,15 @@ spl_autoload_register(function ($class) {
     require RACINE_PATH . '/' . $class . '.php';
 });
 
+//helper commun aux controleur (chargé une seule fois)
+require_once RACINE_PATH . '/controller/ControllerHelpers.php';
+
+// Jeton dispo pour tout form (modale inclus)µ
+$csrfToken = csrfToken();
+
+// msg affiché apres redirection 
+$flashMessage = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' ? pullFlashMessage(): null;
+
 try {
     $db = MyPDO::getInstance();
 } catch (PDOException $e) {
@@ -64,8 +73,12 @@ $page = $_GET['pg'] ?? 'accueil';
 $controller = match ($page) {
     'accueil', 'a-propos' => 'HomeController',
     'recettes', 'recette' => 'RecipeController',
-    'contact' => 'ContactController',
-    default => null,
+    'contact'             => 'ContactController',
+    'compte'              => 'AuthController',     // login/logout
+    'noter'               => 'RatingController',
+    'commentaire'         => 'CommentController',  // com add/delete
+    'admin'               => 'AdminController',   
+    default               => null,
 };
 
 if ($controller === null) {
