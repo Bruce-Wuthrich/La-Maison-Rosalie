@@ -6,12 +6,11 @@ declare(strict_types=1);
 
 namespace model\manager;
 
-use Exception;
 use model\interface\ManagerInterface;
 use model\mapping\ContactMessageMapping;
 use model\MyPDO;
 use PDO;
-use PDOException;
+use InvalidArgumentException;
 
 class ContactMessageManager implements ManagerInterface{
     private MyPDO $db; 
@@ -24,7 +23,7 @@ class ContactMessageManager implements ManagerInterface{
         // verif des 4 champs
         foreach (['name', 'email', 'subject', 'message'] as $field){
             if (!isset($data[$field]) || !is_string($data[$field])){
-                throw new Exception('Tous les champs sont obligatoires.');
+                throw new InvalidArgumentException('Tous les champs sont obligatoires.');
             }
         }
 

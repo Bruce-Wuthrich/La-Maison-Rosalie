@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace model\mapping;
 
-use Exception; 
+use InvalidArgumentException; 
 use model\abstract\AbstractMapping;
 
 class RatingMapping extends AbstractMapping{
@@ -22,7 +22,7 @@ class RatingMapping extends AbstractMapping{
 
     public function setId(int $id): void{
         if($id <= 0){
-            throw new Exception("L'identifiant doit être positif.");
+            throw new InvalidArgumentException("L'identifiant doit être positif.");
         }
         $this->id = $id;
     }
@@ -33,7 +33,7 @@ class RatingMapping extends AbstractMapping{
 
     public function setUserId(int $userId): void{
         if($userId <= 0){
-            throw new Exception("L'identifiant de l'utilisateur doit être positif");
+            throw new InvalidArgumentException("L'identifiant de l'utilisateur doit être positif");
         }
         $this->user_id = $userId;
     }
@@ -44,7 +44,7 @@ class RatingMapping extends AbstractMapping{
 
     public function setRecipeId(int $recipeId): void{
         if($recipeId <= 0){
-            throw new Exception("L'identifiant de la recette doit être positif");
+            throw new InvalidArgumentException("L'identifiant de la recette doit être positif");
         }
         $this->recipe_id = $recipeId;
     }
@@ -55,7 +55,7 @@ class RatingMapping extends AbstractMapping{
 
     public function setRating(int $rating): void{
         if($rating < 1 || $rating > 5){
-            throw new Exception("La note doit se situer entre 1 et 5.");
+            throw new InvalidArgumentException("La note doit se situer entre 1 et 5.");
         }
         $this->rating = $rating;
     }

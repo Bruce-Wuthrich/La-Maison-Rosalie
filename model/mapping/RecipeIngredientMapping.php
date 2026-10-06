@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace model\mapping;
 
-use Exception; 
+use InvalidArgumentException;
 use model\abstract\AbstractMapping;
 
 class RecipeIngredientMapping extends AbstractMapping{
@@ -23,7 +23,7 @@ class RecipeIngredientMapping extends AbstractMapping{
 
     public function setId(int $id): void{
         if($id<=0){
-            throw new Exception("L'identifiant doit être positif");
+            throw new InvalidArgumentException("L'identifiant doit être positif");
         }
         $this->id = $id;
     }
@@ -34,7 +34,7 @@ class RecipeIngredientMapping extends AbstractMapping{
 
     public function setRecipeId(int $recipeId): void{
         if($recipeId<=0){
-            throw new Exception("L'identifiant de la recette doit être positif");
+            throw new InvalidArgumentException("L'identifiant de la recette doit être positif");
         }
         $this->recipe_id = $recipeId;
     }
@@ -45,7 +45,7 @@ class RecipeIngredientMapping extends AbstractMapping{
 
     public function setIngredientId(int $ingredientId): void{
         if($ingredientId<=0){
-            throw new Exception("L'identifiant de l'ingrédient doit être positif");
+            throw new InvalidArgumentException("L'identifiant de l'ingrédient doit être positif");
         }
         $this->ingredient_id = $ingredientId;
     }
@@ -58,7 +58,7 @@ class RecipeIngredientMapping extends AbstractMapping{
         $ingredientName = trim($ingredientName);
         $length = mb_strlen($ingredientName);
         if($length === 0 || $length > 120){
-            throw new Exception("Le nom de l'ingrédient doit faire entre 1 et 120 caractères");
+            throw new InvalidArgumentException("Le nom de l'ingrédient doit faire entre 1 et 120 caractères");
         }
         $this->ingredient_name = $ingredientName;
     }
@@ -77,7 +77,7 @@ class RecipeIngredientMapping extends AbstractMapping{
 
     public function setUnit(?string $unit) : void {
         if ($unit !== null && mb_strlen($unit) > 40) {
-            throw new Exception("L'unité ne doit pas dépasser 40 caractères");
+            throw new InvalidArgumentException("L'unité ne doit pas dépasser 40 caractères");
         }
         $this->unit = $unit;
     }
@@ -88,7 +88,7 @@ class RecipeIngredientMapping extends AbstractMapping{
 
     public function setDetails(?string $details): void {
         if ($details !== null && mb_strlen($details) > 120){
-            throw new Exception("Les précisions ne doivent pas dépasser les 120 caractères");
+            throw new InvalidArgumentException("Les précisions ne doivent pas dépasser les 120 caractères");
         }
         $this->details = $details;
     }
@@ -107,7 +107,7 @@ class RecipeIngredientMapping extends AbstractMapping{
 
     public function setSortOrder(int $sortOrder): void{
         if($sortOrder<=0){
-            throw new Exception("L'ordre d'affichage doit être positif");
+            throw new InvalidArgumentException("L'ordre d'affichage doit être positif");
         }
         $this->sort_order = $sortOrder;
     }

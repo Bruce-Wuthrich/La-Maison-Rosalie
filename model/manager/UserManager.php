@@ -12,6 +12,7 @@ use PDO;
 use Exception; 
 use PDOException; 
 use model\interface\UserInterface; 
+use InvalidArgumentException;
 
 class UserManager implements ManagerInterface, UserInterface{
     private MyPDO $db; 
@@ -61,12 +62,12 @@ class UserManager implements ManagerInterface, UserInterface{
     public function register(array $data): UserMapping|bool{
         foreach (['username', 'email', 'password', 'password_confirm'] as $field) {
             if (!isset($data[$field]) || !is_string($data[$field])){
-                throw new Exception('Tous les champs sont obligatoires.');
+                throw new InvalidArgumentException('Tous les champs sont obligatoires.');
             }
         }
         // mdp identique 
         if ($data['password'] !== $data['password_confirm']){
-            throw new Exception('Les mots de passe ne correspondent pas.');
+            throw new InvalidArgumentException('Les mots de passe ne correspondent pas.');
         }
 
         // spec mdp 
@@ -75,7 +76,7 @@ class UserManager implements ManagerInterface, UserInterface{
         || !preg_match('/[A-Z]/', $password)
         || !preg_match('/[a-z]/', $password)
         || !preg_match('/[0-9]/', $password)){
-            throw new Exception('Le mot de passe doit faire au moins 10 caractères, avec une majuscule, une minuscule et un chiffre.');
+            throw new InvalidArgumentException('Le mot de passe doit faire au moins 10 caractères, avec une majuscule, une minuscule et un chiffre.');
         }
 
         // valide username + email
@@ -86,10 +87,10 @@ class UserManager implements ManagerInterface, UserInterface{
 
         // check doublons 
         if ($this->usernameExists($user->getUsername())) {
-            throw new Exception('Ce nom d\'utilisateur est déjà pris.');
+            throw new InvalidArgumentException('Ce nom d\'utilisateur est déjà pris.');
         }
         if ($this->emailExists($user->getEmail())) {
-            throw new Exception('Cet email est déjà utilisé.');
+            throw new InvalidArgumentException('Cet email est déjà utilisé.');
         }
 
         // Hash mdp 
