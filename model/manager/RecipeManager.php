@@ -81,7 +81,7 @@ class RecipeManager implements ManagerInterface{
     // Toutes les recettes + cat + Moyenne + Nb Vote
     public function getAll(): array{
         $query = $this->db->query(
-            'SELECT r.id, r.title, r.slug, r.main_image, r.prep_time_minutes, r.cook_time_minutes,
+            'SELECT r.id, r.title, r.slug, r.description, r.main_image, r.prep_time_minutes, r.cook_time_minutes,
                     r.difficulty, r.created_at,
                     ROUND(AVG(ra.rating), 1) AS average_rating,
                     COUNT(ra.id) AS rating_count,
