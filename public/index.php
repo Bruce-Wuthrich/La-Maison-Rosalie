@@ -5,6 +5,26 @@ declare(strict_types=1);
 use model\MyPDO;
 use model\manager\RecipeManager;
 
+require_once file_exists(__DIR__ . '/../config-prod.php')
+    ? __DIR__ . '/../config-prod.php'
+    : __DIR__ . '/../config-dev.php';
+
+// affichage erreurs jamais à l'ecran (tjr dans le journal)
+$displayErrors = defined('DISPLAY_ERRORS') && DISPLAY_ERRORS === true; 
+error_reporting(E_ALL);
+ini_set('display_errors', $displayErrors ? '1' : '0');
+ini_set('log_errors', '1');
+
+// Exception propre si pas prévu
+set_exception_handler(function (Throwable $exception) use ($displayErrors): void {
+    error_log('Erreur non attrapée : ' . $exception->getMessage()
+        . ' dans ' . $exception->getFile() . ' ligne ' . $exception->getLine());
+    http_response_code(500);
+    echo $displayErrors
+        ? '<pre>' . htmlspecialchars((string) $exception, ENT_QUOTES, 'UTF-8') . '</pre>'
+        : 'Une erreur inattendue est survenue. Merci de réessayer plus tard.';
+});
+
 $sessionTimeout = 1800;
 
 // securité session 
@@ -29,10 +49,6 @@ if(isset($_SESSION['last_activity']) && time() - $_SESSION['last_activity'] > $s
 }
 
 $_SESSION['last_activity'] = time();
-
-require_once file_exists(__DIR__ . '/../config-prod.php')
-    ? __DIR__ . '/../config-prod.php'
-    : __DIR__ . '/../config-dev.php';
 
 spl_autoload_register(function ($class) {
     $class = str_replace('\\', '/', $class);
