@@ -109,7 +109,7 @@ class ContactMessageMapping extends AbstractMapping{
         return $this->created_at;
     }
 
-    public function setCreatedAt(?string $createdAt){
+    public function setCreatedAt(?string $createdAt): void{
         $this->created_at = $createdAt;
     }
 }

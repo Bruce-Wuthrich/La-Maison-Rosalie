@@ -96,7 +96,7 @@ class CommentMapping extends AbstractMapping{
 
     public function setPublicationStatus(string $publicationStatus):void {
         if (!in_array($publicationStatus, ['pending', 'published', 'hidden'], true)){
-            throw new InvalidArgumentException('Le status doit être pending, published ou hidden.');
+            throw new InvalidArgumentException('Le statut doit être pending, published ou hidden.');
         }
         $this->publication_status = $publicationStatus;
     }

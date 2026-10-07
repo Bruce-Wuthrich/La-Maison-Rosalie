@@ -21,7 +21,7 @@ class StepMapping extends AbstractMapping{
     
     public function setId(int $id): void{
         if($id<=0){
-            throw new InvalidArgumentException("L'identifiant doit être positif");
+            throw new InvalidArgumentException("L'identifiant doit être positif.");
             }
         $this->id = $id;
         }
@@ -32,7 +32,7 @@ class StepMapping extends AbstractMapping{
     
     public function setRecipeId(int $recipeId): void{
         if($recipeId <= 0){
-            throw new InvalidArgumentException("L'identifiant de la recette doit être positif");
+            throw new InvalidArgumentException("L'identifiant de la recette doit être positif.");
             }
             $this->recipe_id = $recipeId;
         }
@@ -43,7 +43,7 @@ class StepMapping extends AbstractMapping{
     
     public function setStepNumber(int $stepNumber): void{
         if($stepNumber <= 0){
-            throw new InvalidArgumentException("Le numéro d'étape doit être positif");
+            throw new InvalidArgumentException("Le numéro d'étape doit être positif.");
             }
             $this->step_number = $stepNumber;
         }
@@ -57,7 +57,7 @@ class StepMapping extends AbstractMapping{
         $title = trim($title);
         $length = mb_strlen($title); 
         if($length === 0 || $length > 120){
-            throw new InvalidArgumentException("Le titre de l'étape doit faire entre 1 et 120 caractères");
+            throw new InvalidArgumentException("Le titre de l'étape doit faire entre 1 et 120 caractères.");
         }
         $this->title = $title;
     }
@@ -70,7 +70,7 @@ class StepMapping extends AbstractMapping{
         $instructions = trim($instructions);
         $length = mb_strlen($instructions); 
         if($length === 0 || $length > 1000){
-            throw new InvalidArgumentException("Les instructions de l'étape doivent faire entre 1 et 1000 caractères");
+            throw new InvalidArgumentException("Les instructions de l'étape doivent faire entre 1 et 1000 caractères.");
         }
         $this->instructions = $instructions;
     }
@@ -83,7 +83,7 @@ class StepMapping extends AbstractMapping{
         $image = trim($image);
         $length = mb_strlen($image); 
         if($length === 0 || $length > 500){
-            throw new InvalidArgumentException("Le chemin de l'image doit faire entre 1 et 500 caractères");
+            throw new InvalidArgumentException("Le chemin de l'image doit faire entre 1 et 500 caractères.");
         }
         $this->image = $image; 
     }

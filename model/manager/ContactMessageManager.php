@@ -10,6 +10,7 @@ use model\interface\ManagerInterface;
 use model\mapping\ContactMessageMapping;
 use model\MyPDO;
 use PDO;
+use PDOException;
 use InvalidArgumentException;
 
 class ContactMessageManager implements ManagerInterface{
