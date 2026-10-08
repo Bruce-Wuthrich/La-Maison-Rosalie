@@ -187,19 +187,19 @@ INSERT INTO categories (id, title, slug, description) VALUES
 INSERT INTO recipes (id, title, slug, description, main_image, prep_time_minutes, cook_time_minutes, servings, difficulty, author_id, created_at) VALUES
   (1, 'Chocolat chaud à l''ancienne', 'chocolat-chaud-a-l-ancienne',
    'Un chocolat chaud épais, fait avec du vrai chocolat noir fondu dans le lait, comme à la boutique les jours d''hiver.',
-   'assets/img/recettes/chocolat-chaud-a-l-ancienne/principale.jpg', 5, 10, 2, 'easy', 1, NOW() - INTERVAL 30 DAY),
+   'assets/img/recettes/pexels-tatianeherder-120156012.webp', 5, 10, 2, 'easy', 1, NOW() - INTERVAL 30 DAY),
   (2, 'Mousse au chocolat noir', 'mousse-au-chocolat-noir',
    'La mousse de Rosalie : seulement du chocolat, des œufs et un peu de beurre, pour une texture aérienne.',
-   'assets/img/recettes/mousse-au-chocolat-noir/principale.jpg', 25, 5, 6, 'medium', 1, NOW() - INTERVAL 25 DAY),
+   'assets/img/recettes/pexels-skylake-173032212.webp', 25, 5, 6, 'medium', 1, NOW() - INTERVAL 25 DAY),
   (3, 'Brownies aux noix', 'brownies-aux-noix',
    'Des brownies fondants au cœur, croustillants sur le dessus, avec des noix grossièrement concassées.',
-   'assets/img/recettes/brownies-aux-noix/principale.jpg', 15, 25, 12, 'easy', 1, NOW() - INTERVAL 20 DAY),
+   'assets/img/recettes/pexels-livilla-latini-1678510737-278500292.webp', 15, 25, 12, 'easy', 1, NOW() - INTERVAL 20 DAY),
   (4, 'Fondant au cœur coulant', 'fondant-au-coeur-coulant',
    'Le dessert qui demande de la précision : une cuisson à la minute près pour garder un cœur liquide.',
-   'assets/img/recettes/fondant-au-coeur-coulant/principale.jpg', 20, 10, 4, 'hard', 1, NOW() - INTERVAL 15 DAY),
+   'assets/img/recettes/pexels-ali-dashti-506667798-171922342.webp', 20, 10, 4, 'hard', 1, NOW() - INTERVAL 15 DAY),
   (5, 'Glace au chocolat sans sorbetière', 'glace-au-chocolat-sans-sorbetiere',
    'Une glace onctueuse préparée avec une simple crème fouettée, sans machine.',
-   'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/principale.jpg', 20, 5, 6, 'medium', 1, NOW() - INTERVAL 5 DAY);
+   'assets/img/recettes/pexels-julias-torten-und-tortchen-434418-382756832.webp', 20, 5, 6, 'medium', 1, NOW() - INTERVAL 5 DAY);
 
 INSERT INTO recipe_categories (recipe_id, category_id) VALUES
   (1, 3), (2, 2), (3, 1), (4, 1), (5, 4);

@@ -1,5 +1,11 @@
 <?php require RACINE_PATH . '/view/inc/header.php'; ?>
 <?php require RACINE_PATH . '/view/inc/navbar.php'; ?>
+<?php
+$escape = static fn (?string $value): string => htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+$primaryCategory = $categories[0] ?? null;
+$averageRating = $recipe->getAverageRating();
+$filledStars = $averageRating === null ? 0 : (int) round($averageRating);
+?>
 
 <main class="recipe-page">
     <section class="recipe-summary">
@@ -9,56 +15,81 @@
                 <span aria-hidden="true">›</span>
 
                 <a href="?pg=recettes">Recettes</a>
-                <span aria-hidden="true">›</span>
 
-                <a href="?pg=recettes&categorie=patisseries">Pâtisseries</a>
-                <span aria-hidden="true">›</span>
+                <?php if ($primaryCategory !== null) { ?>
+                    <span aria-hidden="true">›</span>
+                    <a href="?pg=recettes&amp;categorie=<?php echo rawurlencode((string) $primaryCategory->getSlug()); ?>">
+                        <?php echo $escape($primaryCategory->getTitle()); ?>
+                    </a>
+                <?php } ?>
 
-                <span aria-current="page">Brownies</span>
+                <span aria-hidden="true">›</span>
+                <span aria-current="page"><?php echo $escape($recipe->getTitle()); ?></span>
             </nav>
-            <div class="row align-items-center g-5">
 
+            <div class="row align-items-center g-5">
                 <div class="col-12 col-lg-5">
                     <figure class="recipe-figure">
                         <button class="recipe-favorite" type="button" aria-label="Ajouter aux favoris">
                             <img src="assets/img/recettes/icons/favorite-outline.svg" alt="" aria-hidden="true">
                         </button>
-                        <img class="recipe-image" src="assets/img/recettes/brownie.png" alt="Brownies au chocolat noir">
+
+                        <img class="recipe-image"
+                            src="<?php echo $escape($recipe->getMainImage()); ?>"
+                            alt="<?php echo $escape($recipe->getTitle()); ?>"
+                            width="1200" height="800">
                     </figure>
                 </div>
 
                 <div class="col-12 col-lg-7">
                     <div class="recipe-introduction">
+                        <?php if (!empty($categories)) { ?>
+                            <p class="recipe-category">
+                                <?php
+                                echo $escape(implode(', ', array_map(
+                                    static fn ($category): string => (string) $category->getTitle(),
+                                    $categories
+                                )));
+                                ?>
+                            </p>
+                        <?php } ?>
 
-                        <h1>Brownies au chocolat noir</h1>
+                        <h1><?php echo $escape($recipe->getTitle()); ?></h1>
 
-                        <div class="recipe-rating" aria-label="Note : 4 étoiles sur 5">
+                        <p class="recipe-description"><?php echo $escape($recipe->getDescription()); ?></p>
+
+                        <div class="recipe-rating"
+                            aria-label="<?php echo $averageRating === null
+                                ? 'Cette recette n’a pas encore de note'
+                                : 'Note moyenne : ' . $escape($recipe->getFormattedAverage()) . ' sur 5'; ?>">
                             <div class="recipe-rating-stars" aria-hidden="true">
-                                <img src="assets/img/recettes/icons/star-filled.svg" alt="">
-                                <img src="assets/img/recettes/icons/star-filled.svg" alt="">
-                                <img src="assets/img/recettes/icons/star-filled.svg" alt="">
-                                <img src="assets/img/recettes/icons/star-filled.svg" alt="">
-                                <img src="assets/img/recettes/icons/star-outline.svg" alt="">
+                                <?php for ($star = 1; $star <= 5; $star++) { ?>
+                                    <img src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
+                                <?php } ?>
                             </div>
 
-                            <a href="#comments">(15 commentaires)</a>
+                            <a href="#comments">
+                                <?php echo $commentCount; ?> commentaire<?php echo $commentCount === 1 ? '' : 's'; ?>
+                            </a>
                         </div>
+
                         <ul class="recipe-meta">
                             <li>
                                 <img src="assets/img/recettes/icons/servings.svg" alt="" aria-hidden="true">
-                                <span>4 pers</span>
+                                <span><?php echo (int) $recipe->getServings(); ?> pers.</span>
                             </li>
 
                             <li>
                                 <img src="assets/img/recettes/icons/difficulty.svg" alt="" aria-hidden="true">
-                                <span>Moyen</span>
+                                <span><?php echo $escape($recipe->getDifficultyLabel()); ?></span>
                             </li>
 
                             <li>
                                 <img src="assets/img/recettes/icons/time.svg" alt="" aria-hidden="true">
-                                <span>25 min</span>
+                                <span><?php echo $recipe->getTotalTime(); ?> min</span>
                             </li>
                         </ul>
+
                         <div class="recipe-actions">
                             <button class="recipe-action" type="button" id="printRecipe">
                                 <img src="assets/img/recettes/icons/print.svg" alt="" aria-hidden="true">
@@ -72,24 +103,31 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
+
     <section class="recipe-content">
         <div class="container">
             <div class="row g-5">
-
                 <div class="col-12 col-lg-5">
                     <h2>Ingrédients</h2>
 
                     <ul class="ingredient-list">
-                        <li>250 g de chocolat pâtissier</li>
-                        <li>150 g de beurre</li>
-                        <li>150 g de sucre</li>
-                        <li>60 g de farine</li>
-                        <li>1 sachet de sucre vanillé</li>
-                        <li>3 œufs</li>
+                        <?php foreach ($ingredients as $ingredient) { ?>
+                            <?php
+                            $ingredientParts = array_filter([
+                                $ingredient->getFormattedQuantity(),
+                                $ingredient->getUnit() ?? '',
+                                $ingredient->getIngredientName() ?? '',
+                            ], static fn (string $part): bool => $part !== '');
+                            $ingredientLabel = implode(' ', $ingredientParts);
+                            if ($ingredient->getDetails() !== null && $ingredient->getDetails() !== '') {
+                                $ingredientLabel .= ' (' . $ingredient->getDetails() . ')';
+                            }
+                            ?>
+                            <li><?php echo $escape($ingredientLabel); ?></li>
+                        <?php } ?>
                     </ul>
                 </div>
 
@@ -97,69 +135,59 @@
                     <h2>Préparation</h2>
 
                     <ol class="recipe-steps">
-                        <li>
-                            <h3>Étape 1</h3>
-                            <p>
-                                Faites fondre le chocolat cassé en morceaux avec le beurre.
-                            </p>
-                        </li>
-
-                        <li>
-                            <h3>Étape 2</h3>
-                            <p>
-                                Battez les œufs avec le sucre jusqu’à ce que le mélange blanchisse.
-                            </p>
-                        </li>
-
-                        <li>
-                            <h3>Étape 3</h3>
-                            <p>
-                                Ajoutez la farine, le sucre vanillé et le mélange au chocolat.
-                            </p>
-                        </li>
-
-                        <li>
-                            <h3>Étape 4</h3>
-                            <p>
-                                Versez la préparation dans un moule et enfournez à 180 °C.
-                            </p>
-                        </li>
-
-                        <li>
-                            <h3>Étape 5</h3>
-                            <p>Laissez refroidir avant de servir.</p>
-                        </li>
+                        <?php foreach ($steps as $step) { ?>
+                            <li>
+                                <h3>
+                                    Étape <?php echo (int) $step->getStepNumber(); ?> —
+                                    <?php echo $escape($step->getTitle()); ?>
+                                </h3>
+                                <p><?php echo $escape($step->getInstructions()); ?></p>
+                            </li>
+                        <?php } ?>
                     </ol>
                 </div>
-
             </div>
         </div>
     </section>
+
     <section class="recipe-comments" id="comments">
         <div class="container">
-
             <div class="comments-heading">
                 <img src="assets/img/recettes/icons/comment.svg" alt="" aria-hidden="true">
-
-                <h2>Commentaires</h2>
+                <h2>Commentaires (<?php echo $commentCount; ?>)</h2>
             </div>
 
-            <div class="row g-5">
-                <div class="col-12 col-lg-5">
-                    <div class="comment-form-panel">
-                        <h3>Partagez votre expérience</h3>
-
-                        <!-- Le formulaire sera ajouté ici -->
-                    </div>
+            <?php if (empty($comments)) { ?>
+                <p>Aucun commentaire pour cette recette.</p>
+            <?php } else { ?>
+                <div class="comments-list-panel">
+                    <?php foreach ($comments as $comment) { ?>
+                        <article class="recipe-comment">
+                            <h3><?php echo $escape($comment->getSubject() ?: 'Commentaire de ' . $comment->getAuthorUsername()); ?></h3>
+                            <p><?php echo $escape($comment->getMessage()); ?></p>
+                            <small>Par <?php echo $escape($comment->getAuthorUsername()); ?></small>
+                        </article>
+                    <?php } ?>
                 </div>
+            <?php } ?>
 
-                <div class="col-12 col-lg-7">
-                    <div class="comments-list-panel">
-                        <!-- Les commentaires seront ajoutés ici -->
-                    </div>
-                </div>
-            </div>
+            <?php if ($commentPage > 1 || $commentHasNext) { ?>
+                <nav class="comment-pagination" aria-label="Pagination des commentaires">
+                    <?php if ($commentPage > 1) { ?>
+                        <a href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>&amp;comment_page=<?php echo $commentPage - 1; ?>#comments">
+                            Commentaires précédents
+                        </a>
+                    <?php } ?>
 
+                    <span>Page <?php echo $commentPage; ?></span>
+
+                    <?php if ($commentHasNext) { ?>
+                        <a href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>&amp;comment_page=<?php echo $commentPage + 1; ?>#comments">
+                            Commentaires suivants
+                        </a>
+                    <?php } ?>
+                </nav>
+            <?php } ?>
         </div>
     </section>
 </main>

@@ -874,6 +874,33 @@ main {
     font-size: clamp(1.35rem, 2.5vw, 1.8rem);
 }
 
+.comment-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.comment-pagination a {
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--color-gold);
+    border-radius: 2rem;
+    color: var(--color-brown);
+    text-decoration: none;
+}
+
+.comment-pagination a:hover,
+.comment-pagination a:focus-visible {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+}
+
+.comment-pagination span {
+    font-weight: 500;
+}
+
 /* @media (max-width: 767.98px) {
 
     .navbar {
@@ -1115,5 +1142,32 @@ main {
     .about-story-content {
         margin: 0 auto;
         text-align: center;
+    }
+}
+
+/* Le catalogue passe progressivement de trois à une colonne. */
+@media (max-width: 991.98px) {
+    .recipes-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .recipes-page {
+        overflow-x: hidden;
+    }
+
+    .recipe-filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+
+    .recipe-filter {
+        flex: 0 0 auto;
+    }
+
+    .recipes-grid {
+        grid-template-columns: 1fr;
     }
 }

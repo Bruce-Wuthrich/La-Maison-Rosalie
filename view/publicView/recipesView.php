@@ -1,5 +1,14 @@
 <?php require RACINE_PATH . '/view/inc/header.php'; ?>
 <?php require RACINE_PATH . '/view/inc/navbar.php'; ?>
+<?php
+$recipeFilters = [
+    '' => 'Toutes',
+    'gateaux' => 'Gâteaux',
+    'mousses' => 'Mousses',
+    'boissons' => 'Boissons',
+    'glace' => 'Glacé',
+];
+?>
 
 <main class="recipes-page">
 
@@ -19,61 +28,62 @@
         <div class="container">
 
             <nav class="recipe-filters" aria-label="Filtrer les recettes">
-                <a class="recipe-filter is-active" href="?pg=recettes" aria-current="page">
-                    Toutes
-                </a>
-
-                <a class="recipe-filter" href="?pg=recettes&categorie=tartes">
-                    Tartes
-                </a>
-
-                <a class="recipe-filter" href="?pg=recettes&categorie=gateaux">
-                    Gâteaux
-                </a>
-
-                <a class="recipe-filter" href="?pg=recettes&categorie=glaces">
-                    Glaces
-                </a>
-
-                <a class="recipe-filter" href="?pg=recettes&categorie=mousses">
-                    Mousses
-                </a>
-
-                <a class="recipe-filter" href="?pg=recettes&categorie=patisseries">
-                    Pâtisseries
-                </a>
+                <?php foreach ($recipeFilters as $filterSlug => $filterLabel) { ?>
+                    <?php $isActive = $categorySlug === $filterSlug; ?>
+                    <a class="recipe-filter<?php echo $isActive ? ' is-active' : ''; ?>"
+                        href="?pg=recettes<?php echo $filterSlug === '' ? '' : '&amp;categorie=' . rawurlencode($filterSlug); ?>"
+                        <?php echo $isActive ? 'aria-current="page"' : ''; ?>>
+                        <?php echo htmlspecialchars($filterLabel, ENT_QUOTES, 'UTF-8'); ?>
+                    </a>
+                <?php } ?>
             </nav>
 
-            <div class="recipes-grid">
-
-                <article class="recipe-card">
-                    <a class="recipe-card-image-link" href="?pg=recette&slug=brownies-au-chocolat-noir">
-
-                        <img class="recipe-card-image" src="assets/img/recettes/brownie.png"
-                            alt="Brownies au chocolat noir">
-                    </a>
-
-                    <div class="recipe-card-content">
-                        <p class="recipe-card-category">Gâteaux</p>
-
-                        <h2>
-                            <a href="?pg=recette&slug=brownies-au-chocolat-noir">
-                                Brownies au chocolat noir
+            <?php if ($error !== null) { ?>
+                <p role="alert"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php } elseif (empty($recipes)) { ?>
+                <p>Aucune recette n’est disponible pour le moment.</p>
+            <?php } else { ?>
+                <div class="recipes-grid">
+                    <?php foreach ($recipes as $recipe) { ?>
+                        <article class="recipe-card">
+                            <a class="recipe-card-image-link"
+                                href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>">
+                                <img class="recipe-card-image"
+                                    src="<?php echo htmlspecialchars((string) $recipe->getMainImage(), ENT_QUOTES, 'UTF-8'); ?>"
+                                    alt="<?php echo htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8'); ?>"
+                                    width="1200" height="800" loading="lazy">
                             </a>
-                        </h2>
 
-                        <p class="recipe-card-description">
-                            Un brownie gourmand, fondant et riche en chocolat.
-                        </p>
+                            <div class="recipe-card-content">
+                                <p class="recipe-card-category">
+                                    <?php echo htmlspecialchars($recipe->getCategoryTitles() ?? 'Recette', ENT_QUOTES, 'UTF-8'); ?>
+                                </p>
 
-                        <div class="recipe-card-footer">
-                            <span>★★★★☆</span>
-                            <span>25 min</span>
-                        </div>
-                    </div>
-                </article>
+                                <h2>
+                                    <a href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>">
+                                        <?php echo htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8'); ?>
+                                    </a>
+                                </h2>
 
-            </div>
+                                <p class="recipe-card-description">
+                                    <?php echo htmlspecialchars((string) $recipe->getDescription(), ENT_QUOTES, 'UTF-8'); ?>
+                                </p>
+
+                                <div class="recipe-card-footer">
+                                    <span>
+                                        <?php
+                                        echo $recipe->getAverageRating() === null
+                                            ? 'Pas encore notée'
+                                            : htmlspecialchars($recipe->getFormattedAverage(), ENT_QUOTES, 'UTF-8') . '/5';
+                                        ?>
+                                    </span>
+                                    <span><?php echo $recipe->getTotalTime(); ?> min</span>
+                                </div>
+                            </div>
+                        </article>
+                    <?php } ?>
+                </div>
+            <?php } ?>
         </div>
     </section>
 
