@@ -33,7 +33,6 @@ class UserMapping extends AbstractMapping{
 
     public function setUsername(string $username):void{
         $username = trim($username);
-        $length = mb_strlen($username);
         if (!preg_match('/^[\p{L}\p{N}_-]{3,50}$/u', $username)) {
             throw new InvalidArgumentException("Le nom d'utilisateur doit faire entre 3 et 50 caractères : lettres, chiffres, - et _ uniquement.");
         }

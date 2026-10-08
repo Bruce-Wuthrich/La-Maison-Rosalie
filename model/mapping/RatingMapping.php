@@ -33,7 +33,7 @@ class RatingMapping extends AbstractMapping{
 
     public function setUserId(int $userId): void{
         if($userId <= 0){
-            throw new InvalidArgumentException("L'identifiant de l'utilisateur doit être positif");
+            throw new InvalidArgumentException("L'identifiant de l'utilisateur doit être positif.");
         }
         $this->user_id = $userId;
     }
@@ -44,7 +44,7 @@ class RatingMapping extends AbstractMapping{
 
     public function setRecipeId(int $recipeId): void{
         if($recipeId <= 0){
-            throw new InvalidArgumentException("L'identifiant de la recette doit être positif");
+            throw new InvalidArgumentException("L'identifiant de la recette doit être positif.");
         }
         $this->recipe_id = $recipeId;
     }

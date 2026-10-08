@@ -58,7 +58,7 @@ spl_autoload_register(function ($class) {
 //helper commun aux controleur (chargé une seule fois)
 require_once RACINE_PATH . '/controller/ControllerHelpers.php';
 
-// Jeton dispo pour tout form (modale inclus)µ
+// Jeton dispo pour tout form (modale inclus)
 $csrfToken = csrfToken();
 
 // msg affiché apres redirection 
@@ -67,7 +67,7 @@ $flashMessage = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' ? pullFlashMessa
 try {
     $db = MyPDO::getInstance();
 } catch (PDOException $e) {
-    error_log('La connexion a la BDD a échouée' . $e->getMessage());
+    error_log('La connexion a la BDD a échouée : ' . $e->getMessage());
     http_response_code(503);
     exit('Le site est momentanément indisponible. Merci de réessayer plus tard.');
 }
@@ -78,7 +78,7 @@ $menuRecipesError = false;
 try {
     $menuRecipes = $recipeManager->getMenuList();
 } catch (Throwable $e) {
-    error_log('Erreur lors de la récupération des recettes du menu' . $e->getMessage());
+    error_log('Erreur lors de la récupération des recettes du menu : ' . $e->getMessage());
     $menuRecipesError = true;
 }
 
