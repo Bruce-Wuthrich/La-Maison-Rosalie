@@ -32,7 +32,7 @@ class RecipeMapping extends AbstractMapping{
 
     public function setId(int $id): void{
         if($id<=0){
-            throw new InvalidArgumentException("L'identifiant doit être positif");
+            throw new InvalidArgumentException("L'identifiant doit être positif.");
         }
         $this->id = $id;
     }
@@ -45,7 +45,7 @@ class RecipeMapping extends AbstractMapping{
         $title = trim($title);
         $length = mb_strlen($title);
         if($length < 3 || $length > 150){
-            throw new InvalidArgumentException('Le titre doit faire entre 3 et 150 caractères');
+            throw new InvalidArgumentException('Le titre doit faire entre 3 et 150 caractères.');
         }
         $this->title = $title; 
     }
@@ -56,7 +56,7 @@ class RecipeMapping extends AbstractMapping{
 
     public function setSlug(string $slug):void{
         if(!preg_match('/^[a-z0-9-]{1,170}$/', $slug)){
-            throw new InvalidArgumentException('Slug invalide');
+            throw new InvalidArgumentException('Slug invalide.');
         }
         $this->slug = $slug;
     }
@@ -67,7 +67,7 @@ class RecipeMapping extends AbstractMapping{
 
     public function setPrepTimeMinutes(int $minutes):void{
         if ($minutes < 0){
-            throw new InvalidArgumentException('Le temps de préparation ne peut pas être négatif');
+            throw new InvalidArgumentException('Le temps de préparation ne peut pas être négatif.');
         }
         $this->prep_time_minutes = $minutes;
     }
@@ -78,7 +78,7 @@ class RecipeMapping extends AbstractMapping{
 
     public function setCookTimeMinutes(int $minutes):void{
         if ($minutes < 0){
-            throw new InvalidArgumentException('Le temps de cuisson ne peut pas être négatif');
+            throw new InvalidArgumentException('Le temps de cuisson ne peut pas être négatif.');
         }
         $this->cook_time_minutes = $minutes;
     }
@@ -94,7 +94,7 @@ class RecipeMapping extends AbstractMapping{
 
     public function setDifficulty(string $difficulty):void{
         if (!in_array($difficulty, ['easy', 'medium', 'hard'], true)){
-            throw new InvalidArgumentException('La difficulté doit être easy, medium ou hard');
+            throw new InvalidArgumentException('La difficulté doit être easy, medium ou hard.');
         }
         $this->difficulty = $difficulty;
     }
@@ -115,7 +115,7 @@ class RecipeMapping extends AbstractMapping{
     public function setDescription(string $description):void{
         $description = trim($description);
         if($description === ''){
-            throw new InvalidArgumentException('La description ne peut être vide');
+            throw new InvalidArgumentException('La description ne peut être vide.');
         }
         $this->description = $description; 
     }
@@ -128,7 +128,7 @@ class RecipeMapping extends AbstractMapping{
         $mainImage = trim($mainImage);
         $length = mb_strlen($mainImage);
         if($length === 0 || $length > 500){
-            throw new InvalidArgumentException("Le chemin de l'image doit faire entre 1 et 500 caractères");
+            throw new InvalidArgumentException("Le chemin de l'image doit faire entre 1 et 500 caractères.");
         }
         $this->main_image = $mainImage;
     }
@@ -139,7 +139,7 @@ class RecipeMapping extends AbstractMapping{
 
     public function setServings(int $servings):void{
         if($servings <= 0){
-            throw new InvalidArgumentException("Le nombre de portions doit être supérieur à 0");
+            throw new InvalidArgumentException("Le nombre de portions doit être supérieur à 0.");
         }
         $this->servings = $servings;
     }
@@ -150,7 +150,7 @@ class RecipeMapping extends AbstractMapping{
 
     public function setAuthorId(int $authorId): void{
         if($authorId <= 0){
-            throw new InvalidArgumentException("L'identifiant de l'auteur doit être positif");
+            throw new InvalidArgumentException("L'identifiant de l'auteur doit être positif.");
         }
         $this->author_id = $authorId;
     }
@@ -177,14 +177,14 @@ class RecipeMapping extends AbstractMapping{
 
     public function setRatingCount(int $ratingCount): void{
         if ($ratingCount < 0){
-            throw new InvalidArgumentException("Le nombre de votes ne peut pas être négatif");
+            throw new InvalidArgumentException("Le nombre de votes ne peut pas être négatif.");
         }
         $this->rating_count = $ratingCount; 
     }
 
     public function setUserRating(?int $userRating): void{
         if ($userRating !== null && ($userRating < 1 || $userRating > 5)){
-            throw new InvalidArgumentException("La note doit être comprise entre 1 et 5");
+            throw new InvalidArgumentException("La note doit être comprise entre 1 et 5.");
         }
         $this->user_rating = $userRating; 
     }
