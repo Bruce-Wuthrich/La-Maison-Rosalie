@@ -102,4 +102,32 @@ class RecipeManager implements ManagerInterface{
         return $recipes; 
     }
 
+    public function getByCategorySlug(string $categorySlug): array{
+        $query = $this->db->prepare(
+            'SELECT r.id, r.title, r.slug, r.description, r.main_image, r.prep_time_minutes, r.cook_time_minutes,
+                    r.difficulty, r.created_at,
+                    ROUND(AVG(ra.rating), 1) AS average_rating,
+                    COUNT(ra.id) AS rating_count,
+                    (SELECT GROUP_CONCAT(c.title ORDER BY c.title SEPARATOR \', \')
+                     FROM categories c
+                     JOIN recipe_categories rc ON rc.category_id = c.id
+                     WHERE rc.recipe_id = r.id) AS category_titles
+             FROM recipes r
+             JOIN recipe_categories rc_filter ON rc_filter.recipe_id = r.id
+             JOIN categories c_filter ON c_filter.id = rc_filter.category_id
+             LEFT JOIN ratings ra ON ra.recipe_id = r.id
+             WHERE c_filter.slug = :category_slug
+             GROUP BY r.id
+             ORDER BY r.title'
+        );
+        $query->bindValue(':category_slug', $categorySlug, PDO::PARAM_STR);
+        $query->execute();
+
+        $recipes = [];
+        foreach ($query->fetchAll() as $row){
+            $recipes[] = new RecipeMapping($row);
+        }
+        return $recipes;
+    }
+
 }

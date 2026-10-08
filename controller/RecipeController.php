@@ -73,9 +73,21 @@ if ($page === 'recette') {
 // Prepare toutes les recettes pour la page recettes.
 $recipes = [];
 $error = null;
+$categorySlug = trim((string) ($_GET['categorie'] ?? ''));
+$allowedCategorySlugs = ['gateaux', 'mousses', 'boissons', 'glace'];
+
+// Un slug inconnu ou invalide affiche simplement toutes les recettes.
+if ($categorySlug !== '' && (
+    !preg_match('/^[a-z0-9-]+$/', $categorySlug)
+    || !in_array($categorySlug, $allowedCategorySlugs, true)
+)) {
+    $categorySlug = '';
+}
 
 try {
-    $recipes = $recipeManager->getAll();
+    $recipes = $categorySlug === ''
+        ? $recipeManager->getAll()
+        : $recipeManager->getByCategorySlug($categorySlug);
 } catch (Throwable $exception) {
     error_log('Impossible de charger les recettes : ' . $exception->getMessage());
     http_response_code(503);
