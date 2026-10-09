@@ -10,14 +10,17 @@ if ($page === 'a-propos') {
     return;
 }
 
-// recupere les 3 recettes les mieux notées pour la page d'accueil
+// Récupère les recettes de l'accueil depuis MariaDB.
+// Le top 3 est calculé dans le manager à partir des notes.
 $topRecipes = [];
+$timeRecipes = [];
 
 try {
     $topRecipes = $recipeManager->getTopThree();
+    $timeRecipes = $recipeManager->getTimeShortcuts();
 } catch (Throwable $error) {
     // Garde l'erreur dans les logs sans la montrer au visiteur.
-    error_log('Impossible de charger le top 3 : ' . $error->getMessage());
+    error_log('Impossible de charger les recettes de l’accueil : ' . $error->getMessage());
     http_response_code(503);
 }
 
