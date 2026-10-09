@@ -1,11 +1,5 @@
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#F1B300">
-<g id="SVGRepo_bgCarrier" stroke-width="0"/>
-<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-<g id="SVGRepo_iconCarrier">
-<title>ionicons-v5-f</title>
-<path d="M221.09,64A157.09,157.09,0,1,0,378.18,221.09,157.1,157.1,0,0,0,221.09,64Z" style="fill:none;stroke:#F1B300;stroke-miterlimit:10;stroke-width:32px"/>
-<line x1="338.29" y1="338.29" x2="448" y2="448" style="fill:none;stroke:#F1B300;stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"/>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <circle cx="20" cy="20" r="19" stroke="#EAA000" stroke-width="1" />
+  <circle cx="17" cy="16.5" r="7" stroke="#EAA000" stroke-width="1" />
+  <path d="M22 21.5L29 28.5" stroke="#EAA000" stroke-width="1" stroke-linecap="round" />
+</svg>

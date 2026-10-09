@@ -1,12 +1,12 @@
 <?php require RACINE_PATH . '/view/inc/header.php'; ?>
 <?php require RACINE_PATH . '/view/inc/navbar.php'; ?>
-<main>
+<main class="home-main">
+    <div class="hero-top-marker" aria-hidden="true">
+        <img src="assets/img/logo/picto.svg" alt="">
+    </div>
+
     <section class="hero-home">
         <h1 class="visually-hidden">Maison Rosalie</h1>
-
-        <div class="hero-top-marker" aria-hidden="true">
-            <img src="assets/img/logo/picto.svg" alt="">
-        </div>
 
         <div class="hero-emblem">
             <button class="hero-wheel" type="button" aria-label="Faire tourner les catégories">
