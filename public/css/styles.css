@@ -1388,6 +1388,88 @@ main {
     }
 }
 
+/* Section « Qui sommes nous » de l'accueil. */
+.about-home-section {
+    overflow: hidden;
+    padding: clamp(4rem, 7vw, 6.5rem) 0 clamp(4.5rem, 8vw, 7rem);
+    background-color: var(--color-white);
+    color: var(--color-gold-text);
+}
+
+.about-home-title {
+    margin: 0 0 clamp(2.5rem, 4.5vw, 4rem);
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(1.75rem, 2.8vw, 2.35rem);
+    font-weight: 400;
+    text-align: center;
+}
+
+.about-home-layout {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2vw, 1.75rem);
+    row-gap: clamp(2rem, 3vw, 2.75rem);
+    align-items: start;
+}
+
+.about-home-layout img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.about-home-chocolate {
+    grid-column: 1 / span 3;
+    grid-row: 1;
+    aspect-ratio: 245 / 134;
+}
+
+.about-home-copy {
+    grid-column: 4 / -1;
+    grid-row: 1;
+    margin: 0;
+    padding-top: 0.55rem;
+    font-size: clamp(0.95rem, 1.35vw, 1.08rem);
+    line-height: 1.55;
+}
+
+.about-home-women {
+    grid-column: 2 / span 6;
+    grid-row: 2;
+    margin-top: 0.75rem;
+    aspect-ratio: 3 / 2;
+}
+
+.about-home-more {
+    grid-column: 8 / -1;
+    grid-row: 2;
+    display: grid;
+    gap: clamp(2.75rem, 4.5vw, 3.75rem);
+}
+
+.about-home-link {
+    width: min(100%, 155px);
+    justify-self: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid currentColor;
+    color: var(--color-gold-text);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.about-home-link:hover,
+.about-home-link:focus-visible {
+    color: var(--color-brown);
+}
+
+.about-home-books {
+    aspect-ratio: 500 / 266;
+}
+
 /* Sections de l'accueil reprises du visuel Figma. */
 .home-recipes-section {
     background-color: var(--color-white);
@@ -1517,6 +1599,46 @@ main {
 }
 
 @media (max-width: 767.98px) {
+    .about-home-section {
+        padding: 3.5rem 0 4.5rem;
+    }
+
+    .about-home-title {
+        margin-bottom: 2.25rem;
+        font-size: 1.8rem;
+    }
+
+    .about-home-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .about-home-chocolate,
+    .about-home-copy,
+    .about-home-women,
+    .about-home-more {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .about-home-copy {
+        padding-top: 0;
+        font-size: 0.95rem;
+    }
+
+    .about-home-women {
+        margin-top: 0.5rem;
+    }
+
+    .about-home-more {
+        gap: 1.75rem;
+    }
+
+    .about-home-link {
+        justify-self: end;
+        margin-top: 0.25rem;
+    }
+
     .time-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }

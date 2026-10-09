@@ -35,6 +35,46 @@
         </p>
     </section>
 
+    <section class="about-home-section" aria-labelledby="about-home-title">
+        <div class="container">
+            <h2 id="about-home-title" class="about-home-title">Qui sommes nous</h2>
+
+            <div class="about-home-layout">
+                <img
+                    class="about-home-chocolate"
+                    src="assets/img/home/about-chocolate.gif"
+                    alt="Préparation d’un dessert au chocolat"
+                    loading="lazy">
+
+                <p class="about-home-copy">
+                    Sorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum,
+                    ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+                    inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis. Ut commodo
+                    efficitur neque.
+                </p>
+
+                <img
+                    class="about-home-women"
+                    src="assets/img/home/about-women.webp"
+                    alt="Deux femmes dégustant une pâtisserie en terrasse"
+                    loading="lazy">
+
+                <div class="about-home-more">
+                    <a class="about-home-link" href="?pg=a-propos">
+                        <span>À propos</span>
+                        <span aria-hidden="true">⟶</span>
+                    </a>
+
+                    <img
+                        class="about-home-books"
+                        src="assets/img/home/about-books.webp"
+                        alt="Livres anciens dans une bibliothèque"
+                        loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="home-recipes-section time-section" aria-labelledby="time-recipes-title">
         <div class="container">
             <h2 id="time-recipes-title" class="home-section-title">Quand le temps compte</h2>
