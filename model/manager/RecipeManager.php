@@ -127,6 +127,62 @@ class RecipeManager implements ManagerInterface{
         return $recipes; 
     }
 
+    // Recherche une recette par son titre, sa description ou sa catégorie.
+    public function search(string $searchTerm, ?string $categorySlug = null): array{
+        $sql = 'SELECT r.id, r.title, r.slug, r.description, r.main_image, r.prep_time_minutes, r.cook_time_minutes,
+                       r.difficulty, r.created_at,
+                       ROUND(AVG(ra.rating), 1) AS average_rating,
+                       COUNT(ra.id) AS rating_count,
+                       (SELECT GROUP_CONCAT(c.title ORDER BY c.title SEPARATOR \', \')
+                        FROM categories c
+                        JOIN recipe_categories rc ON rc.category_id = c.id
+                        WHERE rc.recipe_id = r.id) AS category_titles
+                FROM recipes r
+                LEFT JOIN ratings ra ON ra.recipe_id = r.id
+                WHERE (
+                    r.title LIKE :search_title
+                    OR r.description LIKE :search_description
+                    OR EXISTS (
+                        SELECT 1
+                        FROM recipe_categories rc_search
+                        JOIN categories c_search ON c_search.id = rc_search.category_id
+                        WHERE rc_search.recipe_id = r.id
+                        AND c_search.title LIKE :search_category
+                    )
+                )';
+
+        if ($categorySlug !== null) {
+            $sql .= ' AND EXISTS (
+                        SELECT 1
+                        FROM recipe_categories rc_filter
+                        JOIN categories c_filter ON c_filter.id = rc_filter.category_id
+                        WHERE rc_filter.recipe_id = r.id
+                        AND c_filter.slug = :category_slug
+                      )';
+        }
+
+        $sql .= ' GROUP BY r.id ORDER BY r.title';
+
+        $query = $this->db->prepare($sql);
+        $searchPattern = '%' . $searchTerm . '%';
+        $query->bindValue(':search_title', $searchPattern, PDO::PARAM_STR);
+        $query->bindValue(':search_description', $searchPattern, PDO::PARAM_STR);
+        $query->bindValue(':search_category', $searchPattern, PDO::PARAM_STR);
+
+        if ($categorySlug !== null) {
+            $query->bindValue(':category_slug', $categorySlug, PDO::PARAM_STR);
+        }
+
+        $query->execute();
+
+        $recipes = [];
+        foreach ($query->fetchAll() as $row) {
+            $recipes[] = new RecipeMapping($row);
+        }
+
+        return $recipes;
+    }
+
     public function getByCategorySlug(string $categorySlug): array{
         $query = $this->db->prepare(
             'SELECT r.id, r.title, r.slug, r.description, r.main_image, r.prep_time_minutes, r.cook_time_minutes,

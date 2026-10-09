@@ -5,9 +5,20 @@
             <a class="navbar-icon-link" href="?pg=accueil" aria-label="Accueil">
                 <img class="navbar-icon" src="assets/img/interface/home.svg" alt="Accueil">
             </a>
-            <button type="button" class="navbar-icon-button" aria-label="Rechercher">
-                <img class="navbar-icon" src="assets/img/interface/search.svg" alt="Rechercher">
-            </button>
+
+            <?php $navbarSearch = stringInput($_GET['recherche'] ?? null); ?>
+            <form class="navbar-search<?= $navbarSearch !== '' ? ' is-open' : '' ?>" action="" method="get"
+                role="search" data-navbar-search>
+                <input type="hidden" name="pg" value="recettes">
+                <button type="button" class="navbar-search-toggle" data-search-toggle
+                    aria-label="Ouvrir la recherche" aria-expanded="<?= $navbarSearch !== '' ? 'true' : 'false' ?>"
+                    aria-controls="navbarSearchInput">
+                    <img class="navbar-icon" src="assets/img/interface/search.svg" alt="">
+                </button>
+                <input id="navbarSearchInput" class="navbar-search-input" type="search" name="recherche"
+                    value="<?= htmlspecialchars($navbarSearch, ENT_QUOTES, 'UTF-8') ?>" placeholder="Chercher..."
+                    maxlength="80" autocomplete="off" aria-label="Chercher une recette">
+            </form>
         </div>
 
         <?php if ($page !== 'accueil'): ?>
@@ -18,7 +29,8 @@
 
         <div class="navbar-actions navbar-actions-right">
 
-            <button type="button" class="navbar-icon-button" aria-label="Se connecter">
+            <button type="button" class="navbar-icon-button" data-auth-open aria-label="Se connecter"
+                aria-haspopup="dialog" aria-controls="authModal">
                 <img class="navbar-icon" src="assets/img/interface/account.svg" alt="Compte">
             </button>
 
@@ -53,10 +65,10 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="?pg=contact" class="nav-link">Contact</a>
+                    <a href="?pg=a-propos" class="nav-link">À propos</a>
                 </li>
                 <li class="nav-item">
-                    <a href="?pg=a-propos" class="nav-link">À propos</a>
+                    <a href="?pg=contact" class="nav-link">Contact</a>
                 </li>
 
 

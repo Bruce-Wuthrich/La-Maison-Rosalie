@@ -21,7 +21,12 @@ $loginAttemptManager = new LoginAttemptManager($db);
 try {
     if ($action === 'register') {
         storeFormData('register', $_POST);
-        $userManager->register($_POST);
+        $registeredUser = $userManager->register($_POST);
+
+        if ($registeredUser === false) {
+            throw new RuntimeException('La création du compte a échoué.');
+        }
+
         unset($_SESSION['form_data']['register']);
         setFlashMessage('success', 'Votre compte a bien été créé. Vous pouvez maintenant vous connecter.');
         redirectTo($redirect . '#authModal');
@@ -30,7 +35,12 @@ try {
     if ($action === 'login') {
         storeFormData('login', $_POST);
         $email = stringInput($_POST['email'] ?? null);
+        $loginMode = stringInput($_POST['login_mode'] ?? 'user');
         $ipAddress = clientIpAddress();
+
+        if (!in_array($loginMode, ['user', 'admin'], true)) {
+            $loginMode = 'user';
+        }
 
         if ($loginAttemptManager->countRecent($email, $ipAddress, 15) >= 5) {
             setFlashMessage('error', 'Trop de tentatives. Merci de patienter 15 minutes.');
@@ -43,10 +53,18 @@ try {
             redirectTo($redirect . '#authModal');
         }
 
+        if ($loginMode === 'admin' && ($_SESSION['role'] ?? '') !== 'admin') {
+            $userManager->disconnect();
+            session_start();
+            session_regenerate_id(true);
+            setFlashMessage('error', 'Ce compte ne possède pas les droits administrateur.');
+            redirectTo($redirect . '#authModal');
+        }
+
         $loginAttemptManager->clear($email);
         unset($_SESSION['form_data']['login']);
         setFlashMessage('success', 'Connexion réussie. Bienvenue ' . $_SESSION['username'] . ' !');
-        redirectTo($redirect);
+        redirectTo(($_SESSION['role'] ?? '') === 'admin' ? '?pg=admin' : $redirect);
     }
 
     if ($action === 'logout') {

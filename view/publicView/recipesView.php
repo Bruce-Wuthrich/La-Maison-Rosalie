@@ -21,6 +21,13 @@ $recipeFilters = [
             <p class="recipes-introduction">
                 Découvrez nos créations chocolatées et trouvez la recette qui vous fera plaisir.
             </p>
+
+            <?php if ($searchTerm !== '') { ?>
+                <p class="recipes-search-summary">
+                    <?php echo count($recipes); ?> résultat<?php echo count($recipes) > 1 ? 's' : ''; ?> pour
+                    « <?php echo htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8'); ?> »
+                </p>
+            <?php } ?>
         </div>
     </section>
 
@@ -31,7 +38,7 @@ $recipeFilters = [
                 <?php foreach ($recipeFilters as $filterSlug => $filterLabel) { ?>
                     <?php $isActive = $categorySlug === $filterSlug; ?>
                     <a class="recipe-filter<?php echo $isActive ? ' is-active' : ''; ?>"
-                        href="?pg=recettes<?php echo $filterSlug === '' ? '' : '&amp;categorie=' . rawurlencode($filterSlug); ?>"
+                        href="?pg=recettes<?php echo $filterSlug === '' ? '' : '&amp;categorie=' . rawurlencode($filterSlug); ?><?php echo $searchTerm === '' ? '' : '&amp;recherche=' . rawurlencode($searchTerm); ?>"
                         <?php echo $isActive ? 'aria-current="page"' : ''; ?>>
                         <?php echo htmlspecialchars($filterLabel, ENT_QUOTES, 'UTF-8'); ?>
                     </a>
@@ -41,7 +48,11 @@ $recipeFilters = [
             <?php if ($error !== null) { ?>
                 <p role="alert"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
             <?php } elseif (empty($recipes)) { ?>
-                <p>Aucune recette n’est disponible pour le moment.</p>
+                <p>
+                    <?php echo $searchTerm === ''
+                        ? 'Aucune recette n’est disponible pour le moment.'
+                        : 'Aucune recette ne correspond à votre recherche.'; ?>
+                </p>
             <?php } else { ?>
                 <div class="recipes-grid">
                     <?php foreach ($recipes as $recipe) { ?>
