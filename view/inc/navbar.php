@@ -1,4 +1,4 @@
-<nav class="navbar ">
+<nav class="navbar<?= $page === 'accueil' ? ' navbar-home' : '' ?>">
     <div class="container">
 
         <div class="navbar-actions navbar-actions-left">
@@ -10,9 +10,11 @@
             </button>
         </div>
 
-        <a href="?pg=accueil" class="navbar-brand">
-            <img src="assets/img/logo/picto.svg" alt="Maison Rosalie" class="navbar-logo">
-        </a>
+        <?php if ($page !== 'accueil'): ?>
+            <a href="?pg=accueil" class="navbar-brand">
+                <img src="assets/img/logo/picto.svg" alt="Maison Rosalie" class="navbar-logo">
+            </a>
+        <?php endif; ?>
 
         <div class="navbar-actions navbar-actions-right">
 

@@ -15,15 +15,9 @@ if (heroWheel) {
   let categoryIndex = 4;
   let nextCategoryIndex = categoryIndex;
 
-  const showCategory = (index) => {
-    categoryIndex = index;
-    const currentCategory = categories[categoryIndex];
-
-    categoryLink.textContent = currentCategory.name;
-    categoryLink.href = `?pg=recettes&categorie=${currentCategory.slug}`;
-
+  const showActiveIndicator = (index) => {
     categoryButtons.forEach((button, buttonIndex) => {
-      const isCurrent = buttonIndex === categoryIndex;
+      const isCurrent = buttonIndex === index;
       button.classList.toggle("is-active", isCurrent);
 
       if (isCurrent) {
@@ -32,6 +26,16 @@ if (heroWheel) {
         button.removeAttribute("aria-current");
       }
     });
+  };
+
+  const showCategory = (index) => {
+    categoryIndex = index;
+    const currentCategory = categories[categoryIndex];
+
+    categoryLink.textContent = currentCategory.name;
+    categoryLink.href = `?pg=recettes&categorie=${currentCategory.slug}`;
+
+    showActiveIndicator(categoryIndex);
 
     void categoryLink.offsetWidth;
     categoryLink.classList.add("is-active");
@@ -46,6 +50,7 @@ if (heroWheel) {
     heroWheel.disabled = true;
     categoryLink.classList.remove("is-active");
     nextCategoryIndex = index;
+    showActiveIndicator(nextCategoryIndex);
 
     const steps = (index - categoryIndex + categories.length) % categories.length;
     rotation += 15 * (steps || 1);
