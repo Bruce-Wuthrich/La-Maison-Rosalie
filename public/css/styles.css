@@ -1470,6 +1470,78 @@ main {
     aspect-ratio: 500 / 266;
 }
 
+.about-home-section.is-scroll-ready .about-home-title,
+.about-home-section.is-scroll-ready .about-home-copy,
+.about-home-section.is-scroll-ready .about-home-link,
+.about-home-section.is-scroll-ready .about-home-chocolate,
+.about-home-section.is-scroll-ready .about-home-women,
+.about-home-section.is-scroll-ready .about-home-books {
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+.about-home-section.is-scroll-ready .about-home-title,
+.about-home-section.is-scroll-ready .about-home-copy,
+.about-home-section.is-scroll-ready .about-home-link {
+    transform: translateY(1.5rem);
+}
+
+.about-home-section.is-scroll-ready .about-home-chocolate {
+    transform: translateX(-55vw);
+}
+
+.about-home-section.is-scroll-ready .about-home-women {
+    transform: translateX(-65vw);
+}
+
+.about-home-section.is-scroll-ready .about-home-books {
+    transform: translateX(65vw);
+}
+
+.about-home-section.is-scroll-ready.is-visible .about-home-title,
+.about-home-section.is-scroll-ready.is-visible .about-home-copy,
+.about-home-section.is-scroll-ready.is-visible .about-home-link,
+.about-home-section.is-scroll-ready.is-visible .about-home-chocolate,
+.about-home-section.is-scroll-ready.is-visible .about-home-women,
+.about-home-section.is-scroll-ready.is-visible .about-home-books {
+    opacity: 1;
+    transform: translate(0);
+}
+
+.about-home-section.is-scroll-ready.is-visible .about-home-title {
+    transition: opacity 0.65s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-home-section.is-scroll-ready.is-visible .about-home-chocolate {
+    transition: opacity 0.65s 0.08s ease, transform 0.8s 0.08s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-home-section.is-scroll-ready.is-visible .about-home-copy {
+    transition: opacity 0.65s 0.12s ease, transform 0.75s 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-home-section.is-scroll-ready.is-visible .about-home-women,
+.about-home-section.is-scroll-ready.is-visible .about-home-books {
+    transition: opacity 0.7s 0.18s ease, transform 0.9s 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-home-section.is-scroll-ready.is-visible .about-home-link {
+    transition: color 0.2s ease, opacity 0.65s 0.22s ease, transform 0.75s 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about-home-section.is-scroll-ready .about-home-title,
+    .about-home-section.is-scroll-ready .about-home-copy,
+    .about-home-section.is-scroll-ready .about-home-link,
+    .about-home-section.is-scroll-ready .about-home-chocolate,
+    .about-home-section.is-scroll-ready .about-home-women,
+    .about-home-section.is-scroll-ready .about-home-books {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
 /* Sections de l'accueil reprises du visuel Figma. */
 .home-recipes-section {
     background-color: var(--color-white);
