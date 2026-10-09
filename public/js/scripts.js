@@ -8,30 +8,98 @@ if (heroWheel) {
     { name: "Gâteaux", slug: "gateaux" },
     { name: "Glaces", slug: "glaces" },
     { name: "Mousses", slug: "mousses" },
-    { name: "Pâtisseries", slug: "patisseries" },
+    { name: "Pâtisserie", slug: "patisseries" },
   ];
   const categoryLink = document.querySelector(".hero-category-current");
-  let categoryIndex = 0;
+  const categoryButtons = document.querySelectorAll(".hero-pagination button");
+  let categoryIndex = 4;
+  let nextCategoryIndex = categoryIndex;
 
-  heroWheel.addEventListener("click", () => {
+  const showActiveIndicator = (index) => {
+    categoryButtons.forEach((button, buttonIndex) => {
+      const isCurrent = buttonIndex === index;
+      button.classList.toggle("is-active", isCurrent);
+
+      if (isCurrent) {
+        button.setAttribute("aria-current", "true");
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  const showCategory = (index) => {
+    categoryIndex = index;
+    const currentCategory = categories[categoryIndex];
+
+    categoryLink.textContent = currentCategory.name;
+    categoryLink.href = `?pg=recettes&categorie=${currentCategory.slug}`;
+
+    showActiveIndicator(categoryIndex);
+
+    void categoryLink.offsetWidth;
+    categoryLink.classList.add("is-active");
+    heroWheel.disabled = false;
+  };
+
+  const rotateToCategory = (index) => {
+    if (heroWheel.disabled || index === categoryIndex) {
+      return;
+    }
+
     heroWheel.disabled = true;
     categoryLink.classList.remove("is-active");
-    rotation += 15;
+    nextCategoryIndex = index;
+    showActiveIndicator(nextCategoryIndex);
+
+    const steps = (index - categoryIndex + categories.length) % categories.length;
+    rotation += 15 * (steps || 1);
     heroWheel.style.transform = `rotate(${rotation}deg)`;
+  };
+
+  heroWheel.addEventListener("click", () => {
+    rotateToCategory((categoryIndex + 1) % categories.length);
+  });
+
+  categoryButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      rotateToCategory(Number(button.dataset.categoryIndex));
+    });
   });
 
   heroWheel.addEventListener("transitionend", (event) => {
     if (event.propertyName === "transform") {
-      categoryIndex = (categoryIndex + 1) % categories.length;
-      const currentCategory = categories[categoryIndex];
-
-      categoryLink.textContent = currentCategory.name;
-      categoryLink.href = `?pg=recettes&categorie=${currentCategory.slug}`;
-
-      void categoryLink.offsetWidth;
-      categoryLink.classList.add("is-active");
-
-      heroWheel.disabled = false;
+      showCategory(nextCategoryIndex);
     }
   });
+}
+
+const aboutSection = document.querySelector(".about-home-section");
+
+if (aboutSection) {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  // Prépare les éléments avant leur apparition dans la fenêtre.
+  aboutSection.classList.add("is-scroll-ready");
+
+  if (prefersReducedMotion.matches || !("IntersectionObserver" in window)) {
+    aboutSection.classList.add("is-visible");
+  } else {
+    const aboutObserver = new IntersectionObserver(
+      ([entry], observer) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        aboutSection.classList.add("is-visible");
+        observer.unobserve(aboutSection);
+      },
+      {
+        threshold: 0.18,
+        rootMargin: "0px 0px -8%",
+      },
+    );
+
+    aboutObserver.observe(aboutSection);
+  }
 }
