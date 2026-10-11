@@ -5,3 +5,4 @@ logs/
 .idea/
 .DS_Store
 Thumbs.db
+data/create-app-user.sql
