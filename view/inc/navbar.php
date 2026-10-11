@@ -1,4 +1,4 @@
-<nav class="navbar<?= $page === 'accueil' ? ' navbar-home' : '' ?>">
+<nav class="navbar<?= $page === 'accueil' ? ' navbar-home' : ($page === 'a-propos' ? ' navbar-about' : '') ?>">
     <div class="container">
 
         <div class="navbar-actions navbar-actions-left">
@@ -29,9 +29,10 @@
 
         <div class="navbar-actions navbar-actions-right">
 
-            <button type="button" class="navbar-icon-button" data-auth-open aria-label="Se connecter"
+            <button type="button" class="navbar-icon-button navbar-account-button" data-auth-open aria-label="Se connecter"
                 aria-haspopup="dialog" aria-controls="authModal">
                 <img class="navbar-icon" src="assets/img/interface/account.svg" alt="Compte">
+                <span class="navbar-icon-tooltip" aria-hidden="true">Login</span>
             </button>
 
 
