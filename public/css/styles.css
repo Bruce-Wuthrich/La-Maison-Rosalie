@@ -1317,7 +1317,7 @@ body.menu-open .hero-top-marker {
     background-color: var(--color-brown);
 }
 
-.contact-information a {
+.contact-information a, p {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
@@ -1330,6 +1330,35 @@ body.menu-open .hero-top-marker {
     width: 34px;
     height: 34px;
     flex: 0 0 auto;
+}
+
+.contact-map-section {
+    margin-top: 3rem;
+}
+
+.contact-map-title {
+    margin-bottom: 1rem;
+    color: var(--color-gold);
+}
+
+.contact-map-wrapper {
+    overflow: hidden;
+    border-radius: 1.25rem;
+    box-shadow: 0 1rem 2.5rem rgba(90, 57, 43, 0.18);
+}
+
+.contact-map {
+    display: block;
+    width: 100%;
+    height: 380px;
+    border: 0;
+    filter: sepia(35%) saturate(85%);
+}
+
+@media (max-width: 767.98px) {
+    .contact-map {
+        height: 280px;
+    }
 }
 
 .contact-social {
