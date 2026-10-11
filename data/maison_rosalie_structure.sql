@@ -187,19 +187,19 @@ INSERT INTO categories (id, title, slug, description) VALUES
 INSERT INTO recipes (id, title, slug, description, main_image, prep_time_minutes, cook_time_minutes, servings, difficulty, author_id, created_at) VALUES
   (1, 'Chocolat chaud à l''ancienne', 'chocolat-chaud-a-l-ancienne',
    'Un chocolat chaud épais, fait avec du vrai chocolat noir fondu dans le lait, comme à la boutique les jours d''hiver.',
-   'assets/img/recettes/pexels-tatianeherder-120156012.webp', 5, 10, 2, 'easy', 1, NOW() - INTERVAL 30 DAY),
+   'assets/img/recettes/chocolat-chaud-a-l-ancienne/principale.webp', 5, 10, 2, 'easy', 1, NOW() - INTERVAL 30 DAY),
   (2, 'Mousse au chocolat noir', 'mousse-au-chocolat-noir',
    'La mousse de Rosalie : seulement du chocolat, des œufs et un peu de beurre, pour une texture aérienne.',
-   'assets/img/recettes/pexels-skylake-173032212.webp', 25, 5, 6, 'medium', 1, NOW() - INTERVAL 25 DAY),
+   'assets/img/recettes/mousse-au-chocolat-noir/principale.webp', 25, 5, 6, 'medium', 1, NOW() - INTERVAL 25 DAY),
   (3, 'Brownies aux noix', 'brownies-aux-noix',
    'Des brownies fondants au cœur, croustillants sur le dessus, avec des noix grossièrement concassées.',
-   'assets/img/recettes/pexels-livilla-latini-1678510737-278500292.webp', 15, 25, 12, 'easy', 1, NOW() - INTERVAL 20 DAY),
+   'assets/img/recettes/brownies-aux-noix/principale.webp', 15, 25, 12, 'easy', 1, NOW() - INTERVAL 20 DAY),
   (4, 'Fondant au cœur coulant', 'fondant-au-coeur-coulant',
    'Le dessert qui demande de la précision : une cuisson à la minute près pour garder un cœur liquide.',
-   'assets/img/recettes/pexels-ali-dashti-506667798-171922342.webp', 20, 10, 4, 'hard', 1, NOW() - INTERVAL 15 DAY),
+   'assets/img/recettes/fondant-au-coeur-coulant/principale.webp', 20, 10, 4, 'hard', 1, NOW() - INTERVAL 15 DAY),
   (5, 'Glace au chocolat sans sorbetière', 'glace-au-chocolat-sans-sorbetiere',
    'Une glace onctueuse préparée avec une simple crème fouettée, sans machine.',
-   'assets/img/recettes/pexels-julias-torten-und-tortchen-434418-382756832.webp', 20, 5, 6, 'medium', 1, NOW() - INTERVAL 5 DAY);
+   'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/principale.webp', 20, 5, 6, 'medium', 1, NOW() - INTERVAL 5 DAY);
 
 INSERT INTO recipe_categories (recipe_id, category_id) VALUES
   (1, 3), (2, 2), (3, 1), (4, 1), (5, 4);
@@ -242,30 +242,30 @@ INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity, unit, detail
   (5, 11, 20, 'g', NULL, 4);
 
 INSERT INTO steps (recipe_id, step_number, title, instructions, image) VALUES
-  (1, 1, 'Hacher le chocolat', 'Hachez finement le chocolat au couteau et placez-le dans un bol.', 'assets/img/recettes/chocolat-chaud-a-l-ancienne/etape-1.jpg'),
-  (1, 2, 'Chauffer le lait', 'Faites chauffer le lait, la crème et le sucre à feu moyen pendant 5 minutes, sans laisser bouillir.', 'assets/img/recettes/chocolat-chaud-a-l-ancienne/etape-2.jpg'),
-  (1, 3, 'Fondre le chocolat', 'Versez un tiers du lait chaud sur le chocolat et mélangez 1 minute jusqu''à obtenir une pâte lisse.', 'assets/img/recettes/chocolat-chaud-a-l-ancienne/etape-3.jpg'),
-  (1, 4, 'Fouetter et servir', 'Ajoutez le reste du lait et la cannelle, fouettez 2 minutes à feu doux et servez aussitôt.', 'assets/img/recettes/chocolat-chaud-a-l-ancienne/etape-4.jpg'),
+  (1, 1, 'Hacher le chocolat', 'Hachez finement le chocolat au couteau et placez-le dans un bol.', 'assets/img/recettes/chocolat-chaud-a-l-ancienne/etape-1.webp'),
+  (1, 2, 'Chauffer le lait', 'Faites chauffer le lait, la crème et le sucre à feu moyen pendant 5 minutes, sans laisser bouillir.', 'assets/img/recettes/chocolat-chaud-a-l-ancienne/etape-2.webp'),
+  (1, 3, 'Fondre le chocolat', 'Versez un tiers du lait chaud sur le chocolat et mélangez 1 minute jusqu''à obtenir une pâte lisse.', 'assets/img/recettes/chocolat-chaud-a-l-ancienne/etape-3.webp'),
+  (1, 4, 'Fouetter et servir', 'Ajoutez le reste du lait et la cannelle, fouettez 2 minutes à feu doux et servez aussitôt.', 'assets/img/recettes/chocolat-chaud-a-l-ancienne/etape-4.webp'),
 
-  (2, 1, 'Fondre le chocolat', 'Faites fondre le chocolat et le beurre au bain-marie pendant 5 minutes, puis laissez tiédir jusqu''à 35 °C.', 'assets/img/recettes/mousse-au-chocolat-noir/etape-1.jpg'),
-  (2, 2, 'Ajouter les jaunes', 'Incorporez les jaunes d''œufs un par un en mélangeant bien entre chaque ajout.', 'assets/img/recettes/mousse-au-chocolat-noir/etape-2.jpg'),
-  (2, 3, 'Monter les blancs', 'Montez les blancs avec le sel, ajoutez le sucre en fin de course et fouettez jusqu''à ce qu''ils forment un bec.', 'assets/img/recettes/mousse-au-chocolat-noir/etape-3.jpg'),
-  (2, 4, 'Assembler et réfrigérer', 'Incorporez les blancs en trois fois à la maryse, répartissez en verrines et réfrigérez 4 heures.', 'assets/img/recettes/mousse-au-chocolat-noir/etape-4.jpg'),
+  (2, 1, 'Fondre le chocolat', 'Faites fondre le chocolat et le beurre au bain-marie pendant 5 minutes, puis laissez tiédir jusqu''à 35 °C.', 'assets/img/recettes/mousse-au-chocolat-noir/etape-1.webp'),
+  (2, 2, 'Ajouter les jaunes', 'Incorporez les jaunes d''œufs un par un en mélangeant bien entre chaque ajout.', 'assets/img/recettes/mousse-au-chocolat-noir/etape-2.webp'),
+  (2, 3, 'Monter les blancs', 'Montez les blancs avec le sel, ajoutez le sucre en fin de course et fouettez jusqu''à ce qu''ils forment un bec.', 'assets/img/recettes/mousse-au-chocolat-noir/etape-3.webp'),
+  (2, 4, 'Assembler et réfrigérer', 'Incorporez les blancs en trois fois à la maryse, répartissez en verrines et réfrigérez 4 heures.', 'assets/img/recettes/mousse-au-chocolat-noir/etape-4.webp'),
 
-  (3, 1, 'Préchauffer le four', 'Préchauffez le four à 180 °C et chemisez un moule carré de 20 cm avec du papier cuisson.', 'assets/img/recettes/brownies-aux-noix/etape-1.jpg'),
-  (3, 2, 'Fondre chocolat et beurre', 'Faites fondre le chocolat et le beurre au bain-marie pendant 5 minutes, puis ajoutez le sucre.', 'assets/img/recettes/brownies-aux-noix/etape-2.jpg'),
-  (3, 3, 'Ajouter œufs, farine et noix', 'Incorporez les œufs un par un, puis la farine et les noix, sans trop travailler la pâte.', 'assets/img/recettes/brownies-aux-noix/etape-3.jpg'),
-  (3, 4, 'Cuire', 'Enfournez 25 minutes : la lame d''un couteau doit ressortir légèrement humide. Laissez refroidir 1 heure avant de découper.', 'assets/img/recettes/brownies-aux-noix/etape-4.jpg'),
+  (3, 1, 'Préchauffer le four', 'Préchauffez le four à 180 °C et chemisez un moule carré de 20 cm avec du papier cuisson.', 'assets/img/recettes/brownies-aux-noix/etape-1.webp'),
+  (3, 2, 'Fondre chocolat et beurre', 'Faites fondre le chocolat et le beurre au bain-marie pendant 5 minutes, puis ajoutez le sucre.', 'assets/img/recettes/brownies-aux-noix/etape-2.webp'),
+  (3, 3, 'Ajouter œufs, farine et noix', 'Incorporez les œufs un par un, puis la farine et les noix, sans trop travailler la pâte.', 'assets/img/recettes/brownies-aux-noix/etape-3.webp'),
+  (3, 4, 'Cuire', 'Enfournez 25 minutes : la lame d''un couteau doit ressortir légèrement humide. Laissez refroidir 1 heure avant de découper.', 'assets/img/recettes/brownies-aux-noix/etape-4.webp'),
 
-  (4, 1, 'Préparer les moules', 'Beurrez 4 moules individuels puis saupoudrez-les de cacao. Préchauffez le four à 210 °C.', 'assets/img/recettes/fondant-au-coeur-coulant/etape-1.jpg'),
-  (4, 2, 'Fondre chocolat et beurre', 'Faites fondre le chocolat et le beurre au bain-marie pendant 4 minutes et lissez le mélange.', 'assets/img/recettes/fondant-au-coeur-coulant/etape-2.jpg'),
-  (4, 3, 'Mélanger la pâte', 'Fouettez les œufs et le sucre 2 minutes, ajoutez le chocolat puis la farine, et remplissez les moules aux trois quarts.', 'assets/img/recettes/fondant-au-coeur-coulant/etape-3.jpg'),
-  (4, 4, 'Cuire à la minute', 'Enfournez exactement 9 minutes, attendez 1 minute puis démoulez directement sur l''assiette.', 'assets/img/recettes/fondant-au-coeur-coulant/etape-4.jpg'),
+  (4, 1, 'Préparer les moules', 'Beurrez 4 moules individuels puis saupoudrez-les de cacao. Préchauffez le four à 210 °C.', 'assets/img/recettes/fondant-au-coeur-coulant/etape-1.webp'),
+  (4, 2, 'Fondre chocolat et beurre', 'Faites fondre le chocolat et le beurre au bain-marie pendant 4 minutes et lissez le mélange.', 'assets/img/recettes/fondant-au-coeur-coulant/etape-2.webp'),
+  (4, 3, 'Mélanger la pâte', 'Fouettez les œufs et le sucre 2 minutes, ajoutez le chocolat puis la farine, et remplissez les moules aux trois quarts.', 'assets/img/recettes/fondant-au-coeur-coulant/etape-3.webp'),
+  (4, 4, 'Cuire à la minute', 'Enfournez exactement 9 minutes, attendez 1 minute puis démoulez directement sur l''assiette.', 'assets/img/recettes/fondant-au-coeur-coulant/etape-4.webp'),
 
-  (5, 1, 'Fondre le chocolat', 'Faites fondre le chocolat avec le cacao et 5 cl de crème à feu doux pendant 5 minutes.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-1.jpg'),
-  (5, 2, 'Ajouter le lait concentré', 'Hors du feu, incorporez le lait concentré et laissez tiédir 15 minutes.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-2.jpg'),
-  (5, 3, 'Fouetter la crème', 'Montez le reste de la crème bien froide en chantilly ferme, environ 3 minutes au batteur.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-3.jpg'),
-  (5, 4, 'Mélanger et congeler', 'Incorporez délicatement la chantilly au chocolat, versez dans un moule et congelez 6 heures.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-4.jpg');
+  (5, 1, 'Fondre le chocolat', 'Faites fondre le chocolat avec le cacao et 5 cl de crème à feu doux pendant 5 minutes.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-1.webp'),
+  (5, 2, 'Ajouter le lait concentré', 'Hors du feu, incorporez le lait concentré et laissez tiédir 15 minutes.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-2.webp'),
+  (5, 3, 'Fouetter la crème', 'Montez le reste de la crème bien froide en chantilly ferme, environ 3 minutes au batteur.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-3.webp'),
+  (5, 4, 'Mélanger et congeler', 'Incorporez délicatement la chantilly au chocolat, versez dans un moule et congelez 6 heures.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-4.webp');
 
 INSERT INTO ratings (user_id, recipe_id, rating, rated_at) VALUES
   (1, 1, 4, NOW() - INTERVAL 28 DAY), (2, 1, 4, NOW() - INTERVAL 27 DAY), (3, 1, 3, NOW() - INTERVAL 26 DAY),
