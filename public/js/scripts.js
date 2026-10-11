@@ -214,6 +214,89 @@ if (aboutSection) {
   }
 }
 
+const contactEye = document.querySelector(".contact-eye");
+
+if (contactEye) {
+  const pupil = contactEye.querySelector(".contact-eye-pupil");
+  const followsPointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (pupil && followsPointer && !reducedMotion) {
+    let currentX = 0;
+    let currentY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let animationFrame = null;
+
+    // Approche progressivement la position demandée pour éviter un mouvement sec.
+    const animatePupil = () => {
+      currentX += (targetX - currentX) * 0.16;
+      currentY += (targetY - currentY) * 0.16;
+
+      pupil.style.setProperty("--pupil-x", `${currentX.toFixed(2)}px`);
+      pupil.style.setProperty("--pupil-y", `${currentY.toFixed(2)}px`);
+
+      if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) {
+        animationFrame = requestAnimationFrame(animatePupil);
+      } else {
+        currentX = targetX;
+        currentY = targetY;
+        animationFrame = null;
+      }
+    };
+
+    const requestPupilAnimation = () => {
+      if (animationFrame === null) {
+        animationFrame = requestAnimationFrame(animatePupil);
+      }
+    };
+
+    const centerPupil = () => {
+      targetX = 0;
+      targetY = 0;
+      requestPupilAnimation();
+    };
+
+    document.addEventListener("pointermove", (event) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
+      const eyeBounds = contactEye.getBoundingClientRect();
+      const eyeCenterX = eyeBounds.left + eyeBounds.width / 2;
+      const eyeCenterY = eyeBounds.top + eyeBounds.height / 2;
+      const deltaX = event.clientX - eyeCenterX;
+      const deltaY = event.clientY - eyeCenterY;
+      const distance = Math.hypot(deltaX, deltaY);
+
+      if (distance === 0) {
+        centerPupil();
+        return;
+      }
+
+      const maximumX = eyeBounds.width * 0.18;
+      const maximumY = eyeBounds.height * 0.12;
+      const reach = Math.min(distance / Math.max(eyeBounds.width * 1.2, 240), 1);
+
+      targetX = (deltaX / distance) * maximumX * reach;
+      targetY = (deltaY / distance) * maximumY * reach;
+      requestPupilAnimation();
+    });
+
+    document.addEventListener("pointerout", (event) => {
+      if (event.relatedTarget === null) {
+        centerPupil();
+      }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        centerPupil();
+      }
+    });
+  }
+}
+
 const aboutPage = document.querySelector(".about-page");
 
 if (aboutPage) {
@@ -243,5 +326,82 @@ if (aboutPage) {
     revealElements.forEach((element) => revealObserver.observe(element));
   } else {
     revealElements.forEach((element) => element.classList.add("is-visible"));
+  }
+
+  const teamGallery = aboutPage.querySelector(".about-team-gallery");
+  const teamCopy = aboutPage.querySelector(".about-founder-copy");
+  const nextMemberButton = aboutPage.querySelector(".about-round-link");
+
+  if (teamGallery && teamCopy && nextMemberButton) {
+    const title = teamCopy.querySelector("h2");
+    const role = teamCopy.querySelector(".about-founder-role");
+    const biography = teamCopy.querySelector(".about-founder-biography");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let changing = false;
+
+    // Le portrait sélectionné glisse à droite et devient le portrait principal.
+    const showTeamMember = (selectedMember) => {
+      if (!selectedMember || selectedMember.classList.contains("is-active") || changing) {
+        return;
+      }
+
+      changing = true;
+      const membersBefore = [...teamGallery.querySelectorAll(".about-team-member")];
+      const oldPositions = new Map(
+        membersBefore.map((member) => [member, member.getBoundingClientRect()]),
+      );
+
+      membersBefore.forEach((member) => {
+        const isSelected = member === selectedMember;
+        member.classList.toggle("is-active", isSelected);
+        member.querySelector(".about-team-select")?.toggleAttribute("aria-current", isSelected);
+      });
+
+      teamGallery.append(selectedMember);
+
+      if (!reducedMotion) {
+        [...teamGallery.querySelectorAll(".about-team-member")].forEach((member) => {
+          const previous = oldPositions.get(member);
+          const current = member.getBoundingClientRect();
+
+          member.animate(
+            [
+              {
+                transform: `translate(${previous.left - current.left}px, ${previous.top - current.top}px)`,
+              },
+              { transform: "translate(0, 0)" },
+            ],
+            {
+              duration: 700,
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+            },
+          );
+        });
+
+        teamCopy.classList.add("is-changing");
+      }
+
+      window.setTimeout(
+        () => {
+          title.textContent = selectedMember.dataset.name;
+          role.textContent = selectedMember.dataset.role;
+          biography.textContent = selectedMember.dataset.biography;
+          teamCopy.classList.remove("is-changing");
+          changing = false;
+        },
+        reducedMotion ? 0 : 210,
+      );
+    };
+
+    teamGallery.addEventListener("click", (event) => {
+      showTeamMember(event.target.closest(".about-team-member"));
+    });
+
+    nextMemberButton.addEventListener("click", () => {
+      const activeMember = teamGallery.querySelector(".about-team-member.is-active");
+      const members = [...teamGallery.querySelectorAll(".about-team-member")];
+      const nextMember = members[(members.indexOf(activeMember) + 1) % members.length];
+      showTeamMember(nextMember);
+    });
   }
 }

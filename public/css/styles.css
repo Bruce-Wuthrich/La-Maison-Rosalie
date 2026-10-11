@@ -1214,11 +1214,13 @@ body.menu-open .hero-top-marker {
 
 .contact-eye-pupil {
     position: absolute;
-    top: 50%;
+    top: calc(50% + 30px);
     left: 50%;
     width: 32%;
     height: auto;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) translate3d(var(--pupil-x, 0px), var(--pupil-y, 0px), 0);
+    transform-origin: center;
+    will-change: transform;
 }
 
 .contact-information {
@@ -1851,6 +1853,24 @@ body.menu-open .hero-top-marker {
 .about-team-member {
     margin: 0;
     text-align: center;
+    will-change: transform;
+}
+
+.about-team-select {
+    width: 100%;
+    display: block;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.about-team-select:focus-visible {
+    outline: 2px solid var(--color-gold-text);
+    outline-offset: 4px;
 }
 
 .about-team-member img {
@@ -1858,10 +1878,17 @@ body.menu-open .hero-top-marker {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
+    transition: aspect-ratio 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.3s ease;
 }
 
-.about-team-founder img {
+.about-team-member.is-active img {
     aspect-ratio: 0.52;
+}
+
+.about-team-member:not(.is-active) .about-team-select:hover img,
+.about-team-member:not(.is-active) .about-team-select:focus-visible img {
+    transform: scale(1.035);
+    filter: brightness(0.92);
 }
 
 .about-team-member figcaption {
@@ -1873,6 +1900,12 @@ body.menu-open .hero-top-marker {
 
 .about-founder-copy {
     max-width: 430px;
+    transition: opacity 0.2s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-founder-copy.is-changing {
+    opacity: 0;
+    transform: translateX(1.5rem);
 }
 
 .about-founder-copy h2,
@@ -1903,10 +1936,12 @@ body.menu-open .hero-top-marker {
     margin-top: 3rem;
     display: grid;
     place-items: center;
+    border: 0;
     border-radius: 50%;
     background-color: var(--color-gold-text);
     color: var(--color-white);
     text-decoration: none;
+    cursor: pointer;
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease;
 }
 
@@ -2037,6 +2072,11 @@ body.menu-open .hero-top-marker {
 .about-page.is-reveal-ready [data-about-reveal].is-visible {
     opacity: 1;
     transform: translate(0);
+}
+
+.about-page.is-reveal-ready .about-founder-copy.is-visible.is-changing {
+    opacity: 0;
+    transform: translateX(1.5rem);
 }
 
 @media (max-width: 991.98px) {
@@ -2719,6 +2759,8 @@ body.menu-open .hero-top-marker {
     .footer-contact-link::after,
     .footer-contact-link svg,
     .about-round-link,
+    .about-team-member img,
+    .about-founder-copy,
     .about-story-visual img,
     .star-card img,
     .star-card-rating,

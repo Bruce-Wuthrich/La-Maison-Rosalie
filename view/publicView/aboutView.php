@@ -9,35 +9,51 @@
 
     <section class="about-team" aria-labelledby="aboutFounderTitle">
         <div class="about-team-gallery" data-about-reveal>
-            <figure class="about-team-member">
-                <img src="assets/img/about/team-lucas.webp" alt="Portrait de Lucas Delcourt">
+            <figure class="about-team-member"
+                data-name="Lucas Delcourt"
+                data-role="Chocolatier créateur"
+                data-biography="Né à Namur dans une famille de boulangers, Lucas a grandi au milieu des parfums de cacao et de pâte chaude. Après une formation de chocolatier, il a parcouru plusieurs maisons belges avant de rejoindre Rosalie. Il imagine aujourd’hui les nouvelles recettes et veille à préserver l’équilibre entre tradition, précision et gourmandise.">
+                <button class="about-team-select" type="button" aria-label="Découvrir la vie de Lucas Delcourt">
+                    <img src="assets/img/about/team-lucas.webp" alt="Portrait de Lucas Delcourt">
+                </button>
                 <figcaption>Lucas Delcourt</figcaption>
             </figure>
 
-            <figure class="about-team-member">
-                <img src="assets/img/about/team-camille.webp" alt="Portrait de Camille Moreau">
+            <figure class="about-team-member"
+                data-name="Camille Moreau"
+                data-role="Responsable de l’atelier"
+                data-biography="Camille est née à Bruxelles et s’est très tôt passionnée pour les gestes minutieux de la pâtisserie. Organisée et attentive, elle accompagne chaque étape de fabrication, de la sélection des ingrédients aux dernières finitions. Elle transmet aussi aux nouveaux artisans les méthodes et les valeurs qui font l’identité de Maison Rosalie.">
+                <button class="about-team-select" type="button" aria-label="Découvrir la vie de Camille Moreau">
+                    <img src="assets/img/about/team-camille.webp" alt="Portrait de Camille Moreau">
+                </button>
                 <figcaption>Camille Moreau</figcaption>
             </figure>
 
-            <figure class="about-team-member about-team-founder">
-                <img src="assets/img/about/team-rosalie.webp" alt="Portrait de Rosalie Lambert">
+            <figure class="about-team-member is-active"
+                data-name="Rosalie Lambert"
+                data-role="Fondatrice"
+                data-biography="Rosalie a grandi dans une maison où les recettes se transmettaient de génération en génération. Animée par le désir de faire vivre cet héritage, elle a créé Maison Rosalie comme un lieu de partage, d’élégance et de création. Entourée de son équipe, elle continue d’imaginer une chocolaterie profondément belge, généreuse et tournée vers l’avenir.">
+                <button class="about-team-select" type="button" aria-label="Découvrir la vie de Rosalie Lambert" aria-current="true">
+                    <img src="assets/img/about/team-rosalie.webp" alt="Portrait de Rosalie Lambert">
+                </button>
                 <figcaption>Rosalie Lambert</figcaption>
             </figure>
         </div>
 
-        <div class="about-founder-copy" data-about-reveal>
+        <div class="about-founder-copy" data-about-reveal aria-live="polite">
             <h2 id="aboutFounderTitle">Rosalie Lambert</h2>
             <p class="about-founder-role">Fondatrice</p>
-            <p>
-                Rosalie imagine une maison où le chocolat belge se transmet avec élégance,
-                précision et générosité. Entourée de son équipe, elle fait vivre un savoir-faire
-                familial tourné vers la création et le partage.
+            <p class="about-founder-biography">
+                Rosalie a grandi dans une maison où les recettes se transmettaient de génération en génération.
+                Animée par le désir de faire vivre cet héritage, elle a créé Maison Rosalie comme un lieu de partage,
+                d’élégance et de création. Entourée de son équipe, elle continue d’imaginer une chocolaterie
+                profondément belge, généreuse et tournée vers l’avenir.
             </p>
-            <a class="about-round-link" href="#about-story" aria-label="Découvrir l’histoire de Maison Rosalie">
+            <button class="about-round-link" type="button" aria-label="Afficher le personnage suivant">
                 <svg viewBox="0 0 48 48" aria-hidden="true">
                     <path d="M10 24h27M28 14l10 10-10 10" />
                 </svg>
-            </a>
+            </button>
         </div>
     </section>
 
