@@ -562,23 +562,6 @@ body.auth-open {
     outline-offset: 4px;
 }
 
-.auth-message {
-    width: min(100%, 760px);
-    margin: 0 auto 1.5rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid currentColor;
-    background-color: rgba(255, 255, 255, 0.65);
-    text-align: center;
-}
-
-.auth-message-success {
-    color: #52753f;
-}
-
-.auth-message-error {
-    color: #9e3f32;
-}
-
 .auth-modal-header,
 .auth-modal-grid {
     display: grid;
@@ -1258,20 +1241,50 @@ body.menu-open .hero-top-marker {
     border-color: #a1301f;
 }
 
-.contact-message {
+.flash-message {
     margin-bottom: 1rem;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
 }
 
-.contact-message-success {
+.flash-message-success {
     background-color: #eef7ea;
     color: #2f6b2a;
 }
 
-.contact-message-error {
+.flash-message-error {
     background-color: #fbeaea;
     color: #a1301f;
+}
+
+.flash-toast {
+    position: fixed;
+    top: calc(var(--navbar-height, 96px) + 1rem);
+    right: 1rem;
+    z-index: 1050;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    max-width: min(360px, calc(100vw - 2rem));
+    margin: 0;
+    box-shadow: 0 0.75rem 2rem rgba(90, 57, 43, 0.18);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.flash-toast.is-hidden {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    pointer-events: none;
+}
+
+.flash-toast-close {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
 }
 
 .contact-eye {
