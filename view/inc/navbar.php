@@ -29,12 +29,23 @@
 
         <div class="navbar-actions navbar-actions-right">
 
-            <button type="button" class="navbar-icon-button navbar-account-button" data-auth-open aria-label="Se connecter"
-                aria-haspopup="dialog" aria-controls="authModal">
-                <img class="navbar-icon" src="assets/img/interface/account.svg" alt="Compte">
-                <span class="navbar-icon-tooltip" aria-hidden="true">Login</span>
-            </button>
+            <?php if ($currentUser !== null): ?>
+                <span class="navbar-user">
+                    <img class="navbar-icon" src="assets/img/interface/account.svg" alt="" aria-hidden="true">
+                    <span class="navbar-user-name"><?= htmlspecialchars($currentUser['username'], ENT_QUOTES, 'UTF-8') ?></span>
+                </span>
 
+                <form class="navbar-logout-form" action="?pg=compte&amp;action=logout" method="post">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+                    <button type="submit" class="navbar-logout-button">Déconnexion</button>
+                </form>
+            <?php else: ?>
+                <button type="button" class="navbar-icon-button navbar-account-button" data-auth-open aria-label="Se connecter"
+                    aria-haspopup="dialog" aria-controls="authModal">
+                    <img class="navbar-icon" src="assets/img/interface/account.svg" alt="Compte">
+                    <span class="navbar-icon-tooltip" aria-hidden="true">Login</span>
+                </button>
+            <?php endif; ?>
 
             <button class="navbar-toggler navbar-icon-button" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navigationPrincipale" aria-controls="navigationPrincipale" aria-expanded="false"

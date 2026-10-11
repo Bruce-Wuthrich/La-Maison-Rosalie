@@ -166,6 +166,48 @@ body.search-open .navbar-brand {
     transform: translate(-50%, 0);
 }
 
+/* Utilisateur connecté */
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-gold-text);
+    font-size: 0.9rem;
+}
+
+.navbar-logout-form {
+    margin: 0;
+}
+
+.navbar-logout-button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-brown);
+    font-size: 0.8rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+}
+
+.navbar-logout-button:hover,
+.navbar-logout-button:focus-visible {
+    color: var(--color-gold);
+}
+
+@media (max-width: 575.98px) {
+    .navbar-user .navbar-icon {
+        display: none;
+    }
+
+    .navbar-user-name {
+        max-width: 5.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
 /* Recherche animée de la navigation. */
 .navbar-search {
     --search-size: 40px;
@@ -400,6 +442,8 @@ body.menu-open .navbar {
 
 body.menu-open .navbar-actions-left,
 body.menu-open .navbar-actions-right > .navbar-icon-button:not(.navbar-toggler),
+body.menu-open .navbar-user,
+body.menu-open .navbar-logout-form,
 body.menu-open .navbar-brand {
     opacity: 0;
     visibility: hidden;
