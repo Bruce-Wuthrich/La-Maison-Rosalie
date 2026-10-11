@@ -88,3 +88,5 @@
         </div>
     </div>
 </nav>
+
+<?php require RACINE_PATH . '/view/inc/flash.php'; ?>
