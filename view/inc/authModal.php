@@ -20,12 +20,6 @@ $initialAuthPanel = ($registerFormData['form_name'] ?? '') === 'register' ? 'reg
             <span aria-hidden="true"></span>
         </button>
 
-        <?php if (is_array($flashMessage) && isset($flashMessage['message'])): ?>
-            <p class="auth-message auth-message-<?= ($flashMessage['type'] ?? '') === 'success' ? 'success' : 'error' ?>" role="status">
-                <?= $escapeAuth($flashMessage['message']) ?>
-            </p>
-        <?php endif; ?>
-
         <div class="auth-panels">
         <section class="auth-panel auth-login-panel" data-auth-panel="login">
             <header class="auth-modal-header">

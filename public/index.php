@@ -64,6 +64,15 @@ $csrfToken = csrfToken();
 // msg affiché apres redirection 
 $flashMessage = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' ? pullFlashMessage(): null;
 
+// user connecté (null si vistiteur) pour toutes les vues
+$currentUser = isset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['role'])
+    ?[
+        'id' => (int) $_SESSION['user_id'],
+        'username' => (string) $_SESSION['username'],
+        'role' => (string) $_SESSION['role'],
+    ]
+    : null; 
+
 try {
     $db = MyPDO::getInstance();
 } catch (PDOException $e) {

@@ -166,6 +166,48 @@ body.search-open .navbar-brand {
     transform: translate(-50%, 0);
 }
 
+/* Utilisateur connecté */
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-gold-text);
+    font-size: 0.9rem;
+}
+
+.navbar-logout-form {
+    margin: 0;
+}
+
+.navbar-logout-button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-brown);
+    font-size: 0.8rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+}
+
+.navbar-logout-button:hover,
+.navbar-logout-button:focus-visible {
+    color: var(--color-gold);
+}
+
+@media (max-width: 575.98px) {
+    .navbar-user .navbar-icon {
+        display: none;
+    }
+
+    .navbar-user-name {
+        max-width: 5.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
 /* Recherche animée de la navigation. */
 .navbar-search {
     --search-size: 40px;
@@ -400,6 +442,8 @@ body.menu-open .navbar {
 
 body.menu-open .navbar-actions-left,
 body.menu-open .navbar-actions-right > .navbar-icon-button:not(.navbar-toggler),
+body.menu-open .navbar-user,
+body.menu-open .navbar-logout-form,
 body.menu-open .navbar-brand {
     opacity: 0;
     visibility: hidden;
@@ -516,23 +560,6 @@ body.auth-open {
 .auth-modal-close:focus-visible {
     outline: 2px solid var(--color-brown);
     outline-offset: 4px;
-}
-
-.auth-message {
-    width: min(100%, 760px);
-    margin: 0 auto 1.5rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid currentColor;
-    background-color: rgba(255, 255, 255, 0.65);
-    text-align: center;
-}
-
-.auth-message-success {
-    color: #52753f;
-}
-
-.auth-message-error {
-    color: #9e3f32;
 }
 
 .auth-modal-header,
@@ -1214,20 +1241,50 @@ body.menu-open .hero-top-marker {
     border-color: #a1301f;
 }
 
-.contact-message {
+.flash-message {
     margin-bottom: 1rem;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
 }
 
-.contact-message-success {
+.flash-message-success {
     background-color: #eef7ea;
     color: #2f6b2a;
 }
 
-.contact-message-error {
+.flash-message-error {
     background-color: #fbeaea;
     color: #a1301f;
+}
+
+.flash-toast {
+    position: fixed;
+    top: calc(var(--navbar-height, 96px) + 1rem);
+    right: 1rem;
+    z-index: 1050;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    max-width: min(360px, calc(100vw - 2rem));
+    margin: 0;
+    box-shadow: 0 0.75rem 2rem rgba(90, 57, 43, 0.18);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.flash-toast.is-hidden {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    pointer-events: none;
+}
+
+.flash-toast-close {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
 }
 
 .contact-eye {
