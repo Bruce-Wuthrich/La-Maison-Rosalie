@@ -115,4 +115,6 @@
     </section>
 </main>
 
+<script src="js/contact.js" defer></script>
+
 <?php require RACINE_PATH . '/view/inc/footer.php'; ?>

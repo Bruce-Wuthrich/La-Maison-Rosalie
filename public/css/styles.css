@@ -1200,6 +1200,36 @@ body.menu-open .hero-top-marker {
     color: var(--color-brown);
 }
 
+.contact-error {
+    margin: 0.35rem 0 0;
+    color: #a1301f;
+    font-size: 0.85rem;
+}
+
+.contact-error:empty {
+    display: none;
+}
+
+.contact-field [aria-invalid="true"] {
+    border-color: #a1301f;
+}
+
+.contact-message {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+}
+
+.contact-message-success {
+    background-color: #eef7ea;
+    color: #2f6b2a;
+}
+
+.contact-message-error {
+    background-color: #fbeaea;
+    color: #a1301f;
+}
+
 .contact-eye {
     position: relative;
     width: min(100%, 383px);
