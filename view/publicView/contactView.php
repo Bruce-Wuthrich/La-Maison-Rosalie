@@ -38,7 +38,16 @@
                     <section class="contact-form-panel">
                         <h2>Envoyez-nous un message.</h2>
 
+                        <?php if (is_array($flashMessage) && isset($flashMessage['message'])) { ?>
+                            <p class="contact-message contact-message-<?php echo ($flashMessage['type'] ?? '') === 'success' ? 'success' : 'error'; ?>"
+                                role="<?php echo ($flashMessage['type'] ?? '') === 'success' ? 'status' : 'alert'; ?>">
+                                <?php echo htmlspecialchars((string) $flashMessage['message'], ENT_QUOTES, 'UTF-8'); ?>
+                            </p>
+                        <?php } ?>
+
                         <form class="contact-form" action="?pg=contact" method="post">
+                            <input type="hidden" name="csrf_token"
+                                value="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
 
                             <div class="contact-field">
                                 <label for="contactName">Nom et prénom</label>
