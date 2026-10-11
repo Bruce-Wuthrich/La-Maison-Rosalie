@@ -1638,6 +1638,16 @@ body.menu-open .hero-top-marker {
     line-height: 1.7;
 }
 
+.recipe-step-image {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    margin-top: 0.75rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 1rem 2.5rem rgba(90, 57, 43, 0.18);
+}
+
 .recipe-comments {
     padding: 3rem 0 5rem;
 }
