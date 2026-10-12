@@ -27,7 +27,8 @@ $recipeImagePath = static function ($recipe): string {
 
             <img class="hero-logo" src="assets/img/logo/logo.svg" alt="Maison Rosalie">
 
-            <a class="hero-category-current is-active" href="?pg=recettes&amp;categorie=patisseries" aria-live="polite">
+            <a class="hero-category-current is-active" href="?pg=recettes" aria-live="polite"
+                aria-expanded="false" aria-controls="heroCategoryPanel">
                 Pâtisserie
             </a>
         </div>
@@ -39,6 +40,29 @@ $recipeImagePath = static function ($recipe): string {
             <button type="button" data-category-index="3" aria-label="Afficher la catégorie Mousses"></button>
             <button class="is-active" type="button" data-category-index="4" aria-label="Afficher la catégorie Pâtisserie" aria-current="true"></button>
         </div>
+
+        <button class="hero-category-backdrop" type="button"
+            aria-label="Fermer la présentation de la catégorie"></button>
+
+        <aside id="heroCategoryPanel" class="hero-category-panel" aria-hidden="true" inert>
+            <button class="hero-category-close" type="button" aria-label="Fermer la présentation de la catégorie">
+                <span aria-hidden="true">×</span>
+            </button>
+
+            <div class="hero-category-panel-content">
+                <h2 class="hero-category-panel-title">Pâtisserie</h2>
+                <p class="hero-category-panel-copy">
+                    Plongez dans l’univers gourmand des pâtisseries au chocolat, où il y en a pour tous les goûts.
+                    Explorez différentes textures et saveurs et laissez-vous inspirer par nos recettes.
+                </p>
+                <a class="hero-category-panel-link" href="?pg=recettes">
+                    Découvrir les recettes <span aria-hidden="true">⟶</span>
+                </a>
+                <img class="hero-category-panel-image"
+                    src="assets/img/recettes/fondant-au-coeur-coulant/principale.webp"
+                    alt="Fondant au chocolat au cœur coulant">
+            </div>
+        </aside>
 
         <p class="hero-tagline">
             <span>Des créations d’exception</span>
