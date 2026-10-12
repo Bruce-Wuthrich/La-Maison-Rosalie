@@ -202,8 +202,12 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                     Étape <?php echo (int) $step->getStepNumber(); ?> —
                                     <?php echo $escape($step->getTitle()); ?>
                                 </h3>
-                                <p><?php echo $escape($step->getInstructions()); ?></p>
-                            </li>
+                                <?php if ($step->getImage() !== null && $step->getImage() !== '') { ?>
+                                    <img class="recipe-step-image"
+                                        src="<?php echo $escape($step->getImage()); ?>"
+                                        alt="Étape <?php echo (int) $step->getStepNumber(); ?> : <?php echo $escape($step->getTitle()); ?>"
+                                        width="1200" height="800" loading="lazy">
+                                <?php } ?>                            </li>
                         <?php } ?>
                     </ol>
                 </div>
