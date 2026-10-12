@@ -88,7 +88,9 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
             <div class="row align-items-center g-5">
                 <div class="col-12 col-lg-5">
                     <figure class="recipe-figure">
-                        <button class="recipe-favorite" type="button" aria-label="Ajouter aux favoris">
+                        <button class="recipe-favorite" type="button"
+                            data-recipe-slug="<?php echo $escape($recipe->getSlug()); ?>"
+                            aria-label="Ajouter aux favoris" aria-pressed="false">
                             <svg viewBox="0 0 512 512" aria-hidden="true">
                                 <path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64C106.32 80 64.54 124.14 64 176.81c-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0 0 18 0c96.26-65.34 184.09-143.09 183-252.42C447.46 124.14 405.68 80 352.92 80Z" />
                             </svg>
@@ -125,9 +127,21 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 : 'Note moyenne : ' . $escape($recipe->getFormattedAverage()) . ' sur 5'; ?>">
                             <div class="recipe-rating-stars" aria-hidden="true">
                                 <?php for ($star = 1; $star <= 5; $star++) { ?>
-                                    <img src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
+                                    <img
+                                        src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg"
+                                        alt=""
+                                    >
                                 <?php } ?>
                             </div>
+
+                            <p class="recipe-rating-stats" aria-live="polite">
+                                <?php if ($averageRating === null) { ?>
+                                    Aucune note pour le moment
+                                <?php } else { ?>
+                                    <?php echo $escape($recipe->getFormattedAverage()); ?>/5 —
+                                    <?php echo (int) $recipe->getRatingCount(); ?> avis
+                                <?php } ?>
+                            </p>
 
                             <a href="#comments">
                                 <?php echo $commentCount; ?> commentaire<?php echo $commentCount === 1 ? '' : 's'; ?>
@@ -161,6 +175,8 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 <img src="assets/img/recettes/icons/share.svg" alt="" aria-hidden="true">
                                 <span>Partager</span>
                             </button>
+
+                            <p class="recipe-action-status" data-recipe-action-status aria-live="polite"></p>
                         </div>
                     </div>
                 </div>
@@ -373,9 +389,10 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
             <div class="recipe-tags-band">
                 <div class="recipe-tags-list" role="list">
                     <?php foreach ($visibleTags as $tag) { ?>
-                        <span class="recipe-tag" role="listitem">
+                        <a class="recipe-tag" role="listitem"
+                            href="?pg=recettes&amp;recherche=<?php echo rawurlencode((string) $tag['name']); ?>">
                             <?php echo $escape($tag['name']); ?>(<?php echo (int) $tag['count']; ?>)
-                        </span>
+                        </a>
                     <?php } ?>
                 </div>
             </div>

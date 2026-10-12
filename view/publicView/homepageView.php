@@ -1,5 +1,17 @@
 <?php require RACINE_PATH . '/view/inc/header.php'; ?>
 <?php require RACINE_PATH . '/view/inc/navbar.php'; ?>
+<?php
+// Utilise le chemin de la BDD s'il existe, sinon l'image locale de la recette.
+$recipeImagePath = static function ($recipe): string {
+    $image = (string) $recipe->getMainImage();
+
+    if (!is_file(RACINE_PATH . '/public/' . $image)) {
+        $image = 'assets/img/recettes/' . $recipe->getSlug() . '/principale.webp';
+    }
+
+    return $image;
+};
+?>
 <main class="home-main">
     <div class="hero-top-marker" aria-hidden="true">
         <img src="assets/img/logo/picto.svg" alt="">
@@ -87,7 +99,7 @@
                         <a class="time-card" href="?pg=recette&amp;slug=<?= htmlspecialchars((string) $recipe->getSlug(), ENT_QUOTES, 'UTF-8') ?>">
                             <span class="time-card-duration"><?= $recipe->getTotalTime() ?> min</span>
                             <img
-                                src="<?= htmlspecialchars((string) $recipe->getMainImage(), ENT_QUOTES, 'UTF-8') ?>"
+                                src="<?= htmlspecialchars($recipeImagePath($recipe), ENT_QUOTES, 'UTF-8') ?>"
                                 alt="<?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?>"
                                 loading="lazy">
                             <span class="time-card-title"><?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?></span>
@@ -122,7 +134,7 @@
                             </p>
                             <a href="?pg=recette&amp;slug=<?= htmlspecialchars((string) $recipe->getSlug(), ENT_QUOTES, 'UTF-8') ?>">
                                 <img
-                                    src="<?= htmlspecialchars((string) $recipe->getMainImage(), ENT_QUOTES, 'UTF-8') ?>"
+                                    src="<?= htmlspecialchars($recipeImagePath($recipe), ENT_QUOTES, 'UTF-8') ?>"
                                     alt="<?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?>"
                                     loading="lazy">
                                 <h3><?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?></h3>
