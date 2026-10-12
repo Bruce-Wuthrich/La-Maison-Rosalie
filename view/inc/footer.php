@@ -4,9 +4,18 @@
     <div class="container footer-layout">
         <div class="footer-left">
             <div class="footer-social" aria-label="Réseaux sociaux de Maison Rosalie">
-                <img src="assets/img/social/youtube.svg" alt="YouTube">
-                <img src="assets/img/social/facebook.svg" alt="Facebook">
-                <img src="assets/img/social/instagram.svg" alt="Instagram">
+                <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer"
+                    aria-label="YouTube de Maison Rosalie (nouvel onglet)">
+                    <img src="assets/img/social/youtube.svg" alt="YouTube">
+                </a>
+                <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"
+                    aria-label="Facebook de Maison Rosalie (nouvel onglet)">
+                    <img src="assets/img/social/facebook.svg" alt="Facebook">
+                </a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"
+                    aria-label="Instagram de Maison Rosalie (nouvel onglet)">
+                    <img src="assets/img/social/instagram.svg" alt="Instagram">
+                </a>
             </div>
 
             <p class="footer-copyright">© 2026 Maison Rosalie – Tous droits réservés</p>
