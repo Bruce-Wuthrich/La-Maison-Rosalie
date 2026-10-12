@@ -15,7 +15,11 @@ use model\interface\UserInterface;
 use InvalidArgumentException;
 
 class UserManager implements ManagerInterface, UserInterface{
-    private MyPDO $db; 
+    private MyPDO $db;
+    
+    // password_verify tourne même quand l'email existe pas,
+    // pour que le temps de réponse ne révèle pas si un compte existe.
+    private const DUMMY_HASH = '$2y$10$kH2IoZNWbBqODEuMm3zBVekub0GiGU/hDPi.UemjergOY26j2p1vu';
 
     public function __construct(MyPDO $connect){
         $this->db = $connect;
@@ -142,9 +146,12 @@ class UserManager implements ManagerInterface, UserInterface{
             return false; 
         }
 
-        // email ou mdp faux : meme message 
-        if ($row === false || !password_verify($tab['password'], $row['password_hash'])){
-            return false ;
+        // email ou mdp faux : même message et même temps de réponse
+        $passwordHash = $row !== false ? $row['password_hash'] : self::DUMMY_HASH;
+        $passwordIsValid = password_verify($tab['password'], $passwordHash);
+
+        if ($row === false || !$passwordIsValid){
+            return false;
         }
 
         // new id session 

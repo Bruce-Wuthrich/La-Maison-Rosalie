@@ -25,6 +25,11 @@ set_exception_handler(function (Throwable $exception) use ($displayErrors): void
         : 'Une erreur inattendue est survenue. Merci de réessayer plus tard.';
 });
 
+// en-têtes de sécurité envoyés sur toutes les pages
+header('X-Content-Type-Options: nosniff'); // le navigateur ne devine pas le type d'un fichier
+header('X-Frame-Options: DENY'); // le site ne peut pas être affiché dans une iframe (clickjacking)
+header('Referrer-Policy: strict-origin-when-cross-origin'); // n'envoie pas l'URL complète aux autres sites
+
 $sessionTimeout = 1800;
 
 // securité session 
