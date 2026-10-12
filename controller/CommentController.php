@@ -10,6 +10,10 @@ use model\manager\UserManager;
 require_once RACINE_PATH . '/controller/ControllerHelpers.php';
 
 $slug = stringInput($_POST['slug'] ?? null);
+// Une suppression lancée depuis la page admin y revient (formulaire classique, sans js).
+if (stringInput($_POST['from'] ?? null) === 'admin') {
+    $redirect = '?pg=admin#avis';
+}
 $redirect = recipeRedirect($slug) . '#comments';
 $action = stringInput($_GET['action'] ?? null);
 
