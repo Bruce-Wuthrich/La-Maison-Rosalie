@@ -1,4 +1,6 @@
-<nav class="navbar<?= $page === 'accueil' ? ' navbar-home' : (in_array($page, ['a-propos', 'contact'], true) ? ' navbar-about' : '') ?>">
+<?php $isHomeNavbar = $page === 'accueil' || ($navbarHome ?? false); ?>
+<nav class="navbar navbar-home">
+    
     <div class="container">
 
         <div class="navbar-actions navbar-actions-left">
@@ -21,7 +23,7 @@
             </form>
         </div>
 
-        <?php if ($page !== 'accueil'): ?>
+        <?php if (!$isHomeNavbar): ?>
             <a href="?pg=accueil" class="navbar-brand">
                 <img src="assets/img/logo/picto.svg" alt="Maison Rosalie" class="navbar-logo">
             </a>
