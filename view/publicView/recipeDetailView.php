@@ -125,9 +125,21 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 : 'Note moyenne : ' . $escape($recipe->getFormattedAverage()) . ' sur 5'; ?>">
                             <div class="recipe-rating-stars" aria-hidden="true">
                                 <?php for ($star = 1; $star <= 5; $star++) { ?>
-                                    <img src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
+                                    <img
+                                        src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg"
+                                        alt=""
+                                    >
                                 <?php } ?>
                             </div>
+
+                            <p class="recipe-rating-stats" aria-live="polite">
+                                <?php if ($averageRating === null) { ?>
+                                    Aucune note pour le moment
+                                <?php } else { ?>
+                                    <?php echo $escape($recipe->getFormattedAverage()); ?>/5 —
+                                    <?php echo (int) $recipe->getRatingCount(); ?> avis
+                                <?php } ?>
+                            </p>
 
                             <a href="#comments">
                                 <?php echo $commentCount; ?> commentaire<?php echo $commentCount === 1 ? '' : 's'; ?>
