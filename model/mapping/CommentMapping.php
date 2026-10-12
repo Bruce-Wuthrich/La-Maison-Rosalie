@@ -121,4 +121,15 @@ class CommentMapping extends AbstractMapping{
     public function setCreatedAt(string $createdAt): void{
         $this->created_at = $createdAt; 
     }
+
+    // donné pubique com pour un réponse json + JS affiche via textContent jamais innerHTML
+    public function toArray(): array{
+        return[
+            'id' => $this->getId(),
+            'author' => $this->getAuthorUsername(),
+            'subject' => $this->getSubject(),
+            'message' => $this->getMessage(),
+            'createdAt' => $this->getCreatedAt(),
+        ];
+    }
 }

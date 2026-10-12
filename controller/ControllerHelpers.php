@@ -10,6 +10,32 @@ function redirectTo(string $location): never
     exit;
 }
 
+// True quand Js demande reponse Json
+function isJsonRequest(): bool{
+    return str_contains((string) ($_SERVER['HTTP_ACCEPT'] ?? ''), 'application/json');
+}
+
+// Réponse Json commune puis arrete le script
+function jsonResponse(int $status, bool $success, string $message, ?array $data = null): never{
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode(
+        ['success' => $success, 'message' => $message, 'data' => $data],
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    );
+    exit;
+}
+
+// Json pour Js message flash + redirection formulaire classique
+function respond(bool $success, string $message, string $redirect, int $status = 200, ?array $data = null): never{
+    if (isJsonRequest()){
+        jsonResponse($status, $success, $message, $success ? $data : null);
+    }
+
+    setFlashMessage($success ? 'success' : 'error', $message);
+    redirectTo($redirect);
+}
+
 // Place un message temporaire dans la session pour la page suivante.
 function setFlashMessage(string $type, string $message): void
 {
@@ -63,8 +89,7 @@ function validateCsrfToken(array $data, string $redirect): void
     $receivedToken = $data['csrf_token'] ?? '';
 
     if (!is_string($receivedToken) || !hash_equals(csrfToken(), $receivedToken)) {
-        setFlashMessage('error', 'La session du formulaire a expiré. Rechargez la page puis réessayez.');
-        redirectTo($redirect);
+        respond(false, 'La session du formulaire a expiré. Rechargez la page puis réessayez.', $redirect, 400);
     }
 }
 
@@ -72,8 +97,7 @@ function validateCsrfToken(array $data, string $redirect): void
 function requireLogin(string $redirect): array
 {
     if (!isset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['role'])) {
-        setFlashMessage('error', 'Vous devez être connecté pour effectuer cette action.');
-        redirectTo($redirect);
+        respond(false, 'Vous devez être connecté pour effectuer cette action.', $redirect, 401);
     }
 
     return [
@@ -87,8 +111,8 @@ function requireLogin(string $redirect): array
 function requirePostMethod(string $redirect): void
 {
     if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
-        setFlashMessage('error', 'Cette action doit être envoyée depuis un formulaire.');
-        redirectTo($redirect);
+        header('Allow: POST');
+        respond(false, 'Cette action doit être envoyée depuis un formulaire.', $redirect, 405);
     }
 }
 
