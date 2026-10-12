@@ -124,20 +124,20 @@ body.search-open .navbar-brand {
     text-decoration: none;
 }
 
-.navbar-actions-left > .navbar-icon-link,
+.navbar-actions-left>.navbar-icon-link,
 .navbar-account-button {
     position: relative;
 }
 
-.navbar-actions-left > .navbar-icon-link .navbar-icon,
+.navbar-actions-left>.navbar-icon-link .navbar-icon,
 .navbar-account-button .navbar-icon {
     filter: none;
     transform: scale(1);
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.navbar-actions-left > .navbar-icon-link:hover .navbar-icon,
-.navbar-actions-left > .navbar-icon-link:focus-visible .navbar-icon,
+.navbar-actions-left>.navbar-icon-link:hover .navbar-icon,
+.navbar-actions-left>.navbar-icon-link:focus-visible .navbar-icon,
 .navbar-account-button:hover .navbar-icon,
 .navbar-account-button:focus-visible .navbar-icon {
     filter: brightness(0) saturate(100%) invert(23%) sepia(14%) saturate(1638%) hue-rotate(332deg) brightness(91%) contrast(86%);
@@ -296,12 +296,12 @@ body.search-open .navbar-brand {
     padding: clamp(2.25rem, 5vh, 3.75rem) 0;
 }
 
-.navbar-nav > .nav-item {
+.navbar-nav>.nav-item {
     width: 100%;
     border-bottom: 1px solid rgba(151, 103, 0, 0.38);
 }
 
-.navbar-nav > .nav-item > .nav-link {
+.navbar-nav>.nav-item>.nav-link {
     width: 100%;
     padding: 1rem clamp(1.5rem, 3.8vw, 3.65rem);
     color: var(--color-gold-text);
@@ -310,8 +310,8 @@ body.search-open .navbar-brand {
     line-height: 1.25;
 }
 
-.navbar-nav > .nav-item > .nav-link:hover,
-.navbar-nav > .nav-item > .nav-link:focus-visible {
+.navbar-nav>.nav-item>.nav-link:hover,
+.navbar-nav>.nav-item>.nav-link:focus-visible {
     color: var(--color-brown);
 }
 
@@ -336,12 +336,12 @@ body.search-open .navbar-brand {
     background: transparent;
 }
 
-.navbar-nav .dropdown-menu > li {
+.navbar-nav .dropdown-menu>li {
     position: relative;
     border-bottom: 1px solid rgba(151, 103, 0, 0.24);
 }
 
-.navbar-nav .dropdown-menu > li::after {
+.navbar-nav .dropdown-menu>li::after {
     content: "";
     position: absolute;
     right: 0;
@@ -354,8 +354,8 @@ body.search-open .navbar-brand {
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.navbar-nav .dropdown-menu > li:hover::after,
-.navbar-nav .dropdown-menu > li:focus-within::after {
+.navbar-nav .dropdown-menu>li:hover::after,
+.navbar-nav .dropdown-menu>li:focus-within::after {
     transform: scaleX(1);
 }
 
@@ -441,7 +441,7 @@ body.menu-open .navbar {
 }
 
 body.menu-open .navbar-actions-left,
-body.menu-open .navbar-actions-right > .navbar-icon-button:not(.navbar-toggler),
+body.menu-open .navbar-actions-right>.navbar-icon-button:not(.navbar-toggler),
 body.menu-open .navbar-user,
 body.menu-open .navbar-logout-form,
 body.menu-open .navbar-brand {
@@ -679,7 +679,7 @@ body.auth-open {
     pointer-events: none;
 }
 
-.auth-checkbox > span {
+.auth-checkbox>span {
     width: 20px;
     height: 20px;
     display: grid;
@@ -687,12 +687,12 @@ body.auth-open {
     border: 1px solid var(--color-gold-text);
 }
 
-.auth-checkbox input:checked + span::after {
+.auth-checkbox input:checked+span::after {
     content: "✓";
     font-size: 0.9rem;
 }
 
-.auth-checkbox input:focus-visible + span {
+.auth-checkbox input:focus-visible+span {
     outline: 2px solid var(--color-gold);
     outline-offset: 3px;
 }
@@ -918,7 +918,7 @@ body.menu-open .hero-top-marker {
     height: auto;
     display: block;
     position: relative;
-    z-index: 1;
+    z-index: 3;
     pointer-events: none;
     margin-bottom: clamp(1rem, 4vw, 2rem);
 }
@@ -951,6 +951,22 @@ body.menu-open .hero-top-marker {
     place-items: center;
 }
 
+.hero-emblem::before {
+    content: "";
+    position: absolute;
+    width: 38.6%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    opacity: 0.10;
+    background-color: var(--color-cream);
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    pointer-events: none;
+
+}
+
 .hero-wheel {
     position: absolute;
     inset: 0;
@@ -960,6 +976,8 @@ body.menu-open .hero-top-marker {
     cursor: pointer;
     transition: transform 2.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
     will-change: transform;
+    mix-blend-mode: multiply;
+    z-index: 1;
 }
 
 .hero-wheel:focus-visible {
@@ -980,7 +998,7 @@ body.menu-open .hero-top-marker {
     width: 100%;
     height: auto;
     z-index: 0;
-    filter: brightness(0.9) contrast(1.3) saturate(1.05);
+    filter: brightness(1.1);
 }
 
 
@@ -1404,7 +1422,8 @@ body.menu-open .hero-top-marker {
     background-color: var(--color-brown);
 }
 
-.contact-information a, .contact-information p {
+.contact-information a,
+p {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
@@ -2721,7 +2740,7 @@ body.menu-open .hero-top-marker {
     font-size: 1.05rem;
 }
 
-.about-founder-copy > p:last-of-type {
+.about-founder-copy>p:last-of-type {
     margin: 0;
     font-size: clamp(0.95rem, 1.35vw, 1.15rem);
     line-height: 1.55;
@@ -2811,7 +2830,7 @@ body.menu-open .hero-top-marker {
     padding-bottom: 1.5rem;
 }
 
-.about-recipes > img {
+.about-recipes>img {
     display: block;
     width: 100%;
     height: clamp(250px, 24vw, 360px);
@@ -2947,7 +2966,7 @@ body.menu-open .hero-top-marker {
         margin-top: 1.5rem;
     }
 
-    .about-recipes > img,
+    .about-recipes>img,
     .about-recipes-overlay {
         height: 360px;
         min-height: 360px;
@@ -3144,6 +3163,7 @@ body.menu-open .hero-top-marker {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .about-home-section.is-scroll-ready .about-home-title,
     .about-home-section.is-scroll-ready .about-home-copy,
     .about-home-section.is-scroll-ready .about-home-link,
@@ -3460,7 +3480,7 @@ body.menu-open .hero-top-marker {
         padding-top: 1.5rem;
     }
 
-    .navbar-nav > .nav-item > .nav-link {
+    .navbar-nav>.nav-item>.nav-link {
         padding: 0.9rem 1rem;
         font-size: 1.55rem;
     }
@@ -3607,14 +3627,15 @@ body.menu-open .hero-top-marker {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .navbar-search,
     .navbar-search-input,
-    .navbar-actions-left > .navbar-icon-link .navbar-icon,
+    .navbar-actions-left>.navbar-icon-link .navbar-icon,
     .navbar-account-button .navbar-icon,
     .navbar-icon-tooltip,
     .hero-category-current,
     .hero-category-current::after,
-    .navbar-nav .dropdown-menu > li::after,
+    .navbar-nav .dropdown-menu>li::after,
     .navbar-nav .dropdown-item::before,
     .navbar-nav .dropdown-item::after,
     .footer-contact-link::after,

@@ -52,8 +52,9 @@ if (heroWheel) {
     nextCategoryIndex = index;
     showActiveIndicator(nextCategoryIndex);
 
-    const steps = (index - categoryIndex + categories.length) % categories.length;
-    rotation += 15 * (steps || 1);
+    const steps =
+      (index - categoryIndex + categories.length) % categories.length;
+    rotation += 30 * (steps || 1);
     heroWheel.style.transform = `rotate(${rotation}deg)`;
   };
 
@@ -79,7 +80,9 @@ const navbarSearch = document.querySelector("[data-navbar-search]");
 if (navbarSearch) {
   const searchToggle = navbarSearch.querySelector("[data-search-toggle]");
   const searchInput = navbarSearch.querySelector(".navbar-search-input");
-  const supportsHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const supportsHover = window.matchMedia(
+    "(hover: hover) and (pointer: fine)",
+  ).matches;
 
   const setSearchOpen = (
     isOpen,
@@ -150,8 +153,8 @@ if (navbarSearch) {
 
   document.addEventListener("pointerdown", (event) => {
     if (
-      navbarSearch.classList.contains("is-open")
-      && !navbarSearch.contains(event.target)
+      navbarSearch.classList.contains("is-open") &&
+      !navbarSearch.contains(event.target)
     ) {
       setSearchOpen(false);
     }
@@ -176,7 +179,10 @@ if (navigationCollapse) {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape" || !navigationCollapse.classList.contains("show")) {
+    if (
+      event.key !== "Escape" ||
+      !navigationCollapse.classList.contains("show")
+    ) {
       return;
     }
 
@@ -187,7 +193,9 @@ if (navigationCollapse) {
 const aboutSection = document.querySelector(".about-home-section");
 
 if (aboutSection) {
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  );
 
   // Prépare les éléments avant leur apparition dans la fenêtre.
   aboutSection.classList.add("is-scroll-ready");
@@ -218,8 +226,12 @@ const contactEye = document.querySelector(".contact-eye");
 
 if (contactEye) {
   const pupil = contactEye.querySelector(".contact-eye-pupil");
-  const followsPointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const followsPointer = window.matchMedia(
+    "(hover: hover) and (pointer: fine)",
+  ).matches;
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
 
   if (pupil && followsPointer && !reducedMotion) {
     let currentX = 0;
@@ -236,7 +248,10 @@ if (contactEye) {
       pupil.style.setProperty("--pupil-x", `${currentX.toFixed(2)}px`);
       pupil.style.setProperty("--pupil-y", `${currentY.toFixed(2)}px`);
 
-      if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) {
+      if (
+        Math.abs(targetX - currentX) > 0.05 ||
+        Math.abs(targetY - currentY) > 0.05
+      ) {
         animationFrame = requestAnimationFrame(animatePupil);
       } else {
         currentX = targetX;
@@ -276,7 +291,10 @@ if (contactEye) {
 
       const maximumX = eyeBounds.width * 0.18;
       const maximumY = eyeBounds.height * 0.12;
-      const reach = Math.min(distance / Math.max(eyeBounds.width * 1.2, 240), 1);
+      const reach = Math.min(
+        distance / Math.max(eyeBounds.width * 1.2, 240),
+        1,
+      );
 
       targetX = (deltaX / distance) * maximumX * reach;
       targetY = (deltaY / distance) * maximumY * reach;
@@ -311,7 +329,9 @@ const aboutPage = document.querySelector(".about-page");
 
 if (aboutPage) {
   const revealElements = aboutPage.querySelectorAll("[data-about-reveal]");
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
 
   if (!prefersReducedMotion && "IntersectionObserver" in window) {
     aboutPage.classList.add("is-reveal-ready");
@@ -346,17 +366,25 @@ if (aboutPage) {
     const title = teamCopy.querySelector("h2");
     const role = teamCopy.querySelector(".about-founder-role");
     const biography = teamCopy.querySelector(".about-founder-biography");
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     let changing = false;
 
     // Le portrait sélectionné glisse à droite et devient le portrait principal.
     const showTeamMember = (selectedMember) => {
-      if (!selectedMember || selectedMember.classList.contains("is-active") || changing) {
+      if (
+        !selectedMember ||
+        selectedMember.classList.contains("is-active") ||
+        changing
+      ) {
         return;
       }
 
       changing = true;
-      const membersBefore = [...teamGallery.querySelectorAll(".about-team-member")];
+      const membersBefore = [
+        ...teamGallery.querySelectorAll(".about-team-member"),
+      ];
       const oldPositions = new Map(
         membersBefore.map((member) => [member, member.getBoundingClientRect()]),
       );
@@ -364,29 +392,33 @@ if (aboutPage) {
       membersBefore.forEach((member) => {
         const isSelected = member === selectedMember;
         member.classList.toggle("is-active", isSelected);
-        member.querySelector(".about-team-select")?.toggleAttribute("aria-current", isSelected);
+        member
+          .querySelector(".about-team-select")
+          ?.toggleAttribute("aria-current", isSelected);
       });
 
       teamGallery.append(selectedMember);
 
       if (!reducedMotion) {
-        [...teamGallery.querySelectorAll(".about-team-member")].forEach((member) => {
-          const previous = oldPositions.get(member);
-          const current = member.getBoundingClientRect();
+        [...teamGallery.querySelectorAll(".about-team-member")].forEach(
+          (member) => {
+            const previous = oldPositions.get(member);
+            const current = member.getBoundingClientRect();
 
-          member.animate(
-            [
+            member.animate(
+              [
+                {
+                  transform: `translate(${previous.left - current.left}px, ${previous.top - current.top}px)`,
+                },
+                { transform: "translate(0, 0)" },
+              ],
               {
-                transform: `translate(${previous.left - current.left}px, ${previous.top - current.top}px)`,
+                duration: 700,
+                easing: "cubic-bezier(0.22, 1, 0.36, 1)",
               },
-              { transform: "translate(0, 0)" },
-            ],
-            {
-              duration: 700,
-              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-            },
-          );
-        });
+            );
+          },
+        );
 
         teamCopy.classList.add("is-changing");
       }
@@ -408,9 +440,12 @@ if (aboutPage) {
     });
 
     nextMemberButton.addEventListener("click", () => {
-      const activeMember = teamGallery.querySelector(".about-team-member.is-active");
+      const activeMember = teamGallery.querySelector(
+        ".about-team-member.is-active",
+      );
       const members = [...teamGallery.querySelectorAll(".about-team-member")];
-      const nextMember = members[(members.indexOf(activeMember) + 1) % members.length];
+      const nextMember =
+        members[(members.indexOf(activeMember) + 1) % members.length];
       showTeamMember(nextMember);
     });
   }
