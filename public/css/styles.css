@@ -1501,6 +1501,7 @@ body.menu-open .hero-top-marker {
 }
 
 .recipe-page {
+    padding-top: clamp(5rem, 8vw, 8rem);
     background-color: var(--color-white);
 }
 
@@ -1515,9 +1516,10 @@ body.menu-open .hero-top-marker {
 
 .recipe-summary .row {
     display: grid;
-    grid-template-columns: minmax(0, 500px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 500px) minmax(0, 540px);
     align-items: center !important;
-    gap: 3rem !important;
+    justify-content: start;
+    gap: clamp(2rem, 4vw, 4rem) !important;
     margin: 0;
 }
 
@@ -1555,9 +1557,10 @@ body.menu-open .hero-top-marker {
     margin: 0 auto 1.8rem;
     color: var(--color-gold-text);
     font-family: inherit;
-    font-size: clamp(2.45rem, 3.4vw, 3.25rem);
+    font-size: clamp(2.6rem, 3.4vw, 3.25rem);
     font-weight: 400;
     line-height: 1.28;
+    text-wrap: balance;
 }
 
 .recipe-description {
@@ -2456,13 +2459,20 @@ body.menu-open .hero-top-marker {
 
 /* Responsive de la fiche recette inspiré de la maquette. */
 @media (max-width: 991.98px) {
+    .recipe-page { padding-top: 4rem; }
     .recipe-summary { padding-top: 1.5rem; }
     .recipe-summary .row,
     .recipe-content .row {
         grid-template-columns: 1fr;
         gap: 4rem !important;
     }
-    .recipe-introduction { padding-inline: 1rem; }
+    .recipe-introduction {
+        padding-inline: 1rem;
+    }
+    .recipe-introduction h1 {
+        max-width: 600px;
+        font-size: clamp(2.5rem, 6vw, 3.25rem);
+    }
     .recipe-content .row > [class*="col-"] {
         max-width: 750px;
         margin-inline: auto;
@@ -2470,12 +2480,17 @@ body.menu-open .hero-top-marker {
 }
 
 @media (max-width: 575.98px) {
+    .recipe-page { padding-top: 2.5rem; }
     .recipe-summary { padding: 1rem 0 3rem; }
     .recipe-breadcrumb { margin-bottom: 1.5rem; font-size: 0.82rem; }
     .recipe-image { border-radius: 1.75rem; }
     .recipe-favorite { top: 0.85rem; right: 0.85rem; width: 52px; height: 52px; }
     .recipe-favorite svg { width: 35px; height: 35px; }
-    .recipe-introduction h1 { font-size: 2.25rem; }
+    .recipe-introduction h1 {
+        max-width: 100%;
+        font-size: clamp(2.35rem, 10vw, 3rem);
+        line-height: 1.18;
+    }
     .recipe-rating { align-items: flex-start; gap: 0.6rem; }
     .recipe-rating-stars img { width: 20px; height: 20px; }
     .recipe-rating a { font-size: 0.86rem; }
