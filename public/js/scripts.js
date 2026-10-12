@@ -297,6 +297,18 @@ if (contactEye) {
   }
 }
 
+const commentMessage = document.querySelector("#commentMessage");
+const commentCounter = document.querySelector("[data-comment-counter]");
+
+if (commentMessage && commentCounter) {
+  const updateCommentCounter = () => {
+    commentCounter.textContent = `${commentMessage.value.length}/1000 caractères`;
+  };
+
+  updateCommentCounter();
+  commentMessage.addEventListener("input", updateCommentCounter);
+}
+
 const aboutPage = document.querySelector(".about-page");
 
 if (aboutPage) {

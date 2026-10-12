@@ -54,6 +54,21 @@ class RecipeManager implements ManagerInterface{
         return new RecipeMapping($row); 
     }
 
+    // Recette depuis son identifiant pour les actions POST sécurisées.
+    public function getById(int $id): ?RecipeMapping{
+        $query = $this->db->prepare(
+            'SELECT id, title, slug, description, main_image, prep_time_minutes,
+                    cook_time_minutes, servings, difficulty, author_id, created_at, updated_at
+             FROM recipes
+             WHERE id = :id'
+        );
+        $query->bindValue(':id', $id, PDO::PARAM_INT);
+        $query->execute();
+        $row = $query->fetch();
+
+        return $row === false ? null : new RecipeMapping($row);
+    }
+
     public function getTopThree(): array{
         $query = $this->db->query(
             'SELECT r.id, r.title, r.slug, r.main_image, r.prep_time_minutes, r.cook_time_minutes,
@@ -149,6 +164,13 @@ class RecipeManager implements ManagerInterface{
                         WHERE rc_search.recipe_id = r.id
                         AND c_search.title LIKE :search_category
                     )
+                    OR EXISTS (
+                        SELECT 1
+                        FROM recipe_tags rt_search
+                        JOIN tags t_search ON t_search.id = rt_search.tag_id
+                        WHERE rt_search.recipe_id = r.id
+                        AND t_search.name LIKE :search_tag
+                    )
                 )';
 
         if ($categorySlug !== null) {
@@ -168,6 +190,7 @@ class RecipeManager implements ManagerInterface{
         $query->bindValue(':search_title', $searchPattern, PDO::PARAM_STR);
         $query->bindValue(':search_description', $searchPattern, PDO::PARAM_STR);
         $query->bindValue(':search_category', $searchPattern, PDO::PARAM_STR);
+        $query->bindValue(':search_tag', $searchPattern, PDO::PARAM_STR);
 
         if ($categorySlug !== null) {
             $query->bindValue(':category_slug', $categorySlug, PDO::PARAM_STR);

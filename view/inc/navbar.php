@@ -1,4 +1,4 @@
-<nav class="navbar<?= $page === 'accueil' ? ' navbar-home' : (in_array($page, ['a-propos', 'contact'], true) ? ' navbar-about' : '') ?>">
+<nav class="navbar<?= $page === 'accueil' ? ' navbar-home' : (in_array($page, ['a-propos', 'contact', 'recettes', 'recette'], true) ? ' navbar-about' : '') ?>">
     <div class="container">
 
         <div class="navbar-actions navbar-actions-left">

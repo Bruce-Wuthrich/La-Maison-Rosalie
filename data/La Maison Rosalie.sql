@@ -65,6 +65,28 @@ CREATE TABLE recipe_categories (
     REFERENCES categories (id) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
+CREATE TABLE tags (
+  id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name          VARCHAR(80)  NOT NULL,
+  slug          VARCHAR(100) NOT NULL,
+  display_order INT UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_tags_name (name),
+  UNIQUE KEY uq_tags_slug (slug),
+  KEY idx_tags_display_order (display_order)
+) ENGINE = InnoDB;
+
+CREATE TABLE recipe_tags (
+  recipe_id INT UNSIGNED NOT NULL,
+  tag_id    INT UNSIGNED NOT NULL,
+  PRIMARY KEY (recipe_id, tag_id),
+  KEY idx_recipe_tags_tag (tag_id),
+  CONSTRAINT fk_recipe_tags_recipe FOREIGN KEY (recipe_id)
+    REFERENCES recipes (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_recipe_tags_tag FOREIGN KEY (tag_id)
+    REFERENCES tags (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 CREATE TABLE ingredients (
   id    INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name  VARCHAR(120) NOT NULL,
@@ -127,17 +149,30 @@ CREATE TABLE comments (
   author_id          INT UNSIGNED NOT NULL,
   recipe_id          INT UNSIGNED NOT NULL,
   subject            VARCHAR(120) NULL,
-  message            VARCHAR(500) NOT NULL,
+  message            VARCHAR(1000) NOT NULL,
   publication_status ENUM('pending', 'published', 'hidden') NOT NULL DEFAULT 'published',
   created_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_comments_recipe_date (recipe_id, created_at),
   KEY idx_comments_author_date (author_id, created_at),
-  CONSTRAINT chk_comments_message CHECK (CHAR_LENGTH(message) BETWEEN 3 AND 500),
+  CONSTRAINT chk_comments_message CHECK (CHAR_LENGTH(message) BETWEEN 3 AND 1000),
   CONSTRAINT fk_comments_author FOREIGN KEY (author_id)
     REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT fk_comments_recipe FOREIGN KEY (recipe_id)
     REFERENCES recipes (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
+CREATE TABLE comment_reactions (
+  comment_id INT UNSIGNED NOT NULL,
+  user_id    INT UNSIGNED NOT NULL,
+  reaction   ENUM('like', 'dislike') NOT NULL,
+  reacted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (comment_id, user_id),
+  KEY idx_comment_reactions_user (user_id),
+  CONSTRAINT fk_comment_reactions_comment FOREIGN KEY (comment_id)
+    REFERENCES comments (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_comment_reactions_user FOREIGN KEY (user_id)
+    REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE contact_messages (
@@ -203,6 +238,26 @@ INSERT INTO recipes (id, title, slug, description, main_image, prep_time_minutes
 
 INSERT INTO recipe_categories (recipe_id, category_id) VALUES
   (1, 3), (2, 2), (3, 1), (4, 1), (5, 4);
+
+INSERT INTO tags (id, name, slug, display_order) VALUES
+  (1, 'chocolat', 'chocolat', 1),
+  (2, 'rapide', 'rapide', 2),
+  (3, 'famille', 'famille', 3),
+  (4, 'four', 'four', 4),
+  (5, 'chocolat noir', 'chocolat-noir', 5),
+  (6, 'populaire', 'populaire', 6),
+  (7, 'brownies', 'brownies', 7),
+  (8, 'fête', 'fete', 8),
+  (9, 'enfants', 'enfants', 9),
+  (10, 'sans cuisson', 'sans-cuisson', 10),
+  (11, 'crémeux', 'cremeux', 11);
+
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES
+  (1, 1), (1, 2), (1, 3), (1, 5), (1, 6), (1, 9),
+  (2, 1), (2, 2), (2, 3), (2, 5), (2, 9), (2, 11),
+  (3, 1), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8), (3, 9),
+  (4, 1), (4, 4), (4, 5), (4, 6), (4, 8),
+  (5, 1), (5, 2), (5, 3), (5, 6), (5, 9), (5, 10), (5, 11);
 
 INSERT INTO ingredients (id, name) VALUES
   (1, 'chocolat noir 70 %'), (2, 'lait entier'), (3, 'crème liquide entière'), (4, 'sucre'),
@@ -288,5 +343,11 @@ INSERT INTO comments (author_id, recipe_id, subject, message, created_at) VALUES
   (5, 3, NULL, 'Cuits 22 minutes dans mon four, ils étaient parfaits.', NOW() - INTERVAL 6 DAY),
   (3, 4, 'Attention au temps', 'À 10 minutes le cœur était déjà pris. 9 minutes, c''est vraiment le bon réglage.', NOW() - INTERVAL 12 DAY),
   (4, 5, NULL, 'Très simple et bluffant sans sorbetière.', NOW() - INTERVAL 2 DAY);
+
+INSERT INTO comment_reactions (comment_id, user_id, reaction) VALUES
+  (1, 3, 'like'), (1, 4, 'like'),
+  (3, 2, 'like'), (3, 5, 'like'),
+  (5, 3, 'like'), (5, 4, 'like'), (5, 5, 'dislike'),
+  (7, 2, 'like');
 
 COMMIT;

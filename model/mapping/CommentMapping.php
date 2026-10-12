@@ -17,6 +17,10 @@ class CommentMapping extends AbstractMapping{
     protected ?string $message = null;
     protected ?string $publication_status = null;
     protected ?string $created_at = null;
+    protected ?int $author_rating = null;
+    protected int $like_count = 0;
+    protected int $dislike_count = 0;
+    protected ?string $user_reaction = null;
 
     public function getId(): ?int{
         return $this->id; 
@@ -81,11 +85,11 @@ class CommentMapping extends AbstractMapping{
     }
 
     public function setMessage(string $message):void {
-        // entre 3 et 500 cara 
+        // entre 3 et 1000 caractères
         $message = trim($message);
         $length = mb_strlen($message);
-        if ($length < 3 || $length > 500){
-            throw new InvalidArgumentException('Le message doit faire entre 3 et 500 caractères.');
+        if ($length < 3 || $length > 1000){
+            throw new InvalidArgumentException('Le message doit faire entre 3 et 1000 caractères.');
         }
         $this->message = $message;         
     }
@@ -107,5 +111,43 @@ class CommentMapping extends AbstractMapping{
 
     public function setCreatedAt(string $createdAt): void{
         $this->created_at = $createdAt; 
+    }
+
+    public function getAuthorRating(): ?int{
+        return $this->author_rating;
+    }
+
+    public function setAuthorRating(?int $authorRating): void{
+        if ($authorRating !== null && ($authorRating < 1 || $authorRating > 5)){
+            throw new InvalidArgumentException('La note du commentaire doit être comprise entre 1 et 5.');
+        }
+        $this->author_rating = $authorRating;
+    }
+
+    public function getLikeCount(): int{
+        return $this->like_count;
+    }
+
+    public function setLikeCount(int $likeCount): void{
+        $this->like_count = max(0, $likeCount);
+    }
+
+    public function getDislikeCount(): int{
+        return $this->dislike_count;
+    }
+
+    public function setDislikeCount(int $dislikeCount): void{
+        $this->dislike_count = max(0, $dislikeCount);
+    }
+
+    public function getUserReaction(): ?string{
+        return $this->user_reaction;
+    }
+
+    public function setUserReaction(?string $userReaction): void{
+        if ($userReaction !== null && !in_array($userReaction, ['like', 'dislike'], true)){
+            throw new InvalidArgumentException('La réaction du commentaire est invalide.');
+        }
+        $this->user_reaction = $userReaction;
     }
 }

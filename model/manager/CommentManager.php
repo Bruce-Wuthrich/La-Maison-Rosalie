@@ -32,14 +32,37 @@ class CommentManager implements ManagerInterface{
     }
 
     // com publié (plus récent à ancien)
-    public function getByRecipeId(int $recipeId, int $limit, int $offset): array {
+    public function getByRecipeId(
+        int $recipeId,
+        int $limit,
+        int $offset,
+        ?int $viewerId = null,
+        string $sort = 'date'
+    ): array {
+        $orderBy = match ($sort) {
+            'popularite' => '(like_count - dislike_count) DESC, like_count DESC, c.created_at DESC, c.id DESC',
+            'mieux' => 'author_rating IS NULL, author_rating DESC, c.created_at DESC, c.id DESC',
+            'pire' => 'author_rating IS NULL, author_rating ASC, c.created_at DESC, c.id DESC',
+            default => 'c.created_at DESC, c.id DESC',
+        };
+
         $query = $this->db->prepare(
-            "SELECT c.id, c.author_id, u.username AS author_username, c.recipe_id, c.subject, c.message, c.publication_status, c.created_at
+            "SELECT c.id, c.author_id, u.username AS author_username, c.recipe_id,
+                    c.subject, c.message, c.publication_status, c.created_at,
+                    r.rating AS author_rating,
+                    (SELECT COUNT(*) FROM comment_reactions crl
+                     WHERE crl.comment_id = c.id AND crl.reaction = 'like') AS like_count,
+                    (SELECT COUNT(*) FROM comment_reactions crd
+                     WHERE crd.comment_id = c.id AND crd.reaction = 'dislike') AS dislike_count,
+                    (SELECT cru.reaction FROM comment_reactions cru
+                     WHERE cru.comment_id = c.id AND cru.user_id = :viewer_id) AS user_reaction
             FROM comments c INNER JOIN users u ON u.id = c.author_id
+            LEFT JOIN ratings r ON r.user_id = c.author_id AND r.recipe_id = c.recipe_id
             WHERE c.recipe_id = :recipe_id AND c.publication_status = 'published'
-            ORDER BY c.created_at DESC, c.id DESC
+            ORDER BY {$orderBy}
             LIMIT :limit OFFSET :offset"
         ); 
+        $query->bindValue(':viewer_id', $viewerId, $viewerId === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
         $query->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
         $query->bindValue(':limit', $limit, PDO::PARAM_INT);
         $query->bindValue(':offset', $offset, PDO::PARAM_INT);

@@ -64,8 +64,8 @@ class UserMapping extends AbstractMapping{
     }
 
     public function setRole(string $role):void{
-        if (!in_array($role, ['member', 'admin'], true)){
-            throw new InvalidArgumentException('Votre rôle doit être soit member ou admin.');
+        if (!in_array($role, ['member', 'author', 'admin'], true)){
+            throw new InvalidArgumentException('Votre rôle doit être member, author ou admin.');
         }
         $this->role = $role;
     }
