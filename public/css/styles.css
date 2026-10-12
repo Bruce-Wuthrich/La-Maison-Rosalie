@@ -1653,13 +1653,15 @@ body.menu-open .hero-top-marker {
 }
 
 .recipe-favorite:hover,
-.recipe-favorite:focus-visible {
+.recipe-favorite:focus-visible,
+.recipe-favorite.is-active {
     color: var(--color-gold);
     box-shadow: 0 0.45rem 1.15rem rgba(90, 57, 43, 0.13);
 }
 
 .recipe-favorite:hover svg,
-.recipe-favorite:focus-visible svg {
+.recipe-favorite:focus-visible svg,
+.recipe-favorite.is-active svg {
     transform: scale(1.08);
 }
 
@@ -1766,8 +1768,10 @@ body.menu-open .hero-top-marker {
 
 .recipe-actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 3rem;
+    column-gap: 3rem;
+    row-gap: 0.35rem;
 }
 
 .recipe-action {
@@ -2465,13 +2469,27 @@ body.menu-open .hero-top-marker {
     color: #fff;
     font-size: 1.08rem;
     line-height: 1;
+    text-decoration: none;
     transition: color 0.22s ease, background-color 0.22s ease, transform 0.22s ease;
 }
 
-.recipe-tag:hover {
+.recipe-tag:hover,
+.recipe-tag:focus-visible {
     background-color: #f2ddb0;
     color: var(--color-gold-text);
     transform: translateY(-2px);
+}
+
+.recipe-action-status {
+    width: 100%;
+    margin: 0.35rem 0 0;
+    color: var(--color-gold-text);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.recipe-action-status:empty {
+    display: none;
 }
 
 @media (max-width: 575.98px) {
@@ -3659,5 +3677,65 @@ body.menu-open .hero-top-marker {
     .star-card h3 {
         transition-duration: 0.01ms;
         transition-delay: 0s;
+    }
+}
+
+@media print {
+    @page {
+        margin: 1.2cm;
+    }
+
+    .navbar,
+    .site-footer,
+    .recipe-breadcrumb,
+    .recipe-favorite,
+    .recipe-actions,
+    .recipe-comments,
+    .recipe-tags,
+    .auth-modal {
+        display: none !important;
+    }
+
+    body,
+    .recipe-page,
+    .recipe-summary,
+    .recipe-content {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .recipe-page {
+        padding-top: 0;
+    }
+
+    .recipe-summary,
+    .recipe-content {
+        padding: 0 0 1.5rem;
+    }
+
+    .recipe-summary .row,
+    .recipe-content .row {
+        display: grid;
+        grid-template-columns: minmax(0, 38%) minmax(0, 1fr);
+        gap: 1.5rem !important;
+    }
+
+    .recipe-image {
+        height: auto;
+        max-height: 420px;
+        border-radius: 1rem;
+    }
+
+    .recipe-introduction h1,
+    .recipe-content h2,
+    .recipe-steps h3,
+    .ingredient-list,
+    .recipe-steps p {
+        color: #000 !important;
+    }
+
+    .recipe-content,
+    .recipe-steps li {
+        break-inside: avoid;
     }
 }

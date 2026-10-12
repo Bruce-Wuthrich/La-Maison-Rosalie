@@ -325,6 +325,99 @@ if (commentMessage && commentCounter) {
   commentMessage.addEventListener("input", updateCommentCounter);
 }
 
+// Rend fonctionnels les boutons de la fiche recette sans requête serveur.
+const recipeFavorite = document.querySelector(
+  ".recipe-favorite[data-recipe-slug]",
+);
+const favoriteStorageKey = "maisonRosalieFavoriteRecipes";
+
+if (recipeFavorite) {
+  const recipeSlug = recipeFavorite.dataset.recipeSlug;
+  let favoriteRecipes = [];
+
+  try {
+    const savedFavorites = JSON.parse(
+      localStorage.getItem(favoriteStorageKey) ?? "[]",
+    );
+    favoriteRecipes = Array.isArray(savedFavorites)
+      ? savedFavorites.filter((slug) => typeof slug === "string")
+      : [];
+  } catch {
+    favoriteRecipes = [];
+  }
+
+  const showFavoriteState = (isFavorite) => {
+    recipeFavorite.classList.toggle("is-active", isFavorite);
+    recipeFavorite.setAttribute("aria-pressed", String(isFavorite));
+    recipeFavorite.setAttribute(
+      "aria-label",
+      isFavorite ? "Retirer des favoris" : "Ajouter aux favoris",
+    );
+
+    const tooltip = recipeFavorite.querySelector(".recipe-favorite-tooltip");
+    if (tooltip) {
+      tooltip.textContent = isFavorite ? "Enregistré" : "Enregistrez";
+    }
+  };
+
+  showFavoriteState(favoriteRecipes.includes(recipeSlug));
+
+  recipeFavorite.addEventListener("click", () => {
+    const isFavorite = favoriteRecipes.includes(recipeSlug);
+    favoriteRecipes = isFavorite
+      ? favoriteRecipes.filter((slug) => slug !== recipeSlug)
+      : [...favoriteRecipes, recipeSlug];
+
+    try {
+      localStorage.setItem(favoriteStorageKey, JSON.stringify(favoriteRecipes));
+    } catch {
+      // L'état visuel reste utilisable même si le stockage est bloqué.
+    }
+
+    showFavoriteState(!isFavorite);
+  });
+}
+
+const printRecipeButton = document.querySelector("#printRecipe");
+if (printRecipeButton) {
+  printRecipeButton.addEventListener("click", () => window.print());
+}
+
+const shareRecipeButton = document.querySelector("#shareRecipe");
+const recipeActionStatus = document.querySelector(
+  "[data-recipe-action-status]",
+);
+
+if (shareRecipeButton) {
+  const showShareStatus = (message) => {
+    if (recipeActionStatus) {
+      recipeActionStatus.textContent = message;
+    }
+  };
+
+  shareRecipeButton.addEventListener("click", async () => {
+    const shareData = {
+      title: document.title,
+      url: window.location.href,
+    };
+
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share(shareData);
+        showShareStatus("Recette partagée.");
+        return;
+      }
+
+      await navigator.clipboard.writeText(shareData.url);
+      showShareStatus("Lien copié dans le presse-papiers.");
+    } catch (error) {
+      if (error?.name !== "AbortError") {
+        showShareStatus("Le partage n’est pas disponible sur ce navigateur.");
+      }
+    }
+  });
+}
+
 const aboutPage = document.querySelector(".about-page");
 
 if (aboutPage) {

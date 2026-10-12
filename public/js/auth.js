@@ -1,13 +1,16 @@
 const authModal = document.querySelector("#authModal");
-const authOpenButton = document.querySelector("[data-auth-open]");
+// navbar et invitations à se connecter
+const authOpenButtons = document.querySelectorAll("[data-auth-open]");
 
-if (authModal && authOpenButton) {
+if (authModal) {
   const authPanels = authModal.querySelectorAll("[data-auth-panel]");
   const authRoleButtons = authModal.querySelectorAll("[data-auth-role]");
   const loginModeInput = authModal.querySelector("[data-auth-login-mode]");
   const loginEmailInput = authModal.querySelector('input[name="email"]');
   const rememberEmailInput = authModal.querySelector("[data-auth-remember-email]");
   const loginForm = authModal.querySelector('.auth-login-panel form');
+  const registerForm = authModal.querySelector(".auth-register-panel form");
+  const logoutForm = document.querySelector("[data-auth-logout]");
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let previousFocus = null;
   let isSwitchingPanel = false;
@@ -94,8 +97,10 @@ if (authModal && authOpenButton) {
     previousFocus?.focus();
   };
 
-  authOpenButton.addEventListener("click", () => openAuthModal("login"));
-
+  authOpenButtons.forEach((button) => {
+    button.addEventListener("click", () => openAuthModal("login"));
+  });
+  
   authModal.querySelectorAll("[data-auth-close]").forEach((button) => {
     button.addEventListener("click", closeAuthModal);
   });
@@ -137,6 +142,84 @@ if (authModal && authOpenButton) {
     } catch (error) {
       // La connexion ne dépend pas du stockage facultatif de l’e-mail.
     }
+  });
+
+  // Met la page à jour après une connexion ou une déconnexion, sans rechargement (FE-60, FE-53).
+  const updateAuthState = (user, csrfToken) => {
+    document.querySelectorAll("[data-auth-member]").forEach((element) => {
+      element.hidden = user === null;
+    });
+    document.querySelectorAll("[data-auth-guest]").forEach((element) => {
+      element.hidden = user !== null;
+    });
+    document.querySelectorAll("[data-auth-username]").forEach((element) => {
+      element.textContent = user?.username ?? "";
+    });
+
+    // La session a changé : chaque formulaire de la page reçoit le nouveau jeton CSRF.
+    document.querySelectorAll('input[name="csrf_token"]').forEach((input) => {
+      input.value = csrfToken;
+    });
+
+    // Les autres scripts (étoiles, commentaires) peuvent réagir au changement d'état.
+    document.dispatchEvent(new CustomEvent("auth:change", { detail: { user } }));
+  };
+
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const result = await sendJsonForm(loginForm);
+
+    if (!result.success) {
+      showFlash("error", result.message);
+      return;
+    }
+
+    loginForm.querySelector('input[name="password"]').value = "";
+
+    // Même comportement que le serveur : un administrateur arrive sur sa page.
+    if (result.data.user.role === "admin") {
+      window.location.href = "?pg=admin";
+      return;
+    }
+
+    updateAuthState(result.data.user, result.data.csrfToken);
+    closeAuthModal();
+    showFlash("success", result.message);
+  });
+
+  registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const result = await sendJsonForm(registerForm);
+
+    if (!result.success) {
+      showFlash("error", result.message);
+      return;
+    }
+
+    // Compte créé : on passe à la connexion avec l'e-mail déjà rempli.
+    loginEmailInput.value = registerForm.querySelector('input[name="email"]').value;
+    registerForm.reset();
+    showPanel("login");
+    showFlash("success", result.message);
+  });
+
+  logoutForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const result = await sendJsonForm(logoutForm);
+
+    if (!result.success) {
+      showFlash("error", result.message);
+      return;
+    }
+
+    // La page admin n'a plus de sens une fois déconnecté.
+    if (new URLSearchParams(window.location.search).get("pg") === "admin") {
+      window.location.href = "?pg=accueil";
+      return;
+    }
+
+    updateAuthState(null, result.data.csrfToken);
+    showFlash("success", result.message);
   });
 
   authModal.addEventListener("keydown", (event) => {
