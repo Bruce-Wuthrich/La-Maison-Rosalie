@@ -36,6 +36,14 @@ function respond(bool $success, string $message, string $redirect, int $status =
     redirectTo($redirect);
 }
 
+// Code HTTP d'une erreur 
+function errorStatus(Throwable $exception): int
+{
+    $code = $exception->getCode();
+
+    return in_array($code, [403, 404, 429], true) ? $code : 400;
+}
+
 // Place un message temporaire dans la session pour la page suivante.
 function setFlashMessage(string $type, string $message): void
 {

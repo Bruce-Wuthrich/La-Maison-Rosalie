@@ -130,6 +130,7 @@ class CommentMapping extends AbstractMapping{
             'subject' => $this->getSubject(),
             'message' => $this->getMessage(),
             'createdAt' => $this->getCreatedAt(),
+            'authorRating' => $this->getAuthorRating(),
         ];
     }
 }
