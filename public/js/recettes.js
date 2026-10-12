@@ -1,3 +1,10 @@
+// path: public/js/recettes.js
+// Page recettes : les listes Difficulté et Temps appliquent le filtre dès qu'on les change.
+// Sans js, le bouton fait la même chose.
+
+document.querySelectorAll("[data-auto-submit]").forEach((select) => {
+    select.addEventListener("change", () => select.form.requestSubmit());
+});
 const commentForm = document.querySelector(".comment-form");
 if (commentForm !== null) {
   const ratingInputs = commentForm.querySelectorAll('input[name="rating"]');
