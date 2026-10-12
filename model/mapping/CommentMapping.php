@@ -17,6 +17,7 @@ class CommentMapping extends AbstractMapping{
     protected ?string $message = null;
     protected ?string $publication_status = null;
     protected ?string $created_at = null;
+    protected ?int $author_rating = null;
 
     public function getId(): ?int{
         return $this->id; 
@@ -99,6 +100,18 @@ class CommentMapping extends AbstractMapping{
             throw new InvalidArgumentException('Le statut doit être pending, published ou hidden.');
         }
         $this->publication_status = $publicationStatus;
+    }
+
+    public function getAuthorRating(): ?int{
+        return $this->author_rating;
+    }
+
+    public function setAuthorRating(int|string $authorRating): void{
+        $authorRating = (int) $authorRating;
+        if ($authorRating < 0 || $authorRating > 5) {
+            throw new InvalidArgumentException('La note doit être comprise entre 0 et 5.');
+        }
+        $this->author_rating = $authorRating;
     }
 
     public function getCreatedAt(): ?string{

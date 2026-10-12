@@ -6,6 +6,7 @@ use model\manager\CategoryManager;
 use model\manager\CommentManager;
 use model\manager\RecipeIngredientManager;
 use model\manager\StepManager;
+use model\manager\UserManager;
 
 require_once RACINE_PATH . '/controller/ControllerHelpers.php';
 
@@ -22,7 +23,12 @@ if ($page === 'recette') {
 
     // Prépare la page demandée et refuse les nombres trop grands pour PHP.
     $commentPage = positiveInteger($_GET['comment_page'] ?? null) ?? 1;
-    $commentLimit = 10;
+    $commentBatchSize = 3;
+    $commentSort = stringInput($_GET['comment_sort'] ?? null);
+    $allowedCommentSorts = ['date', 'mieux', 'pire'];
+    if (!in_array($commentSort, $allowedCommentSorts, true)) {
+        $commentSort = 'date';
+    }
 
     $recipe = null;
     $ingredients = [];
@@ -33,11 +39,15 @@ if ($page === 'recette') {
     $commentHasNext = false;
     $commentFormData = pullFormData('comment');
     $csrfToken = csrfToken();
+    $connectedUser = null;
 
     try {
         // Cherche la recette et la note du membre s'il est connecté.
         $userId = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
         $recipe = $recipeManager->getBySlug($slug, $userId);
+        if ($userId !== null) {
+            $connectedUser = (new UserManager($db))->getById($userId);
+        }
 
         // Un slug valide qui ne correspond à aucune recette renvoie une vraie 404.
         if ($recipe === null) {
@@ -55,11 +65,11 @@ if ($page === 'recette') {
         $commentCount = $commentManager->countByRecipeId($recipe->getId());
 
         // Ramène une page trop éloignée vers la dernière page disponible.
-        $commentPageCount = max(1, (int) ceil($commentCount / $commentLimit));
+        $commentPageCount = max(1, (int) ceil($commentCount / $commentBatchSize));
         $commentPage = min($commentPage, $commentPageCount);
-        $commentOffset = ($commentPage - 1) * $commentLimit;
-        $comments = $commentManager->getByRecipeId($recipe->getId(), $commentLimit, $commentOffset);
-        $commentHasNext = $commentOffset + count($comments) < $commentCount;
+        $commentLimit = $commentPage * $commentBatchSize;
+        $comments = $commentManager->getByRecipeId($recipe->getId(), $commentLimit, 0, $commentSort);
+        $commentHasNext = count($comments) < $commentCount;
     } catch (Throwable $exception) {
         error_log('Impossible de charger la recette : ' . $exception->getMessage());
         http_response_code(503);

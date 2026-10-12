@@ -5,6 +5,64 @@ $escape = static fn (?string $value): string => htmlspecialchars($value ?? '', E
 $primaryCategory = $categories[0] ?? null;
 $averageRating = $recipe->getAverageRating();
 $filledStars = $averageRating === null ? 0 : (int) round($averageRating);
+$recipeImage = (string) $recipe->getMainImage();
+
+// Garde l'image de la BDD et utilise l'asset local si son ancien chemin n'existe plus.
+if (!is_file(RACINE_PATH . '/public/' . $recipeImage)) {
+    $recipeImage = 'assets/img/recettes/' . $recipe->getSlug() . '/principale.webp';
+}
+$commentSortLabels = [
+    'date' => 'Date',
+    'mieux' => 'Les mieux notés',
+    'pire' => 'Les moins bien notés',
+];
+
+// Tags visuels de la maquette : aucune nouvelle table ni requête SQL.
+$recipeTags = [
+    'chocolat-chaud-a-l-ancienne' => [
+        ['name' => 'chocolat', 'count' => 5],
+        ['name' => 'rapide', 'count' => 3],
+        ['name' => 'famille', 'count' => 4],
+        ['name' => 'chocolat noir', 'count' => 4],
+        ['name' => 'populaire', 'count' => 4],
+        ['name' => 'enfants', 'count' => 4],
+    ],
+    'mousse-au-chocolat-noir' => [
+        ['name' => 'chocolat', 'count' => 5],
+        ['name' => 'rapide', 'count' => 3],
+        ['name' => 'famille', 'count' => 4],
+        ['name' => 'chocolat noir', 'count' => 4],
+        ['name' => 'enfants', 'count' => 4],
+        ['name' => 'crémeux', 'count' => 2],
+    ],
+    'brownies-aux-noix' => [
+        ['name' => 'chocolat', 'count' => 5],
+        ['name' => 'famille', 'count' => 4],
+        ['name' => 'four', 'count' => 2],
+        ['name' => 'chocolat noir', 'count' => 4],
+        ['name' => 'populaire', 'count' => 4],
+        ['name' => 'brownies', 'count' => 1],
+        ['name' => 'fête', 'count' => 2],
+        ['name' => 'enfants', 'count' => 4],
+    ],
+    'fondant-au-coeur-coulant' => [
+        ['name' => 'chocolat', 'count' => 5],
+        ['name' => 'four', 'count' => 2],
+        ['name' => 'chocolat noir', 'count' => 4],
+        ['name' => 'populaire', 'count' => 4],
+        ['name' => 'fête', 'count' => 2],
+    ],
+    'glace-au-chocolat-sans-sorbetiere' => [
+        ['name' => 'chocolat', 'count' => 5],
+        ['name' => 'rapide', 'count' => 3],
+        ['name' => 'famille', 'count' => 4],
+        ['name' => 'populaire', 'count' => 4],
+        ['name' => 'enfants', 'count' => 4],
+        ['name' => 'sans cuisson', 'count' => 1],
+        ['name' => 'crémeux', 'count' => 2],
+    ],
+];
+$visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
 ?>
 
 <main class="recipe-page">
@@ -31,11 +89,14 @@ $filledStars = $averageRating === null ? 0 : (int) round($averageRating);
                 <div class="col-12 col-lg-5">
                     <figure class="recipe-figure">
                         <button class="recipe-favorite" type="button" aria-label="Ajouter aux favoris">
-                            <img src="assets/img/recettes/icons/favorite-outline.svg" alt="" aria-hidden="true">
+                            <svg viewBox="0 0 512 512" aria-hidden="true">
+                                <path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64C106.32 80 64.54 124.14 64 176.81c-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0 0 18 0c96.26-65.34 184.09-143.09 183-252.42C447.46 124.14 405.68 80 352.92 80Z" />
+                            </svg>
+                            <span class="recipe-favorite-tooltip" aria-hidden="true">Enregistrez</span>
                         </button>
 
                         <img class="recipe-image"
-                            src="<?php echo $escape($recipe->getMainImage()); ?>"
+                            src="<?php echo $escape($recipeImage); ?>"
                             alt="<?php echo $escape($recipe->getTitle()); ?>"
                             width="1200" height="800">
                     </figure>
@@ -132,7 +193,7 @@ $filledStars = $averageRating === null ? 0 : (int) round($averageRating);
                 </div>
 
                 <div class="col-12 col-lg-7">
-                    <h2>Préparation</h2>
+                    <h2>Method</h2>
 
                     <ol class="recipe-steps">
                         <?php foreach ($steps as $step) { ?>
@@ -142,12 +203,6 @@ $filledStars = $averageRating === null ? 0 : (int) round($averageRating);
                                     <?php echo $escape($step->getTitle()); ?>
                                 </h3>
                                 <p><?php echo $escape($step->getInstructions()); ?></p>
-                                <?php if ($step->getImage() !== null && $step->getImage() !== '') { ?>
-                                    <img class="recipe-step-image"
-                                        src="<?php echo $escape($step->getImage()); ?>"
-                                        alt="Étape <?php echo (int) $step->getStepNumber(); ?> : <?php echo $escape($step->getTitle()); ?>"
-                                        width="1200" height="800" loading="lazy">
-                                <?php } ?>
                             </li>
                         <?php } ?>
                     </ol>
@@ -160,42 +215,168 @@ $filledStars = $averageRating === null ? 0 : (int) round($averageRating);
         <div class="container">
             <div class="comments-heading">
                 <img src="assets/img/recettes/icons/comment.svg" alt="" aria-hidden="true">
-                <h2>Commentaires (<?php echo $commentCount; ?>)</h2>
+                <h2>Commentaires</h2>
             </div>
 
-            <?php if (empty($comments)) { ?>
-                <p>Aucun commentaire pour cette recette.</p>
-            <?php } else { ?>
-                <div class="comments-list-panel">
-                    <?php foreach ($comments as $comment) { ?>
-                        <article class="recipe-comment">
-                            <h3><?php echo $escape($comment->getSubject() ?: 'Commentaire de ' . $comment->getAuthorUsername()); ?></h3>
-                            <p><?php echo $escape($comment->getMessage()); ?></p>
-                            <small>Par <?php echo $escape($comment->getAuthorUsername()); ?></small>
-                        </article>
-                    <?php } ?>
-                </div>
+            <?php if (is_array($flashMessage) && isset($flashMessage['message'])) { ?>
+                <p class="comment-flash comment-flash-<?php echo ($flashMessage['type'] ?? '') === 'success' ? 'success' : 'error'; ?>" role="status">
+                    <?php echo $escape((string) $flashMessage['message']); ?>
+                </p>
             <?php } ?>
 
-            <?php if ($commentPage > 1 || $commentHasNext) { ?>
-                <nav class="comment-pagination" aria-label="Pagination des commentaires">
-                    <?php if ($commentPage > 1) { ?>
-                        <a href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>&amp;comment_page=<?php echo $commentPage - 1; ?>#comments">
-                            Commentaires précédents
-                        </a>
-                    <?php } ?>
+            <div class="comments-layout">
+                <aside class="comment-form-panel" aria-labelledby="commentFormTitle">
+                    <h3 id="commentFormTitle">Partagez votre expérience</h3>
 
-                    <span>Page <?php echo $commentPage; ?></span>
+                    <?php if ($connectedUser !== null) { ?>
+                        <?php
+                        $selectedRating = (int) ($commentFormData['rating'] ?? $recipe->getUserRating() ?? 0);
+                        $oldMessage = (string) ($commentFormData['message'] ?? '');
+                        ?>
+                        <form class="comment-form" action="?pg=commentaire&amp;action=add" method="post">
+                            <input type="hidden" name="csrf_token" value="<?php echo $escape($csrfToken); ?>">
+                            <input type="hidden" name="recipe_id" value="<?php echo (int) $recipe->getId(); ?>">
+                            <input type="hidden" name="slug" value="<?php echo $escape($recipe->getSlug()); ?>">
+
+                            <div class="comment-identity">
+                                <label>
+                                    <span class="visually-hidden">Votre nom</span>
+                                    <input type="text" value="<?php echo $escape($connectedUser->getUsername()); ?>" readonly>
+                                </label>
+                                <label>
+                                    <span class="visually-hidden">Votre e-mail</span>
+                                    <input type="email" value="<?php echo $escape($connectedUser->getEmail()); ?>" readonly>
+                                </label>
+                            </div>
+
+                            <fieldset class="comment-rating-fieldset">
+                                <legend>Rating</legend>
+                                <div class="comment-rating-input" aria-label="Votre note sur 5">
+                                    <?php for ($rating = 5; $rating >= 1; $rating--) { ?>
+                                        <input id="commentRating<?php echo $rating; ?>" type="radio" name="rating"
+                                            value="<?php echo $rating; ?>" <?php echo $selectedRating === $rating ? 'checked' : ''; ?> required>
+                                        <label for="commentRating<?php echo $rating; ?>" title="<?php echo $rating; ?> étoile<?php echo $rating > 1 ? 's' : ''; ?>">
+                                            <span aria-hidden="true">★</span>
+                                            <span class="visually-hidden"><?php echo $rating; ?> étoile<?php echo $rating > 1 ? 's' : ''; ?></span>
+                                        </label>
+                                    <?php } ?>
+                                </div>
+                            </fieldset>
+
+                            <label class="comment-message-label" for="commentMessage">Votre commentaire</label>
+                            <textarea id="commentMessage" name="message" minlength="3" maxlength="500" required
+                                placeholder="Dites-nous ce que vous pensez de cette recette."><?php echo $escape($oldMessage); ?></textarea>
+                            <small class="comment-character-count" data-comment-counter>0/500 caractères</small>
+
+                            <button class="comment-submit" type="submit">Publier le commentaire</button>
+                            <p class="comment-moderation-note">Votre commentaire sera vérifié avant sa publication</p>
+                        </form>
+                    <?php } else { ?>
+                        <div class="comment-login-panel">
+                            <div class="comment-identity" aria-hidden="true">
+                                <input type="text" placeholder="Votre nom" disabled>
+                                <input type="email" placeholder="Votre e-mail" disabled>
+                            </div>
+                            <p>Connectez-vous pour noter cette recette et partager votre commentaire.</p>
+                            <button class="comment-submit" type="button" data-auth-open>Se connecter pour commenter</button>
+                        </div>
+                    <?php } ?>
+                </aside>
+
+                <div class="comments-feed">
+                    <header class="comments-summary">
+                        <div class="comments-average-stars" aria-hidden="true">
+                            <?php for ($star = 1; $star <= 5; $star++) { ?>
+                                <img src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
+                            <?php } ?>
+                        </div>
+                        <p>(<?php echo $commentCount; ?> commentaire<?php echo $commentCount === 1 ? '' : 's'; ?>)</p>
+                        <details class="comment-sort">
+                            <summary aria-label="Trier les commentaires" title="Trier les commentaires">
+                                <span></span><span></span><span></span>
+                            </summary>
+                            <div class="comment-sort-menu">
+                                <p>Trier par</p>
+                                <?php foreach ($commentSortLabels as $sortValue => $sortLabel) { ?>
+                                    <a href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>&amp;comment_sort=<?php echo $sortValue; ?>#comments"
+                                        <?php echo $commentSort === $sortValue ? 'aria-current="true"' : ''; ?>>
+                                        <?php echo $sortLabel; ?>
+                                    </a>
+                                <?php } ?>
+                            </div>
+                        </details>
+                    </header>
+
+                    <?php if (empty($comments)) { ?>
+                        <p class="comments-empty">Soyez la première personne à partager son expérience.</p>
+                    <?php } else { ?>
+                        <div class="comments-list-panel<?php echo $commentPage > 1 ? ' is-expanded' : ''; ?>">
+                            <?php foreach ($comments as $index => $comment) { ?>
+                                <?php
+                                $commentRating = $comment->getAuthorRating() ?? 0;
+                                $commentDate = strtotime((string) $comment->getCreatedAt());
+                                $isOwnComment = $connectedUser !== null && $comment->getAuthorId() === $connectedUser->getId();
+                                ?>
+                                <article class="recipe-comment<?php echo $index % 2 === 1 ? ' recipe-comment-reversed' : ''; ?>">
+                                    <div class="comment-avatar" aria-hidden="true"><span></span></div>
+
+                                    <div class="comment-body">
+                                        <div class="comment-author-line">
+                                            <h3><?php echo $escape($comment->getAuthorUsername()); ?></h3>
+                                            <div class="comment-stars" aria-label="Note : <?php echo $commentRating; ?> sur 5">
+                                                <?php for ($star = 1; $star <= 5; $star++) { ?>
+                                                    <img src="assets/img/recettes/icons/<?php echo $star <= $commentRating ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
+                                                <?php } ?>
+                                            </div>
+                                            <time datetime="<?php echo $escape($comment->getCreatedAt()); ?>">
+                                                <?php echo $commentDate === false ? '' : date('d/m/Y H:i', $commentDate); ?>
+                                            </time>
+                                        </div>
+
+                                        <p><?php echo nl2br($escape($comment->getMessage())); ?></p>
+
+                                        <div class="comment-footer-row">
+                                            <?php if ($isOwnComment || ($connectedUser !== null && $connectedUser->isAdmin())) { ?>
+                                                <form action="?pg=commentaire&amp;action=delete" method="post">
+                                                    <input type="hidden" name="csrf_token" value="<?php echo $escape($csrfToken); ?>">
+                                                    <input type="hidden" name="comment_id" value="<?php echo (int) $comment->getId(); ?>">
+                                                    <input type="hidden" name="slug" value="<?php echo $escape($recipe->getSlug()); ?>">
+                                                    <button class="comment-delete" type="submit">Supprimer</button>
+                                                </form>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                </article>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
 
                     <?php if ($commentHasNext) { ?>
-                        <a href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>&amp;comment_page=<?php echo $commentPage + 1; ?>#comments">
-                            Commentaires suivants
-                        </a>
+                        <nav class="comment-pagination" aria-label="Pagination des commentaires">
+                            <a class="comment-more" href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>&amp;comment_sort=<?php echo $commentSort; ?>&amp;comment_page=<?php echo $commentPage + 1; ?>#comments">
+                                Voir plus
+                            </a>
+                        </nav>
                     <?php } ?>
-                </nav>
-            <?php } ?>
+                </div>
+            </div>
         </div>
     </section>
+
+    <?php if ($visibleTags !== []) { ?>
+        <section class="recipe-tags" aria-labelledby="recipeTagsTitle">
+            <h2 id="recipeTagsTitle">Tags</h2>
+            <div class="recipe-tags-band">
+                <div class="recipe-tags-list" role="list">
+                    <?php foreach ($visibleTags as $tag) { ?>
+                        <span class="recipe-tag" role="listitem">
+                            <?php echo $escape($tag['name']); ?>(<?php echo (int) $tag['count']; ?>)
+                        </span>
+                    <?php } ?>
+                </div>
+            </div>
+        </section>
+    <?php } ?>
 </main>
 
 <?php require RACINE_PATH . '/view/inc/footer.php'; ?>

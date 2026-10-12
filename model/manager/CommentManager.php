@@ -31,20 +31,28 @@ class CommentManager implements ManagerInterface{
         return (int) $query->fetchColumn();
     }
 
-    // com publié (plus récent à ancien)
-    public function getByRecipeId(int $recipeId, int $limit, int $offset): array {
+    // Commentaires publiés avec la note laissée par leur auteur.
+    public function getByRecipeId(int $recipeId, int $limit, int $offset, string $sort = 'date'): array {
+        $orderBy = match ($sort) {
+            'mieux' => 'author_rating DESC, c.created_at DESC, c.id DESC',
+            'pire' => 'author_rating ASC, c.created_at DESC, c.id DESC',
+            default => 'c.created_at DESC, c.id DESC',
+        };
         $query = $this->db->prepare(
-            "SELECT c.id, c.author_id, u.username AS author_username, c.recipe_id, c.subject, c.message, c.publication_status, c.created_at
-            FROM comments c INNER JOIN users u ON u.id = c.author_id
-            WHERE c.recipe_id = :recipe_id AND c.publication_status = 'published'
-            ORDER BY c.created_at DESC, c.id DESC
-            LIMIT :limit OFFSET :offset"
-        ); 
+            "SELECT c.id, c.author_id, u.username AS author_username, c.recipe_id,
+                    c.subject, c.message, c.publication_status, c.created_at,
+                    COALESCE(r.rating, 0) AS author_rating
+             FROM comments c
+             INNER JOIN users u ON u.id = c.author_id
+             LEFT JOIN ratings r ON r.user_id = c.author_id AND r.recipe_id = c.recipe_id
+             WHERE c.recipe_id = :recipe_id AND c.publication_status = 'published'
+             ORDER BY {$orderBy}
+             LIMIT :limit OFFSET :offset"
+        );
         $query->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
         $query->bindValue(':limit', $limit, PDO::PARAM_INT);
         $query->bindValue(':offset', $offset, PDO::PARAM_INT);
         $query->execute();
-
         $comments = [];
         foreach ($query->fetchAll() as $row){
             $comments[] = new CommentMapping($row);
