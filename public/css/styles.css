@@ -907,7 +907,7 @@ body.auth-open {
     place-items: center;
     overflow: hidden;
     padding: clamp(2rem, 5vw, 5rem);
-    background: linear-gradient(rgba(255, 250, 242, 0.58), rgba(255, 250, 242, 0.58)),
+    background: linear-gradient(rgba(255, 250, 242, 0.40), rgba(255, 250, 242, 0.40)),
         url("../assets/img/interface/figma/hero-background.webp") center / cover no-repeat;
 }
 
