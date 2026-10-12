@@ -23,7 +23,7 @@ if ($page === 'recette') {
 
     // Prépare la page demandée et refuse les nombres trop grands pour PHP.
     $commentPage = positiveInteger($_GET['comment_page'] ?? null) ?? 1;
-    $commentBatchSize = 3;
+    $commentBatchSize = 10;
     $commentSort = stringInput($_GET['comment_sort'] ?? null);
     $allowedCommentSorts = ['date', 'mieux', 'pire'];
     if (!in_array($commentSort, $allowedCommentSorts, true)) {
