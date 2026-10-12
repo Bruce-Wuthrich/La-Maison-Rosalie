@@ -151,6 +151,30 @@ class CommentManager implements ManagerInterface{
         return $query->rowCount() > 0;
     }
 
+    // Tous les avis, du plus récent au plus ancien avec recette pour modération (page admin).
+    public function getAllForAdmin(int $limit = 100): array{
+        $query = $this->db->prepare(
+            "SELECT c.id, c.author_id, u.username AS author_username, c.recipe_id,
+                    r.title AS recipe_title, r.slug AS recipe_slug,
+                    c.subject, c.message, c.publication_status, c.created_at,
+                    COALESCE(ra.rating, 0) AS author_rating
+             FROM comments c
+             INNER JOIN users u ON u.id = c.author_id
+             INNER JOIN recipes r ON r.id = c.recipe_id
+             LEFT JOIN ratings ra ON ra.user_id = c.author_id AND ra.recipe_id = c.recipe_id
+             ORDER BY c.created_at DESC, c.id DESC
+             LIMIT :limit"
+        );
+        $query->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $query->execute();
+
+        $comments = [];
+        foreach ($query->fetchAll() as $row){
+            $comments[] = new CommentMapping($row);
+        }
+        return $comments;
+    }
+
     // Nb de com par user (sur une période)
     public function countRecentByAuthor(int $authorId, int $minutes): int{
         $query = $this->db->prepare(
