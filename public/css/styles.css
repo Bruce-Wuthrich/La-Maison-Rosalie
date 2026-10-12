@@ -3466,6 +3466,35 @@ body.menu-open .hero-top-marker {
     color: var(--color-gold-text);
 }
 
+/* Bonus filtres : difficulté et temps, même style que les pastilles de catégorie */
+.recipe-extra-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem;
+    margin: -1.5rem 0 3rem;
+}
+
+.recipe-extra-filters label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+}
+
+.recipe-extra-filters select {
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--color-gold);
+    border-radius: 2rem;
+    background-color: var(--color-white);
+    color: var(--color-brown);
+}
+
+button.recipe-filter {
+    background-color: transparent;
+    font: inherit;
+}
+
 /* Page admin : réutilise l'en-tête et les filtres de la page Recettes, et les avis de la fiche recette */
 .admin-section {
     margin-bottom: 4rem;
