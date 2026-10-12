@@ -3,7 +3,7 @@
 //message temp apres refirection sur tt pages
 // page contact à son emplacement reservé au dess de form
 
-if (is_array($flashMessage) && isset($flashMessage['message']) && $page !== 'contact'):
+if (is_array($flashMessage) && isset($flashMessage['message']) && !in_array($page, ['contact', 'recette'], true)):
     $flashIsSuccess = ($flashMessage['type'] ?? '') === 'success';
 ?>
     <div class="flash-message flash-toast flash-message-<?= $flashIsSuccess ? 'success' : 'error' ?>"

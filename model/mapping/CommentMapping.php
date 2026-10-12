@@ -17,6 +17,7 @@ class CommentMapping extends AbstractMapping{
     protected ?string $message = null;
     protected ?string $publication_status = null;
     protected ?string $created_at = null;
+    protected ?int $author_rating = null;
 
     public function getId(): ?int{
         return $this->id; 
@@ -101,11 +102,34 @@ class CommentMapping extends AbstractMapping{
         $this->publication_status = $publicationStatus;
     }
 
+    public function getAuthorRating(): ?int{
+        return $this->author_rating;
+    }
+
+    public function setAuthorRating(int|string $authorRating): void{
+        $authorRating = (int) $authorRating;
+        if ($authorRating < 0 || $authorRating > 5) {
+            throw new InvalidArgumentException('La note doit être comprise entre 0 et 5.');
+        }
+        $this->author_rating = $authorRating;
+    }
+
     public function getCreatedAt(): ?string{
         return $this->created_at;
     }
 
     public function setCreatedAt(string $createdAt): void{
         $this->created_at = $createdAt; 
+    }
+
+    // donné pubique com pour un réponse json + JS affiche via textContent jamais innerHTML
+    public function toArray(): array{
+        return[
+            'id' => $this->getId(),
+            'author' => $this->getAuthorUsername(),
+            'subject' => $this->getSubject(),
+            'message' => $this->getMessage(),
+            'createdAt' => $this->getCreatedAt(),
+        ];
     }
 }
