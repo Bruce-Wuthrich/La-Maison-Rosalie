@@ -18,19 +18,18 @@ validateCsrfToken($_POST, $redirect);
 $recipeId = positiveInteger($_POST['recipe_id'] ?? null);
 $rating = positiveInteger($_POST['rating'] ?? null);
 if ($recipeId === null || $rating === null) {
-    setFlashMessage('error', 'La recette ou la note envoyée est invalide.');
-    redirectTo($redirect);
+    respond(false, 'La recette ou la note envoyée est invalide.', $redirect, 400);
 }
 
 try {
     // Le contrôleur vérifie l'existence, le slug et le droit de noter.
-    $recipe = $recipeManager->getById($recipeId);
-    if ($recipe === null || $recipe->getSlug() !== $slug) {
+    $recipe = $recipeManager->getBySlug($slug, $user['id']);
+    if ($recipe === null || $recipe->getId() !== $recipeId) {
         $redirect = '?pg=recettes';
-        throw new DomainException('La recette envoyée ne correspond pas à la page consultée.');
+        throw new DomainException('La recette envoyée ne correspond pas à la page consultée.', 404);
     }
     if ($recipe->getAuthorId() === $user['id']) {
-        throw new DomainException('Vous ne pouvez pas noter votre propre recette.');
+        throw new DomainException('Vous ne pouvez pas noter votre propre recette.', 403);
     }
 
     $ratingManager = new RatingManager($db);
@@ -40,15 +39,21 @@ try {
     $stats = $ratingManager->getStats($recipeId);
     $average = $stats['average'] === null ? 'aucune' : number_format($stats['average'], 1, ',', '') . '/5';
 
-    setFlashMessage(
-        'success',
-        'Votre note a été enregistrée. Nouvelle moyenne : ' . $average . ' (' . $stats['count'] . ' avis).'
+    // moyenne renvoyée pour mise à jour étoiles sans rechargement
+    respond(
+        true,
+        'Votre note a été enregistrée. Nouvelle moyenne : ' . $average . ' (' . $stats['count'] . ' avis).',
+        $redirect,
+        200,
+        [
+            'average' => $stats['average'],
+            'count' => $stats['count'],
+            'userRating' => $rating,
+        ]
     );
 } catch (InvalidArgumentException|DomainException $exception) {
-    setFlashMessage('error', $exception->getMessage());
+    respond(false, $exception->getMessage(), $redirect, errorStatus($exception));
 } catch (Throwable $exception) {
     error_log('Erreur dans RatingController : ' . $exception->getMessage());
-    setFlashMessage('error', 'Le service de notation est momentanément indisponible.');
+    respond(false, 'Le service de notation est momentanément indisponible.', $redirect, 503);
 }
-
-redirectTo($redirect);
