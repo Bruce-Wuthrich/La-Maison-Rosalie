@@ -138,6 +138,7 @@ body.search-open .navbar-brand {
 
 .navbar-actions-left>.navbar-icon-link:hover .navbar-icon,
 .navbar-actions-left>.navbar-icon-link:focus-visible .navbar-icon,
+.navbar-actions-left>.navbar-icon-link.is-active .navbar-icon,
 .navbar-account-button:hover .navbar-icon,
 .navbar-account-button:focus-visible .navbar-icon {
     filter: brightness(0) saturate(100%) invert(23%) sepia(14%) saturate(1638%) hue-rotate(332deg) brightness(91%) contrast(86%);
@@ -311,8 +312,16 @@ body.search-open .navbar-brand {
 }
 
 .navbar-nav>.nav-item>.nav-link:hover,
-.navbar-nav>.nav-item>.nav-link:focus-visible {
+.navbar-nav>.nav-item>.nav-link:focus-visible,
+.navbar-nav>.nav-item>.nav-link.is-active {
     color: var(--color-brown);
+}
+
+.navbar-nav>.nav-item>.nav-link.is-active {
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
 }
 
 .navbar-nav .dropdown-toggle::after {
@@ -750,6 +759,21 @@ body.auth-open {
     gap: 0.75rem;
 }
 
+.footer-social a {
+    display: inline-flex;
+    border-radius: 0.25rem;
+    transition: transform 0.2s ease;
+}
+
+.footer-social a:hover {
+    transform: translateY(-2px);
+}
+
+.footer-social a:focus-visible {
+    outline: 2px solid var(--color-brown);
+    outline-offset: 4px;
+}
+
 .footer-social img {
     width: 32px;
     height: 32px;
@@ -757,7 +781,7 @@ body.auth-open {
     object-fit: contain;
 }
 
-.footer-social img:first-child {
+.footer-social a:first-child img {
     width: 40px;
 }
 

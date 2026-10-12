@@ -8,6 +8,17 @@ $recipeFilters = [
     'boissons' => 'Boissons',
     'glace' => 'Glacé',
 ];
+
+// Utilise le chemin de la BDD s'il existe, sinon l'image locale de la recette.
+$recipeImagePath = static function ($recipe): string {
+    $image = (string) $recipe->getMainImage();
+
+    if (!is_file(RACINE_PATH . '/public/' . $image)) {
+        $image = 'assets/img/recettes/' . $recipe->getSlug() . '/principale.webp';
+    }
+
+    return $image;
+};
 ?>
 
 <main class="recipes-page">
@@ -60,7 +71,7 @@ $recipeFilters = [
                             <a class="recipe-card-image-link"
                                 href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>">
                                 <img class="recipe-card-image"
-                                    src="<?php echo htmlspecialchars((string) $recipe->getMainImage(), ENT_QUOTES, 'UTF-8'); ?>"
+                                    src="<?php echo htmlspecialchars($recipeImagePath($recipe), ENT_QUOTES, 'UTF-8'); ?>"
                                     alt="<?php echo htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8'); ?>"
                                     width="1200" height="800" loading="lazy">
                             </a>

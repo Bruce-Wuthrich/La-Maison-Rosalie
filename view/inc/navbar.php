@@ -1,10 +1,15 @@
-<?php $isHomeNavbar = $page === 'accueil' || ($navbarHome ?? false); ?>
+<?php
+$isHomeNavbar = $page === 'accueil' || ($navbarHome ?? false);
+$isRecipesPage = in_array($page, ['recettes', 'recette'], true);
+$activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '';
+?>
 <nav class="navbar navbar-home">
     
     <div class="container">
 
         <div class="navbar-actions navbar-actions-left">
-            <a class="navbar-icon-link" href="?pg=accueil" aria-label="Accueil">
+            <a class="navbar-icon-link<?= $page === 'accueil' ? ' is-active' : '' ?>" href="?pg=accueil"
+                aria-label="Accueil" <?= $page === 'accueil' ? 'aria-current="page"' : '' ?>>
                 <img class="navbar-icon" src="assets/img/interface/home.svg" alt="Accueil">
             </a>
 
@@ -59,10 +64,12 @@
         <div class="collapse navbar-collapse" id="navigationPrincipale">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a href="?pg=recettes" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
-                        aria-expanded="false">Recettes</a>
+                    <a href="?pg=recettes" class="nav-link dropdown-toggle<?= $isRecipesPage ? ' is-active' : '' ?>"
+                        data-bs-toggle="dropdown" aria-expanded="false"
+                        <?= $isRecipesPage ? 'aria-current="page"' : '' ?>>Recettes</a>
                     <ul class="dropdown-menu">
-                        <li><a href="?pg=recettes" class="dropdown-item">Toutes les recettes</a></li>
+                        <li><a href="?pg=recettes" class="dropdown-item<?= $page === 'recettes' ? ' is-active' : '' ?>"
+                                <?= $page === 'recettes' ? 'aria-current="page"' : '' ?>>Toutes les recettes</a></li>
                         <?php
                         if ($menuRecipesError) {
                             echo '<li>Erreur lors de la récupération des recettes</li>';
@@ -71,18 +78,22 @@
                         } else {
                             foreach ($menuRecipes as $menuRecipe) {
                                 ?>
+                                <?php $isCurrentRecipe = $activeRecipeSlug === $menuRecipe->getSlug(); ?>
                                 <li><a href="?pg=recette&slug=<?php echo htmlspecialchars($menuRecipe->getSlug()) ?>"
-                                        class="dropdown-item"><?php echo htmlspecialchars($menuRecipe->getTitle()) ?></a></li><?php
+                                        class="dropdown-item<?= $isCurrentRecipe ? ' is-active' : '' ?>"
+                                        <?= $isCurrentRecipe ? 'aria-current="page"' : '' ?>><?php echo htmlspecialchars($menuRecipe->getTitle()) ?></a></li><?php
                             }
                         }
                         ?>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="?pg=a-propos" class="nav-link">À propos</a>
+                    <a href="?pg=a-propos" class="nav-link<?= $page === 'a-propos' ? ' is-active' : '' ?>"
+                        <?= $page === 'a-propos' ? 'aria-current="page"' : '' ?>>À propos</a>
                 </li>
                 <li class="nav-item">
-                    <a href="?pg=contact" class="nav-link">Contact</a>
+                    <a href="?pg=contact" class="nav-link<?= $page === 'contact' ? ' is-active' : '' ?>"
+                        <?= $page === 'contact' ? 'aria-current="page"' : '' ?>>Contact</a>
                 </li>
 
 
