@@ -10,6 +10,8 @@ require_once RACINE_PATH . '/controller/ControllerHelpers.php';
 
 $redirect = '?pg=accueil';
 $action = stringInput($_GET['action'] ?? null);
+// Après une erreur d'inscription ou de connexion, le formulaire classique rouvre la fenêtre modale.
+$errorRedirect = $redirect . (in_array($action, ['register', 'login'], true) ? '#authModal' : '');
 
 // Toutes les actions d'authentification viennent d'un formulaire protégé.
 requirePostMethod($redirect);
@@ -20,20 +22,31 @@ $loginAttemptManager = new LoginAttemptManager($db);
 
 try {
     if ($action === 'register') {
-        storeFormData('register', $_POST);
-        $registeredUser = $userManager->register($_POST);
+        // La saisie n'est gardée que pour réafficher un formulaire classique après une erreur.
+        if (!isJsonRequest()) {
+            storeFormData('register', $_POST);
+        }
 
+        $registeredUser = $userManager->register($_POST);
         if ($registeredUser === false) {
             throw new RuntimeException('La création du compte a échoué.');
         }
 
         unset($_SESSION['form_data']['register']);
-        setFlashMessage('success', 'Votre compte a bien été créé. Vous pouvez maintenant vous connecter.');
-        redirectTo($redirect . '#authModal');
+        respond(
+            true,
+            'Votre compte a bien été créé. Vous pouvez maintenant vous connecter.',
+            $redirect . '#authModal',
+            201,
+            ['username' => $registeredUser->getUsername()]
+        );
     }
 
     if ($action === 'login') {
-        storeFormData('login', $_POST);
+        if (!isJsonRequest()) {
+            storeFormData('login', $_POST);
+        }
+
         $email = stringInput($_POST['email'] ?? null);
         $loginMode = stringInput($_POST['login_mode'] ?? 'user');
         $ipAddress = clientIpAddress();
@@ -43,28 +56,38 @@ try {
         }
 
         if ($loginAttemptManager->countRecent($email, $ipAddress, 15) >= 5) {
-            setFlashMessage('error', 'Trop de tentatives. Merci de patienter 15 minutes.');
-            redirectTo($redirect . '#authModal');
+            throw new DomainException('Trop de tentatives. Merci de patienter 15 minutes.', 429);
         }
 
         if (!$userManager->connect($_POST)) {
             $loginAttemptManager->add($email, $ipAddress);
-            setFlashMessage('error', 'L’adresse e-mail ou le mot de passe est incorrect.');
-            redirectTo($redirect . '#authModal');
+            throw new DomainException('L’adresse e-mail ou le mot de passe est incorrect.', 401);
         }
 
         if ($loginMode === 'admin' && ($_SESSION['role'] ?? '') !== 'admin') {
             $userManager->disconnect();
             session_start();
             session_regenerate_id(true);
-            setFlashMessage('error', 'Ce compte ne possède pas les droits administrateur.');
-            redirectTo($redirect . '#authModal');
+            throw new DomainException('Ce compte ne possède pas les droits administrateur.', 403);
         }
 
         $loginAttemptManager->clear($email);
         unset($_SESSION['form_data']['login']);
-        setFlashMessage('success', 'Connexion réussie. Bienvenue ' . $_SESSION['username'] . ' !');
-        redirectTo(($_SESSION['role'] ?? '') === 'admin' ? '?pg=admin' : $redirect);
+
+        // Le JavaScript reçoit l'utilisateur et le jeton CSRF pour mettre la page à jour sans la recharger (FE-60, FE-53).
+        respond(
+            true,
+            'Connexion réussie. Bienvenue ' . $_SESSION['username'] . ' !',
+            ($_SESSION['role'] ?? '') === 'admin' ? '?pg=admin' : $redirect,
+            200,
+            [
+                'user' => [
+                    'username' => $_SESSION['username'],
+                    'role' => $_SESSION['role'],
+                ],
+                'csrfToken' => csrfToken(),
+            ]
+        );
     }
 
     if ($action === 'logout') {
@@ -73,16 +96,15 @@ try {
         $userManager->disconnect();
         session_start();
         session_regenerate_id(true);
-        setFlashMessage('success', 'Vous êtes maintenant déconnecté.');
-        redirectTo($redirect);
+
+        // Nouvelle session, donc nouveau jeton CSRF pour les formulaires encore affichés.
+        respond(true, 'Vous êtes maintenant déconnecté.', $redirect, 200, ['csrfToken' => csrfToken()]);
     }
 
-    setFlashMessage('error', 'Action d’authentification introuvable.');
-} catch (InvalidArgumentException $exception) {
-    setFlashMessage('error', $exception->getMessage());
+    respond(false, 'Action d’authentification introuvable.', $redirect, 404);
+} catch (InvalidArgumentException|DomainException $exception) {
+    respond(false, $exception->getMessage(), $errorRedirect, errorStatus($exception));
 } catch (Throwable $exception) {
     error_log('Erreur dans AuthController : ' . $exception->getMessage());
-    setFlashMessage('error', 'Le service des comptes est momentanément indisponible.');
+    respond(false, 'Le service des comptes est momentanément indisponible.', $errorRedirect, 503);
 }
-
-redirectTo($redirect . ($action === 'register' ? '#authModal' : ''));
