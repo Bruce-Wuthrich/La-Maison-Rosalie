@@ -48,6 +48,9 @@ try {
             throw new DomainException('Vous ne pouvez pas noter votre propre recette.', 403);
         }
 
+        // update avis pour eviter doublons
+        $isUpdate = $commentManager->hasCommented($user['id'], $recipeId);
+
         // Commentaire et note enregistrés ensemble, ou pas du tout.
         $ratingManager = new RatingManager($db);
         $db->beginTransaction();
@@ -64,10 +67,17 @@ try {
         $commentData['authorRating'] = $rating;
         $commentData['canDelete'] = true; // l'auteur peut toujours supprimer son propre commentaire
 
-        respond(true, 'Votre commentaire a bien été ajouté.', $redirect, 201, [
-            'comment' => $commentData,
-            'rating' => $ratingManager->getStats($recipeId),
-        ]);
+        respond(
+            true,
+            $isUpdate ? 'Votre avis a bien été modifié.' : 'Votre commentaire a bien été ajouté.',
+            $redirect,
+            $isUpdate ? 200 : 201,
+            [
+                'comment' => $commentData,
+                'rating' => $ratingManager->getStats($recipeId),
+                'updated' => $isUpdate,
+            ]
+        );
     }
 
     if ($action === 'delete') {
