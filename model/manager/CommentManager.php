@@ -79,6 +79,18 @@ class CommentManager implements ManagerInterface{
         return new CommentMapping($row);
     }
 
+    // un seul avis par personne
+    public function hasCommented(int $authorId, int $recipeId): bool{
+        $query = $this->db->prepare(
+            'SELECT 1 FROM comments WHERE author_id = :author_id AND recipe_id = :recipe_id'
+        );
+        $query->bindValue(':author_id', $authorId, PDO::PARAM_INT);
+        $query->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+        $query->execute();
+
+        return $query->fetchColumn() !== false;
+    }
+
     // ajout com + renvoi complet (affiche sans recharge) + Exception et renvoi false si recette n'existe pas 
     public function create(int $authorId, int $recipeId, array $data): CommentMapping|bool{
         //msg obligatoirement text et suj facult.
@@ -102,8 +114,14 @@ class CommentManager implements ManagerInterface{
         // status et created_at remplis par la bdd 
         try{
             $query = $this->db->prepare(
+                // Un seul avis par personne et par recette
                 "INSERT INTO comments (author_id, recipe_id, subject, message)
-                VALUES (:author_id, :recipe_id, :subject, :message)"
+                VALUES (:author_id, :recipe_id, :subject, :message)
+                ON DUPLICATE KEY UPDATE
+                    id = LAST_INSERT_ID(id),
+                    subject = VALUES(subject),
+                    message = VALUES(message),
+                    created_at = CURRENT_TIMESTAMP"
             );
             $query->bindValue(':author_id', $comment->getAuthorId(), PDO::PARAM_INT);
             $query->bindValue(':recipe_id', $comment->getRecipeId(), PDO::PARAM_INT);

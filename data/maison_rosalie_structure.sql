@@ -131,6 +131,7 @@ CREATE TABLE comments (
   publication_status ENUM('pending', 'published', 'hidden') NOT NULL DEFAULT 'published',
   created_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
+  UNIQUE KEY uq_comments_author_recipe (author_id, recipe_id),
   KEY idx_comments_recipe_date (recipe_id, created_at),
   KEY idx_comments_author_date (author_id, created_at),
   CONSTRAINT chk_comments_message CHECK (CHAR_LENGTH(message) BETWEEN 3 AND 500),
