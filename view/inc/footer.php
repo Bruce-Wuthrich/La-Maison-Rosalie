@@ -36,6 +36,7 @@
 <script src="js/ajax.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/auth.js"></script>
+<script src="js/recettes.js"></script>
 </body>
 
 </html>
