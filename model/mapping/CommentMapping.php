@@ -18,6 +18,8 @@ class CommentMapping extends AbstractMapping{
     protected ?string $publication_status = null;
     protected ?string $created_at = null;
     protected ?int $author_rating = null;
+    protected ?string $recipe_title = null;
+    protected ?string $recipe_slug = null;
 
     public function getId(): ?int{
         return $this->id; 
@@ -120,6 +122,23 @@ class CommentMapping extends AbstractMapping{
 
     public function setCreatedAt(string $createdAt): void{
         $this->created_at = $createdAt; 
+    }
+
+    // Recette de l'avis, utilisée par la page admin pour afficher le titre et le lien.
+    public function getRecipeTitle(): ?string{
+        return $this->recipe_title;
+    }
+
+    public function setRecipeTitle(string $recipeTitle): void{
+        $this->recipe_title = $recipeTitle;
+    }
+
+    public function getRecipeSlug(): ?string{
+        return $this->recipe_slug;
+    }
+
+    public function setRecipeSlug(string $recipeSlug): void{
+        $this->recipe_slug = $recipeSlug;
     }
 
     // donné pubique com pour un réponse json + JS affiche via textContent jamais innerHTML

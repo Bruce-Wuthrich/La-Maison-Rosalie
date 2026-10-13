@@ -11,7 +11,11 @@ require_once RACINE_PATH . '/controller/ControllerHelpers.php';
 
 $slug = stringInput($_POST['slug'] ?? null);
 $redirect = recipeRedirect($slug) . '#comments';
-$action = stringInput($_GET['action'] ?? null);
+// Une suppression lancée depuis la page admin y revient (formulaire classique, sans js).
+if (stringInput($_POST['from'] ?? null) === 'admin') {
+    $redirect = '?pg=admin#avis';
+    }
+    $action = stringInput($_GET['action'] ?? null);
 
 // Protège chaque modification de commentaire.
 requirePostMethod($redirect);
@@ -40,12 +44,16 @@ try {
             throw new DomainException('Vous avez envoyé trop de commentaires. Merci de patienter quelques minutes.', 429);
         }
 
-        $rating = positiveInteger($_POST['rating'] ?? null);
-        if ($rating === null || $rating > 5) {
-            throw new InvalidArgumentException('Choisissez une note comprise entre 1 et 5 étoiles.');
-        }
-        if ($recipe->getAuthorId() === $user['id']) {
-            throw new DomainException('Vous ne pouvez pas noter votre propre recette.', 403);
+        // Note facultative (note et commentaire)
+        $rating = null;
+        if (stringInput($_POST['rating'] ?? null) !== '') {
+            $rating = positiveInteger($_POST['rating']);
+            if ($rating === null || $rating > 5) {
+                throw new InvalidArgumentException('Choisissez une note comprise entre 1 et 5 étoiles.');
+            }
+            if ($recipe->getAuthorId() === $user['id']) {
+                throw new DomainException('Vous ne pouvez pas noter votre propre recette.', 403);
+            }
         }
 
         // update avis pour eviter doublons
@@ -55,7 +63,7 @@ try {
         $ratingManager = new RatingManager($db);
         $db->beginTransaction();
         $comment = $commentManager->create($user['id'], $recipeId, $_POST);
-        $ratingSaved = $ratingManager->rate($user['id'], $recipeId, $rating);
+        $ratingSaved = $rating === null || $ratingManager->rate($user['id'], $recipeId, $rating);        
         if ($comment === false || !$ratingSaved) {
             throw new RuntimeException('L’enregistrement du commentaire a échoué.');
         }
@@ -64,7 +72,8 @@ try {
 
         // Le commentaire créé et la nouvelle moyenne sont renvoyés pour un affichage sans rechargement (BE-42).
         $commentData = $comment->toArray();
-        $commentData['authorRating'] = $rating;
+        // Sans note envoyée, on affiche celle déjà donnée par le membre (0 s'il n'a jamais noté).
+        $commentData['authorRating'] = $rating ?? (int) $recipe->getUserRating();        
         $commentData['canDelete'] = true; // l'auteur peut toujours supprimer son propre commentaire
 
         respond(
@@ -100,6 +109,33 @@ try {
         respond(true, 'Le commentaire a bien été supprimé.', $redirect, 200, ['commentId' => $commentId]);
     }
 
+    if ($action === 'status') {
+        // Rôle relu en base avant tout : un membre ne sait même pas si l'avis existe
+        $connectedUser = (new UserManager($db))->getById($user['id']);
+        if ($connectedUser === null || !$connectedUser->isAdmin()) {
+            throw new DomainException('Cette action est réservée aux administrateurs.', 403);
+        }
+
+        $commentId = positiveInteger($_POST['comment_id'] ?? null);
+        $comment = $commentId === null ? null : $commentManager->getById($commentId);
+        if ($comment === null) {
+            throw new DomainException('Cet avis est introuvable.', 404);
+        }
+
+        $status = stringInput($_POST['status'] ?? null);
+        if (!$commentManager->setStatus($commentId, $status)) {
+            throw new RuntimeException('Le changement de statut a échoué.');
+        }
+
+        respond(
+            true,
+            $status === 'hidden' ? 'L’avis est masqué sur le site.' : 'L’avis est de nouveau visible sur le site.',
+            $redirect,
+            200,
+            ['commentId' => $commentId, 'status' => $status]
+        );
+    } 
+    
     respond(false, 'Action de commentaire introuvable.', $redirect, 404);
 } catch (InvalidArgumentException|DomainException $exception) {
     if ($db->inTransaction()) {

@@ -30,22 +30,22 @@
             </figure>
 
             <figure class="about-team-member is-active"
-                data-name="Rosalie Lambert"
+                data-name="Rosalie Moreau"
                 data-role="Fondatrice"
                 data-biography="Rosalie a grandi dans une maison où les recettes se transmettaient de génération en génération. Animée par le désir de faire vivre cet héritage, elle a créé Maison Rosalie comme un lieu de partage, d’élégance et de création. Entourée de son équipe, elle continue d’imaginer une chocolaterie profondément belge, généreuse et tournée vers l’avenir.">
-                <button class="about-team-select" type="button" aria-label="Découvrir la vie de Rosalie Lambert" aria-current="true">
-                    <img src="assets/img/about/team-rosalie.webp" alt="Portrait de Rosalie Lambert">
+                <button class="about-team-select" type="button" aria-label="Découvrir la vie de Rosalie Moreau" aria-current="true">
+                    <img src="assets/img/about/team-rosalie.webp" alt="Portrait de Rosalie Moreau">
                 </button>
-                <figcaption>Rosalie Lambert</figcaption>
+                <figcaption>Rosalie Moreau</figcaption>
             </figure>
         </div>
 
         <div class="about-founder-copy" data-about-reveal aria-live="polite">
-            <h2 id="aboutFounderTitle">Rosalie Lambert</h2>
+            <h2 id="aboutFounderTitle">Rosalie Moreau</h2>
             <p class="about-founder-role">Fondatrice</p>
             <p class="about-founder-biography">
                 Rosalie a grandi dans une maison où les recettes se transmettaient de génération en génération.
-                Animée par le désir de faire vivre cet héritage, elle a créé Maison Rosalie comme un lieu de partage,
+                Animée par le désir de faire vivre cet héritage, elle a fondé Maison Rosalie à Liège en 1987, comme un lieu de partage,
                 d’élégance et de création. Entourée de son équipe, elle continue d’imaginer une chocolaterie
                 profondément belge, généreuse et tournée vers l’avenir.
             </p>
@@ -76,7 +76,7 @@
         <aside class="about-story-copy" data-about-reveal>
             <h2>Maison Rosalie</h2>
             <p>
-                L’élégance du chocolat belge depuis 1928<br>
+                L’élégance du chocolat belge depuis 1987<br>
                 Inspirée par l’art de vivre belge et les grandes maisons européennes, Rosalie
                 a imaginé des chocolats conçus comme des bijoux gustatifs. Chaque création est
                 une rencontre entre la noblesse des matières premières, la précision artisanale
@@ -85,6 +85,16 @@
                 l’art du chocolat, la finesse, la délicatesse et le raffinement.
             </p>
         </aside>
+    </section>
+
+    <section class="about-figures" aria-labelledby="aboutFiguresTitle" data-about-reveal>
+        <h2 id="aboutFiguresTitle">Nos valeurs en chiffres</h2>
+        <ul class="about-figures-list">
+            <li><strong>1987</strong> Création de la maison à Liège</li>
+            <li><strong>3</strong> Générations de chocolatiers</li>
+            <li><strong>100 %</strong> Chocolat belge</li>
+            <li><strong>5</strong> Recettes du livre familial</li>
+        </ul>
     </section>
 
     <section class="about-recipes" data-about-reveal>

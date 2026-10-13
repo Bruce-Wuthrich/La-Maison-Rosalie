@@ -95,13 +95,6 @@ class RecipeManager implements ManagerInterface{
         return $this->fetchList();
     }
 
-    // Recettes d'une catégorie 
-    public function getByCategorySlug(string $categorySlug): array{
-        return $this->fetchList(self::CATEGORY_FILTER, 'r.title', null, [
-            ':category_slug' => $categorySlug,
-        ]);
-    }
-
     // recettes fin de fiche
     public function getOthers(int $recipeId, int $limit = 4): array{
         return $this->fetchList('r.id <> :recipe_id', 'r.title', $limit, [
@@ -109,34 +102,48 @@ class RecipeManager implements ManagerInterface{
         ]);
     }
 
-    // Recherche une recette 
-    public function search(string $searchTerm, ?string $categorySlug = null): array{
-        $searchPattern = '%' . addcslashes($searchTerm, '%_\\') . '%';
+    // liste filtré de la page recettes (bonus) recherche, catégorie, difficulté et temps total.
+    //Chaque critère est facultatif et toutes les valeurs passent par bindValue
+    public function filter(string $searchTerm = '', ?string $categorySlug = null, ?string $difficulty = null, ?int $maxTotalTime = null): array {
+        $conditions = [];
+        $params = [];
 
-        $where = '(
+        if ($searchTerm !== ''){
+            // % et _ tapés par le visiteur sont cherchés comme du texte pas comme LIKE
+            $searchPattern = '%' . addcslashes($searchTerm, '%_\\') . '%';
+            $conditions[] = '(
             r.title LIKE :search_title
-            OR r.description LIKE :search_description
-            OR EXISTS (
-                SELECT 1
-                FROM recipe_categories rc_search
-                JOIN categories c_search ON c_search.id = rc_search.category_id
-                WHERE rc_search.recipe_id = r.id
-                AND c_search.title LIKE :search_category
+                OR r.description LIKE :search_description
+                OR EXISTS (
+                    SELECT 1
+                    FROM recipe_categories rc_search
+                    JOIN categories c_search ON c_search.id = rc_search.category_id
+                    WHERE rc_search.recipe_id = r.id
+                    AND c_search.title LIKE :search_category
             )
         )';
+        $params[':search_title'] = $searchPattern;
+        $params[':search_description'] = $searchPattern;
+        $params[':search_category'] = $searchPattern;
+        }
 
-        $params = [
-            ':search_title' => $searchPattern,
-            ':search_description' => $searchPattern,
-            ':search_category' => $searchPattern,
-        ];
-
-        if ($categorySlug !== null) {
-            $where .= ' AND ' . self::CATEGORY_FILTER;
+        if ($categorySlug !== null){
+            $conditions[] = self::CATEGORY_FILTER; 
             $params[':category_slug'] = $categorySlug;
         }
 
-        return $this->fetchList($where, 'r.title', null, $params);
+        if ($difficulty !== null){
+            $conditions[] = 'r.difficulty = :difficulty';
+            $params[':difficulty'] = $difficulty;
+        }
+
+        if ($maxTotalTime !== null){
+            // calculé jamais stocké 
+            $conditions[] = '(r.prep_time_minutes + r.cook_time_minutes) <= :max_total_time';
+            $params[':max_total_time'] = $maxTotalTime;
+        }
+
+        return $this->fetchList(implode(' AND ', $conditions), 'r.title', null, $params);
     }
 
     // Exécute LIST_SELECT avec filtre + $where $orderBy via classe, jamais de saisie

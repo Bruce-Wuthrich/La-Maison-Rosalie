@@ -59,6 +59,24 @@ class ContactMessageManager implements ManagerInterface{
     return $contact; 
     }
 
+    // Derniers msg de contact pr page admin
+    public function getLatest(int $limit = 50): array{
+        $query = $this->db->prepare(
+            'SELECT id, name, email, subject, message, status, created_at
+             FROM contact_messages
+             ORDER BY created_at DESC, id DESC
+             LIMIT :limit'
+        );
+        $query->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $query->execute();
+
+        $messages = [];
+        foreach ($query->fetchAll() as $row){
+            $messages[] = new ContactMessageMapping($row);
+        }
+        return $messages;
+    }
+
     // Nb de msg envoyé par ip sur délais
     public function countRecentByIp(string $ip, int $minutes): int{
         $query = $this->db->prepare(

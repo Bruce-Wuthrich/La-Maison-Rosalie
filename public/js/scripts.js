@@ -4,14 +4,62 @@ if (heroWheel) {
   let rotation = 0;
 
   const categories = [
-    { name: "Tartes", slug: "tartes" },
-    { name: "Gâteaux", slug: "gateaux" },
-    { name: "Glaces", slug: "glaces" },
-    { name: "Mousses", slug: "mousses" },
-    { name: "Pâtisserie", slug: "patisseries" },
+    {
+      name: "Tartes",
+      href: "?pg=recettes",
+      description:
+        "Découvrez des tartes chocolatées généreuses, croustillantes et fondantes, pensées pour toutes les occasions.",
+      image: "assets/img/recettes/fondant-au-coeur-coulant/principale.webp",
+      imageAlt: "Fondant au chocolat au cœur coulant",
+    },
+    {
+      name: "Gâteaux",
+      href: "?pg=recettes&categorie=gateaux",
+      description:
+        "Moelleux, brownies et fondants : retrouvez nos gâteaux au chocolat à partager en famille ou entre amis.",
+      image: "assets/img/recettes/brownies-aux-noix/principale.webp",
+      imageAlt: "Brownies au chocolat et aux noix",
+    },
+    {
+      name: "Glaces",
+      href: "?pg=recettes&categorie=glace",
+      description:
+        "Savourez des desserts glacés au chocolat, onctueux et simples à préparer, même sans sorbetière.",
+      image:
+        "assets/img/recettes/glace-au-chocolat-sans-sorbetiere/principale.webp",
+      imageAlt: "Glace au chocolat sans sorbetière",
+    },
+    {
+      name: "Mousses",
+      href: "?pg=recettes&categorie=mousses",
+      description:
+        "Légères et intenses, nos mousses au chocolat jouent avec les textures pour terminer le repas en douceur.",
+      image: "assets/img/recettes/mousse-au-chocolat-noir/principale.webp",
+      imageAlt: "Mousse au chocolat noir",
+    },
+    {
+      name: "Pâtisserie",
+      href: "?pg=recettes",
+      description:
+        "Plongez dans l’univers gourmand des pâtisseries au chocolat, où il y en a pour tous les goûts. Explorez différentes textures et saveurs et laissez-vous inspirer par nos recettes.",
+      image: "assets/img/recettes/fondant-au-coeur-coulant/principale.webp",
+      imageAlt: "Fondant au chocolat au cœur coulant",
+    },
   ];
+  const heroHome = document.querySelector(".hero-home");
   const categoryLink = document.querySelector(".hero-category-current");
   const categoryButtons = document.querySelectorAll(".hero-pagination button");
+  const categoryBackdrop = document.querySelector(".hero-category-backdrop");
+  const categoryPanel = document.querySelector(".hero-category-panel");
+  const categoryPanelClose = document.querySelector(".hero-category-close");
+  const categoryPanelTitle = document.querySelector(
+    ".hero-category-panel-title",
+  );
+  const categoryPanelCopy = document.querySelector(".hero-category-panel-copy");
+  const categoryPanelImage = document.querySelector(
+    ".hero-category-panel-image",
+  );
+  const categoryPanelLink = document.querySelector(".hero-category-panel-link");
   let categoryIndex = 4;
   let nextCategoryIndex = categoryIndex;
 
@@ -28,12 +76,51 @@ if (heroWheel) {
     });
   };
 
+  const updateCategoryPanel = (category) => {
+    if (!categoryPanel) {
+      return;
+    }
+
+    categoryPanelTitle.textContent = category.name;
+    categoryPanelCopy.textContent = category.description;
+    categoryPanelImage.src = category.image;
+    categoryPanelImage.alt = category.imageAlt;
+    categoryPanelLink.href = category.href;
+  };
+
+  const setCategoryPanelOpen = (isOpen, { returnFocus = false } = {}) => {
+    if (!categoryPanel || !heroHome) {
+      return;
+    }
+
+    heroHome.classList.toggle("is-detail-open", isOpen);
+    document.body.classList.toggle("hero-detail-open", isOpen);
+    categoryPanel.setAttribute("aria-hidden", String(!isOpen));
+    categoryPanel.inert = !isOpen;
+    categoryLink.setAttribute("aria-expanded", String(isOpen));
+
+    if (isOpen) {
+      updateCategoryPanel(categories[categoryIndex]);
+      requestAnimationFrame(() =>
+        categoryPanelClose.focus({ preventScroll: true }),
+      );
+    } else {
+      if (returnFocus) {
+        categoryLink.focus({ preventScroll: true });
+      }
+
+      // Le focus ne doit pas laisser le héros décalé horizontalement.
+      heroHome.scrollLeft = 0;
+    }
+  };
+
   const showCategory = (index) => {
     categoryIndex = index;
     const currentCategory = categories[categoryIndex];
 
     categoryLink.textContent = currentCategory.name;
-    categoryLink.href = `?pg=recettes&categorie=${currentCategory.slug}`;
+    categoryLink.href = currentCategory.href;
+    updateCategoryPanel(currentCategory);
 
     showActiveIndicator(categoryIndex);
 
@@ -57,6 +144,37 @@ if (heroWheel) {
     rotation += 30 * (steps || 1);
     heroWheel.style.transform = `rotate(${rotation}deg)`;
   };
+
+  categoryLink.addEventListener("click", (event) => {
+    if (!categoryPanel) {
+      return;
+    }
+
+    event.preventDefault();
+    const isOpen = heroHome.classList.contains("is-detail-open");
+    setCategoryPanelOpen(!isOpen, { returnFocus: isOpen });
+  });
+
+  if (categoryPanelClose) {
+    categoryPanelClose.addEventListener("click", () => {
+      setCategoryPanelOpen(false, { returnFocus: true });
+    });
+
+    categoryBackdrop.addEventListener("click", () => {
+      setCategoryPanelOpen(false);
+    });
+
+    heroHome.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        setCategoryPanelOpen(false, { returnFocus: true });
+      }
+    });
+
+    // Réinitialise l'accueil lorsqu'on y revient avec le bouton précédent.
+    if (typeof window.addEventListener === "function") {
+      window.addEventListener("pageshow", () => setCategoryPanelOpen(false));
+    }
+  }
 
   heroWheel.addEventListener("click", () => {
     rotateToCategory((categoryIndex + 1) % categories.length);
@@ -227,7 +345,7 @@ const contactEye = document.querySelector(".contact-eye");
 if (contactEye) {
   const pupil = contactEye.querySelector(".contact-eye-pupil");
   const followsPointer = window.matchMedia(
-    "(hover: hover) and (pointer: fine)",
+    "(any-hover: hover) and (any-pointer: fine)",
   ).matches;
   const reducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
@@ -323,6 +441,99 @@ if (commentMessage && commentCounter) {
   };
   updateCommentCounter();
   commentMessage.addEventListener("input", updateCommentCounter);
+}
+
+// Rend fonctionnels les boutons de la fiche recette sans requête serveur.
+const recipeFavorite = document.querySelector(
+  ".recipe-favorite[data-recipe-slug]",
+);
+const favoriteStorageKey = "maisonRosalieFavoriteRecipes";
+
+if (recipeFavorite) {
+  const recipeSlug = recipeFavorite.dataset.recipeSlug;
+  let favoriteRecipes = [];
+
+  try {
+    const savedFavorites = JSON.parse(
+      localStorage.getItem(favoriteStorageKey) ?? "[]",
+    );
+    favoriteRecipes = Array.isArray(savedFavorites)
+      ? savedFavorites.filter((slug) => typeof slug === "string")
+      : [];
+  } catch {
+    favoriteRecipes = [];
+  }
+
+  const showFavoriteState = (isFavorite) => {
+    recipeFavorite.classList.toggle("is-active", isFavorite);
+    recipeFavorite.setAttribute("aria-pressed", String(isFavorite));
+    recipeFavorite.setAttribute(
+      "aria-label",
+      isFavorite ? "Retirer des favoris" : "Ajouter aux favoris",
+    );
+
+    const tooltip = recipeFavorite.querySelector(".recipe-favorite-tooltip");
+    if (tooltip) {
+      tooltip.textContent = isFavorite ? "Enregistré" : "Enregistrez";
+    }
+  };
+
+  showFavoriteState(favoriteRecipes.includes(recipeSlug));
+
+  recipeFavorite.addEventListener("click", () => {
+    const isFavorite = favoriteRecipes.includes(recipeSlug);
+    favoriteRecipes = isFavorite
+      ? favoriteRecipes.filter((slug) => slug !== recipeSlug)
+      : [...favoriteRecipes, recipeSlug];
+
+    try {
+      localStorage.setItem(favoriteStorageKey, JSON.stringify(favoriteRecipes));
+    } catch {
+      // L'état visuel reste utilisable même si le stockage est bloqué.
+    }
+
+    showFavoriteState(!isFavorite);
+  });
+}
+
+const printRecipeButton = document.querySelector("#printRecipe");
+if (printRecipeButton) {
+  printRecipeButton.addEventListener("click", () => window.print());
+}
+
+const shareRecipeButton = document.querySelector("#shareRecipe");
+const recipeActionStatus = document.querySelector(
+  "[data-recipe-action-status]",
+);
+
+if (shareRecipeButton) {
+  const showShareStatus = (message) => {
+    if (recipeActionStatus) {
+      recipeActionStatus.textContent = message;
+    }
+  };
+
+  shareRecipeButton.addEventListener("click", async () => {
+    const shareData = {
+      title: document.title,
+      url: window.location.href,
+    };
+
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share(shareData);
+        showShareStatus("Recette partagée.");
+        return;
+      }
+
+      await navigator.clipboard.writeText(shareData.url);
+      showShareStatus("Lien copié dans le presse-papiers.");
+    } catch (error) {
+      if (error?.name !== "AbortError") {
+        showShareStatus("Le partage n’est pas disponible sur ce navigateur.");
+      }
+    }
+  });
 }
 
 const aboutPage = document.querySelector(".about-page");

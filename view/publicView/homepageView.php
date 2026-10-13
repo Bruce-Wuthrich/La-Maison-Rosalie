@@ -1,5 +1,17 @@
 <?php require RACINE_PATH . '/view/inc/header.php'; ?>
 <?php require RACINE_PATH . '/view/inc/navbar.php'; ?>
+<?php
+// Utilise le chemin de la BDD s'il existe, sinon l'image locale de la recette.
+$recipeImagePath = static function ($recipe): string {
+    $image = (string) $recipe->getMainImage();
+
+    if (!is_file(RACINE_PATH . '/public/' . $image)) {
+        $image = 'assets/img/recettes/' . $recipe->getSlug() . '/principale.webp';
+    }
+
+    return $image;
+};
+?>
 <main class="home-main">
     <div class="hero-top-marker" aria-hidden="true">
         <img src="assets/img/logo/picto.svg" alt="">
@@ -15,7 +27,8 @@
 
             <img class="hero-logo" src="assets/img/logo/logo.svg" alt="Maison Rosalie">
 
-            <a class="hero-category-current is-active" href="?pg=recettes&amp;categorie=patisseries" aria-live="polite">
+            <a class="hero-category-current is-active" href="?pg=recettes" aria-live="polite"
+                aria-expanded="false" aria-controls="heroCategoryPanel">
                 Pâtisserie
             </a>
         </div>
@@ -27,6 +40,29 @@
             <button type="button" data-category-index="3" aria-label="Afficher la catégorie Mousses"></button>
             <button class="is-active" type="button" data-category-index="4" aria-label="Afficher la catégorie Pâtisserie" aria-current="true"></button>
         </div>
+
+        <button class="hero-category-backdrop" type="button"
+            aria-label="Fermer la présentation de la catégorie"></button>
+
+        <aside id="heroCategoryPanel" class="hero-category-panel" aria-hidden="true" inert>
+            <button class="hero-category-close" type="button" aria-label="Fermer la présentation de la catégorie">
+                <span aria-hidden="true">×</span>
+            </button>
+
+            <div class="hero-category-panel-content">
+                <h2 class="hero-category-panel-title">Pâtisserie</h2>
+                <p class="hero-category-panel-copy">
+                    Plongez dans l’univers gourmand des pâtisseries au chocolat, où il y en a pour tous les goûts.
+                    Explorez différentes textures et saveurs et laissez-vous inspirer par nos recettes.
+                </p>
+                <a class="hero-category-panel-link" href="?pg=recettes">
+                    Découvrir les recettes <span aria-hidden="true">⟶</span>
+                </a>
+                <img class="hero-category-panel-image"
+                    src="assets/img/recettes/fondant-au-coeur-coulant/principale.webp"
+                    alt="Fondant au chocolat au cœur coulant">
+            </div>
+        </aside>
 
         <p class="hero-tagline">
             <span>Des créations d’exception</span>
@@ -47,10 +83,8 @@
                     loading="lazy">
 
                 <p class="about-home-copy">
-                    Sorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum,
-                    ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-                    inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis. Ut commodo
-                    efficitur neque.
+                    Depuis 1987, la famille Moreau perpétue la tradition des chocolatiers artisanaux belges.
+                    Chaque recette est transmise de génération en génération avec amour et savoir-faire.
                 </p>
 
                 <img
@@ -61,7 +95,7 @@
 
                 <div class="about-home-more">
                     <a class="about-home-link" href="?pg=a-propos">
-                        <span>À propos</span>
+                        <span>Notre histoire</span>
                         <span aria-hidden="true">⟶</span>
                     </a>
 
@@ -87,7 +121,7 @@
                         <a class="time-card" href="?pg=recette&amp;slug=<?= htmlspecialchars((string) $recipe->getSlug(), ENT_QUOTES, 'UTF-8') ?>">
                             <span class="time-card-duration"><?= $recipe->getTotalTime() ?> min</span>
                             <img
-                                src="<?= htmlspecialchars((string) $recipe->getMainImage(), ENT_QUOTES, 'UTF-8') ?>"
+                                src="<?= htmlspecialchars($recipeImagePath($recipe), ENT_QUOTES, 'UTF-8') ?>"
                                 alt="<?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?>"
                                 loading="lazy">
                             <span class="time-card-title"><?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?></span>
@@ -122,7 +156,7 @@
                             </p>
                             <a href="?pg=recette&amp;slug=<?= htmlspecialchars((string) $recipe->getSlug(), ENT_QUOTES, 'UTF-8') ?>">
                                 <img
-                                    src="<?= htmlspecialchars((string) $recipe->getMainImage(), ENT_QUOTES, 'UTF-8') ?>"
+                                    src="<?= htmlspecialchars($recipeImagePath($recipe), ENT_QUOTES, 'UTF-8') ?>"
                                     alt="<?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?>"
                                     loading="lazy">
                                 <h3><?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?></h3>

@@ -12,5 +12,4 @@ if (is_array($flashMessage) && isset($flashMessage['message']) && !in_array($pag
         <p class="m-0"><?= htmlspecialchars((string) $flashMessage['message'], ENT_QUOTES, 'UTF-8') ?></p>
         <button type="button" class="flash-toast-close" data-flash-close aria-label="Fermer le message">×</button>
     </div>
-    <script src="js/flash.js" defer></script>
 <?php endif; ?>
