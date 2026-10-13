@@ -20,6 +20,18 @@ set_exception_handler(function (Throwable $exception) use ($displayErrors): void
     error_log('Erreur non attrapée : ' . $exception->getMessage()
         . ' dans ' . $exception->getFile() . ' ligne ' . $exception->getLine());
     http_response_code(500);
+
+    // le js reçoit le format JSON commun, même en cas d'erreur imprévue
+    if (str_contains((string) ($_SERVER['HTTP_ACCEPT'] ?? ''), 'application/json')) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Une erreur inattendue est survenue. Merci de réessayer plus tard.',
+            'data' => null,
+        ], JSON_UNESCAPED_UNICODE);
+        return;
+    }
+
     echo $displayErrors
         ? '<pre>' . htmlspecialchars((string) $exception, ENT_QUOTES, 'UTF-8') . '</pre>'
         : 'Une erreur inattendue est survenue. Merci de réessayer plus tard.';
@@ -83,6 +95,12 @@ try {
 } catch (PDOException $e) {
     error_log('La connexion a la BDD a échouée : ' . $e->getMessage());
     http_response_code(503);
+
+    // le js reçoit le format JSON commun quand la base ne répond pas
+    if (isJsonRequest()) {
+        jsonResponse(503, false, 'Le site est momentanément indisponible. Merci de réessayer plus tard.');
+    }
+
     exit('Le site est momentanément indisponible. Merci de réessayer plus tard.');
 }
 

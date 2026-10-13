@@ -159,9 +159,21 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 <span><?php echo $escape($recipe->getDifficultyLabel()); ?></span>
                             </li>
 
+                                                        <li>
+                                <img src="assets/img/recettes/icons/time.svg" alt="" aria-hidden="true">
+                                <span>Préparation <?php echo (int) $recipe->getPrepTimeMinutes(); ?> min</span>
+                            </li>
+
                             <li>
                                 <img src="assets/img/recettes/icons/time.svg" alt="" aria-hidden="true">
-                                <span><?php echo $recipe->getTotalTime(); ?> min</span>
+                                <span><?php echo (int) $recipe->getCookTimeMinutes() > 0
+                                    ? 'Cuisson ' . (int) $recipe->getCookTimeMinutes() . ' min'
+                                    : 'Sans cuisson'; ?></span>
+                            </li>
+
+                            <li>
+                                <img src="assets/img/recettes/icons/time.svg" alt="" aria-hidden="true">
+                                <span>Total <?php echo $recipe->getTotalTime(); ?> min</span>
                             </li>
                         </ul>
 
@@ -270,11 +282,11 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                             </div>
 
                             <fieldset class="comment-rating-fieldset">
-                                <legend>Rating</legend>
+                                <legend>Votre note (facultative)</legend>
                                 <div class="comment-rating-input" aria-label="Votre note sur 5">
                                     <?php for ($rating = 5; $rating >= 1; $rating--) { ?>
                                         <input id="commentRating<?php echo $rating; ?>" type="radio" name="rating"
-                                            value="<?php echo $rating; ?>" <?php echo $selectedRating === $rating ? 'checked' : ''; ?> required>
+                                            value="<?php echo $rating; ?>" <?php echo $selectedRating === $rating ? 'checked' : ''; ?>>
                                         <label for="commentRating<?php echo $rating; ?>" title="<?php echo $rating; ?> étoile<?php echo $rating > 1 ? 's' : ''; ?>">
                                             <span aria-hidden="true">★</span>
                                             <span class="visually-hidden"><?php echo $rating; ?> étoile<?php echo $rating > 1 ? 's' : ''; ?></span>
@@ -343,11 +355,13 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                     <div class="comment-body">
                                         <div class="comment-author-line">
                                             <h3><?php echo $escape($comment->getAuthorUsername()); ?></h3>
-                                            <div class="comment-stars" aria-label="Note : <?php echo $commentRating; ?> sur 5">
-                                                <?php for ($star = 1; $star <= 5; $star++) { ?>
-                                                    <img src="assets/img/recettes/icons/<?php echo $star <= $commentRating ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
-                                                <?php } ?>
-                                            </div>
+                                       <?php if ($commentRating > 0) { // pas d'étoiles si l'auteur n'a pas noté ?>
+                                                <div class="comment-stars" aria-label="Note : <?php echo $commentRating; ?> sur 5">
+                                                    <?php for ($star = 1; $star <= 5; $star++) { ?>
+                                                        <img src="assets/img/recettes/icons/<?php echo $star <= $commentRating ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
+                                                    <?php } ?>
+                                                </div>
+                                            <?php } ?>
                                             <time datetime="<?php echo $escape($comment->getCreatedAt()); ?>">
                                                 <?php echo $commentDate === false ? '' : date('d/m/Y H:i', $commentDate); ?>
                                             </time>

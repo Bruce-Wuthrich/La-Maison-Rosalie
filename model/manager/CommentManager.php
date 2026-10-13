@@ -151,6 +151,21 @@ class CommentManager implements ManagerInterface{
         return $query->rowCount() > 0;
     }
 
+    // Modération admin : masque ou republie un avis
+    public function setStatus(int $commentId, string $status): bool{
+        if (!in_array($status, ['published', 'hidden'], true)){
+            throw new InvalidArgumentException('Le statut de publication est invalide.');
+        }
+
+        $query = $this->db->prepare(
+            'UPDATE comments SET publication_status = :status WHERE id = :id'
+        );
+        $query->bindValue(':status', $status);
+        $query->bindValue(':id', $commentId, PDO::PARAM_INT);
+
+        return $query->execute();
+    }
+
     // Tous les avis, du plus récent au plus ancien avec recette pour modération (page admin).
     public function getAllForAdmin(int $limit = 100): array{
         $query = $this->db->prepare(
