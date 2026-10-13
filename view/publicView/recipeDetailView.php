@@ -17,52 +17,8 @@ $commentSortLabels = [
     'pire' => 'Les moins bien notés',
 ];
 
-// Tags visuels de la maquette : aucune nouvelle table ni requête SQL.
-$recipeTags = [
-    'chocolat-chaud-a-l-ancienne' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'rapide', 'count' => 3],
-        ['name' => 'famille', 'count' => 4],
-        ['name' => 'chocolat noir', 'count' => 4],
-        ['name' => 'populaire', 'count' => 4],
-        ['name' => 'enfants', 'count' => 4],
-    ],
-    'mousse-au-chocolat-noir' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'rapide', 'count' => 3],
-        ['name' => 'famille', 'count' => 4],
-        ['name' => 'chocolat noir', 'count' => 4],
-        ['name' => 'enfants', 'count' => 4],
-        ['name' => 'crémeux', 'count' => 2],
-    ],
-    'brownies-aux-noix' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'famille', 'count' => 4],
-        ['name' => 'four', 'count' => 2],
-        ['name' => 'chocolat noir', 'count' => 4],
-        ['name' => 'populaire', 'count' => 4],
-        ['name' => 'brownies', 'count' => 1],
-        ['name' => 'fête', 'count' => 2],
-        ['name' => 'enfants', 'count' => 4],
-    ],
-    'fondant-au-coeur-coulant' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'four', 'count' => 2],
-        ['name' => 'chocolat noir', 'count' => 4],
-        ['name' => 'populaire', 'count' => 4],
-        ['name' => 'fête', 'count' => 2],
-    ],
-    'glace-au-chocolat-sans-sorbetiere' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'rapide', 'count' => 3],
-        ['name' => 'famille', 'count' => 4],
-        ['name' => 'populaire', 'count' => 4],
-        ['name' => 'enfants', 'count' => 4],
-        ['name' => 'sans cuisson', 'count' => 1],
-        ['name' => 'crémeux', 'count' => 2],
-    ],
-];
-$visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
+// Tags tirés de la base (catégories puis ingrédients), préparés par RecipeController.
+$visibleTags = $recipeTags;
 ?>
 
 <main class="recipe-page">
@@ -414,7 +370,9 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                     <?php foreach ($visibleTags as $tag) { ?>
                         <li>
                             <a class="recipe-tag"
-                                href="?pg=recettes&amp;recherche=<?php echo rawurlencode((string) $tag['name']); ?>">
+                                href="?pg=recettes&amp;<?php echo $tag['type'] === 'categorie'
+                                    ? 'categorie=' . rawurlencode((string) $tag['slug'])
+                                    : 'recherche=' . rawurlencode($tag['name']); ?>">
                                 <?php echo $escape($tag['name']); ?>(<?php echo (int) $tag['count']; ?>)
                             </a>
                         </li>
