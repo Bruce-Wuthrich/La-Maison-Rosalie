@@ -46,13 +46,14 @@ $recipeImagePath = static function ($recipe): string {
         <div class="container">
         <?php
             // filtre qui garde les autres critères actifs (catégorie, recherche, difficulté, temps).
-            $filterUrl = static function (array $changes) use ($categorySlug, $searchTerm, $difficulty, $maxTotalTime): string {
+            $filterUrl = static function (array $changes) use ($categorySlug, $searchTerm, $difficulty, $maxTotalTime, $onlyFavorites): string {
                 $params = array_merge([
                     'pg' => 'recettes',
                     'categorie' => $categorySlug,
                     'recherche' => $searchTerm,
                     'difficulte' => $difficulty,
                     'temps' => $maxTotalTime,
+                    'favoris' => $onlyFavorites ? '1' : null,
                 ], $changes);
                 $params = array_filter($params, static fn($value): bool => $value !== '' && $value !== null);
 
@@ -61,6 +62,14 @@ $recipeImagePath = static function ($recipe): string {
             ?>
 
             <nav class="recipe-filters" aria-label="Filtrer les recettes par catégorie">
+                <?php if ($favoriteUserId !== null) { ?>
+                    <!-- Bonus favoris : recettes enregistrées par le membre connecté -->
+                    <a class="recipe-filter<?php echo $onlyFavorites ? ' is-active' : ''; ?>"
+                        href="<?php echo $filterUrl(['favoris' => $onlyFavorites ? null : '1']); ?>"
+                        <?php echo $onlyFavorites ? 'aria-current="page"' : ''; ?>>
+                        Mes favoris
+                    </a>
+                <?php } ?>
                 <?php foreach ($recipeFilters as $filterSlug => $filterLabel) { ?>
                     <?php $isActive = $categorySlug === $filterSlug; ?>
                     <a class="recipe-filter<?php echo $isActive ? ' is-active' : ''; ?>"
@@ -78,6 +87,9 @@ $recipeImagePath = static function ($recipe): string {
                 <?php } ?>
                 <?php if ($searchTerm !== '') { ?>
                     <input type="hidden" name="recherche" value="<?php echo htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8'); ?>">
+                <?php } ?>
+                <?php if ($onlyFavorites) { ?>
+                    <input type="hidden" name="favoris" value="1">
                 <?php } ?>
 
                 <label>
@@ -107,9 +119,11 @@ $recipeImagePath = static function ($recipe): string {
                 <p role="alert"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
             <?php } elseif (empty($recipes)) { ?>
                 <p>
-                    <?php echo $searchTerm === ''
-                        ? 'Aucune recette n’est disponible pour le moment.'
-                        : 'Aucune recette ne correspond à votre recherche.'; ?>
+                    <?php echo $onlyFavorites
+                        ? 'Vous n’avez pas encore de recette favorite : touchez le cœur d’une fiche recette pour l’enregistrer.'
+                        : ($searchTerm === ''
+                            ? 'Aucune recette n’est disponible pour le moment.'
+                            : 'Aucune recette ne correspond à votre recherche.'); ?>
                 </p>
             <?php } else { ?>
                 <div class="recipes-grid">
