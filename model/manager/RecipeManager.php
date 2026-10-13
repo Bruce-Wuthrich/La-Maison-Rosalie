@@ -102,6 +102,39 @@ class RecipeManager implements ManagerInterface{
         ]);
     }
 
+    // Tags de la fiche, tirés de la base : catégories puis ingrédients de la recette,
+    // chacun avec le nombre de recettes qui l'utilisent.
+    public function getTags(int $recipeId): array{
+        $query = $this->db->prepare(
+            'SELECT \'categorie\' AS type, c.title AS name, c.slug AS slug,
+                    (SELECT COUNT(*) FROM recipe_categories rc_count WHERE rc_count.category_id = c.id) AS recipe_count
+                FROM categories c
+                JOIN recipe_categories rc ON rc.category_id = c.id
+                WHERE rc.recipe_id = :recipe_id_category
+            UNION ALL
+            SELECT \'ingredient\' AS type, i.name AS name, NULL AS slug,
+                    (SELECT COUNT(DISTINCT ri_count.recipe_id) FROM recipe_ingredients ri_count WHERE ri_count.ingredient_id = i.id) AS recipe_count
+                FROM ingredients i
+                JOIN recipe_ingredients ri ON ri.ingredient_id = i.id
+                WHERE ri.recipe_id = :recipe_id_ingredient
+            ORDER BY type, recipe_count DESC, name'
+        );
+        $query->bindValue(':recipe_id_category', $recipeId, PDO::PARAM_INT);
+        $query->bindValue(':recipe_id_ingredient', $recipeId, PDO::PARAM_INT);
+        $query->execute();
+
+        $tags = [];
+        foreach ($query->fetchAll() as $row) {
+            $tags[] = [
+                'type' => (string) $row['type'],
+                'name' => (string) $row['name'],
+                'slug' => $row['slug'] === null ? null : (string) $row['slug'],
+                'count' => (int) $row['recipe_count'],
+            ];
+        }
+        return $tags;
+    }
+
     // liste filtré de la page recettes (bonus) recherche, catégorie, difficulté et temps total.
     //Chaque critère est facultatif et toutes les valeurs passent par bindValue
     public function filter(string $searchTerm = '', ?string $categorySlug = null, ?string $difficulty = null, ?int $maxTotalTime = null): array {
@@ -121,10 +154,18 @@ class RecipeManager implements ManagerInterface{
                     WHERE rc_search.recipe_id = r.id
                     AND c_search.title LIKE :search_category
             )
+                OR EXISTS (
+                    SELECT 1
+                    FROM recipe_ingredients ri_search
+                    JOIN ingredients i_search ON i_search.id = ri_search.ingredient_id
+                    WHERE ri_search.recipe_id = r.id
+                    AND i_search.name LIKE :search_ingredient
+            )
         )';
         $params[':search_title'] = $searchPattern;
         $params[':search_description'] = $searchPattern;
         $params[':search_category'] = $searchPattern;
+        $params[':search_ingredient'] = $searchPattern;
         }
 
         if ($categorySlug !== null){
