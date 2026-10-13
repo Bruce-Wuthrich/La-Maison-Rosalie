@@ -907,7 +907,7 @@ body.auth-open {
     place-items: center;
     overflow: hidden;
     padding: clamp(2rem, 5vw, 5rem);
-    background: linear-gradient(rgba(255, 250, 242, 0.58), rgba(255, 250, 242, 0.58)),
+    background: linear-gradient(rgba(255, 250, 242, 0.40), rgba(255, 250, 242, 0.40)),
         url("../assets/img/interface/figma/hero-background.webp") center / cover no-repeat;
 }
 
@@ -1657,7 +1657,7 @@ body.menu-open .hero-top-marker {
 }
 
 .contact-information a,
-p {
+.contact-information p {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
@@ -2115,6 +2115,16 @@ p {
     margin: 0;
     font-size: clamp(1.1rem, 1.65vw, 1.75rem);
     line-height: 1.55;
+}
+
+.recipe-step-image {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    margin-top: 0.75rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 1rem 2.5rem rgba(90, 57, 43, 0.18);
 }
 
 .recipe-comments {
@@ -3664,6 +3674,57 @@ p {
 .error-button-light {
     background-color: transparent;
     color: var(--color-gold-text);
+}
+
+/* Bonus filtres : difficulté et temps, même style que les pastilles de catégorie */
+.recipe-extra-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem;
+    margin: -1.5rem 0 3rem;
+}
+
+.recipe-extra-filters label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+}
+
+.recipe-extra-filters select {
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--color-gold);
+    border-radius: 2rem;
+    background-color: var(--color-white);
+    color: var(--color-brown);
+}
+
+button.recipe-filter {
+    background-color: transparent;
+    font: inherit;
+}
+
+/* Page admin : réutilise l'en-tête et les filtres de la page Recettes, et les avis de la fiche recette */
+.admin-section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 6rem;
+}
+
+.admin-section h2 {
+    margin-bottom: 2rem;
+    font-family: Georgia, serif;
+    color: var(--color-brown);
+}
+
+.admin-list {
+    display: grid;
+    gap: 2.5rem;
+}
+
+.admin-meta {
+    margin: 0.5rem 0 0;
+    font-size: 0.95rem;
 }
 
 @media (max-width: 767.98px) {

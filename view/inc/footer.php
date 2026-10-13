@@ -43,6 +43,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js?v=<?= filemtime(RACINE_PATH . '/public/js/scripts.js') ?>"></script>
 <script src="js/auth.js"></script>
+<script src="js/recettes.js"></script>
 </body>
 
 </html>

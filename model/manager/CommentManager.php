@@ -79,6 +79,18 @@ class CommentManager implements ManagerInterface{
         return new CommentMapping($row);
     }
 
+    // un seul avis par personne
+    public function hasCommented(int $authorId, int $recipeId): bool{
+        $query = $this->db->prepare(
+            'SELECT 1 FROM comments WHERE author_id = :author_id AND recipe_id = :recipe_id'
+        );
+        $query->bindValue(':author_id', $authorId, PDO::PARAM_INT);
+        $query->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+        $query->execute();
+
+        return $query->fetchColumn() !== false;
+    }
+
     // ajout com + renvoi complet (affiche sans recharge) + Exception et renvoi false si recette n'existe pas 
     public function create(int $authorId, int $recipeId, array $data): CommentMapping|bool{
         //msg obligatoirement text et suj facult.
@@ -102,8 +114,14 @@ class CommentManager implements ManagerInterface{
         // status et created_at remplis par la bdd 
         try{
             $query = $this->db->prepare(
+                // Un seul avis par personne et par recette
                 "INSERT INTO comments (author_id, recipe_id, subject, message)
-                VALUES (:author_id, :recipe_id, :subject, :message)"
+                VALUES (:author_id, :recipe_id, :subject, :message)
+                ON DUPLICATE KEY UPDATE
+                    id = LAST_INSERT_ID(id),
+                    subject = VALUES(subject),
+                    message = VALUES(message),
+                    created_at = CURRENT_TIMESTAMP"
             );
             $query->bindValue(':author_id', $comment->getAuthorId(), PDO::PARAM_INT);
             $query->bindValue(':recipe_id', $comment->getRecipeId(), PDO::PARAM_INT);
@@ -131,6 +149,30 @@ class CommentManager implements ManagerInterface{
         $query->execute(); 
 
         return $query->rowCount() > 0;
+    }
+
+    // Tous les avis, du plus récent au plus ancien avec recette pour modération (page admin).
+    public function getAllForAdmin(int $limit = 100): array{
+        $query = $this->db->prepare(
+            "SELECT c.id, c.author_id, u.username AS author_username, c.recipe_id,
+                    r.title AS recipe_title, r.slug AS recipe_slug,
+                    c.subject, c.message, c.publication_status, c.created_at,
+                    COALESCE(ra.rating, 0) AS author_rating
+             FROM comments c
+             INNER JOIN users u ON u.id = c.author_id
+             INNER JOIN recipes r ON r.id = c.recipe_id
+             LEFT JOIN ratings ra ON ra.user_id = c.author_id AND ra.recipe_id = c.recipe_id
+             ORDER BY c.created_at DESC, c.id DESC
+             LIMIT :limit"
+        );
+        $query->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $query->execute();
+
+        $comments = [];
+        foreach ($query->fetchAll() as $row){
+            $comments[] = new CommentMapping($row);
+        }
+        return $comments;
     }
 
     // Nb de com par user (sur une période)

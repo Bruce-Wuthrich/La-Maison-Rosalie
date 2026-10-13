@@ -131,6 +131,7 @@ CREATE TABLE comments (
   publication_status ENUM('pending', 'published', 'hidden') NOT NULL DEFAULT 'published',
   created_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
+  UNIQUE KEY uq_comments_author_recipe (author_id, recipe_id),
   KEY idx_comments_recipe_date (recipe_id, created_at),
   KEY idx_comments_author_date (author_id, created_at),
   CONSTRAINT chk_comments_message CHECK (CHAR_LENGTH(message) BETWEEN 3 AND 500),
@@ -172,11 +173,11 @@ CREATE TABLE login_attempts (
 START TRANSACTION;
 
 INSERT INTO users (id, username, email, password_hash, role, created_at) VALUES
-  (1, 'admin',  'admin@maisonrosalie.be', '$2y$10$1/HgisbgbBybK97Z.iPX8uS/qjGx6WNqzpUU2O9UqksRAF.7A0dru',  'admin',  NOW() - INTERVAL 60 DAY),
-  (2, 'marie',  'marie@example.com',      '$2y$10$TUTfhwaVnffIlHIGOKT.ienZTuk4g3cH0LT/164exv4jpxt/x6jo.', 'member', NOW() - INTERVAL 40 DAY),
-  (3, 'Bruce', 'bruce@example.com',     '$2y$10$TUTfhwaVnffIlHIGOKT.ienZTuk4g3cH0LT/164exv4jpxt/x6jo.', 'member', NOW() - INTERVAL 35 DAY),
-  (4, 'bryan', 'bryan@example.com',     '$2y$10$TUTfhwaVnffIlHIGOKT.ienZTuk4g3cH0LT/164exv4jpxt/x6jo.', 'member', NOW() - INTERVAL 20 DAY),
-  (5, 'Meidhy',  'meidhy@example.com',      '$2y$10$TUTfhwaVnffIlHIGOKT.ienZTuk4g3cH0LT/164exv4jpxt/x6jo.', 'member', NOW() - INTERVAL 10 DAY);
+  (1, 'admin',  'admin@maisonrosalie.be', '$2y$10$HT1w95sEIZjiKJpGb.1Qv.QxuJWpteGbPGeSQr0BpRbCB2shfiV76', 'admin',  NOW() - INTERVAL 60 DAY),
+  (2, 'marie',  'marie@example.com',      '$2y$10$bZecbBuP8LYznzBdKE.yqu.QOCdvTRKHynOTkr/DU6uXA9.txeXTS', 'member', NOW() - INTERVAL 40 DAY),
+  (3, 'Bruce',  'bruce@example.com',      '$2y$10$bZecbBuP8LYznzBdKE.yqu.QOCdvTRKHynOTkr/DU6uXA9.txeXTS', 'member', NOW() - INTERVAL 35 DAY),
+  (4, 'bryan',  'bryan@example.com',      '$2y$10$bZecbBuP8LYznzBdKE.yqu.QOCdvTRKHynOTkr/DU6uXA9.txeXTS', 'member', NOW() - INTERVAL 20 DAY),
+  (5, 'Meidhy', 'meidhy@example.com',     '$2y$10$bZecbBuP8LYznzBdKE.yqu.QOCdvTRKHynOTkr/DU6uXA9.txeXTS', 'member', NOW() - INTERVAL 10 DAY);
 
 INSERT INTO categories (id, title, slug, description) VALUES
   (1, 'Gâteaux', 'gateaux', 'Fondants, brownies et gâteaux de famille.'),

@@ -127,9 +127,21 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 : 'Note moyenne : ' . $escape($recipe->getFormattedAverage()) . ' sur 5'; ?>">
                             <div class="recipe-rating-stars" aria-hidden="true">
                                 <?php for ($star = 1; $star <= 5; $star++) { ?>
-                                    <img src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
+                                    <img
+                                        src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg"
+                                        alt=""
+                                    >
                                 <?php } ?>
                             </div>
+
+                            <p class="recipe-rating-stats" aria-live="polite">
+                                <?php if ($averageRating === null) { ?>
+                                    Aucune note pour le moment
+                                <?php } else { ?>
+                                    <?php echo $escape($recipe->getFormattedAverage()); ?>/5 —
+                                    <?php echo (int) $recipe->getRatingCount(); ?> avis
+                                <?php } ?>
+                            </p>
 
                             <a href="#comments">
                                 <?php echo $commentCount; ?> commentaire<?php echo $commentCount === 1 ? '' : 's'; ?>
@@ -206,8 +218,12 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                     Étape <?php echo (int) $step->getStepNumber(); ?> —
                                     <?php echo $escape($step->getTitle()); ?>
                                 </h3>
-                                <p><?php echo $escape($step->getInstructions()); ?></p>
-                            </li>
+                                <?php if ($step->getImage() !== null && $step->getImage() !== '') { ?>
+                                    <img class="recipe-step-image"
+                                        src="<?php echo $escape($step->getImage()); ?>"
+                                        alt="Étape <?php echo (int) $step->getStepNumber(); ?> : <?php echo $escape($step->getTitle()); ?>"
+                                        width="1200" height="800" loading="lazy">
+                                <?php } ?>                            </li>
                         <?php } ?>
                     </ol>
                 </div>
