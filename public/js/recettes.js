@@ -55,7 +55,7 @@ document.querySelectorAll('[data-auto-submit]').forEach((select) => {
     const filled = average === null ? 0 : Math.round(average);
     document.querySelectorAll('.recipe-rating-stars, .comments-average-stars').forEach((group) => {
       group.querySelectorAll('img').forEach((image, index) => {
-        image.src = `assets/img/recettes/icons/star-${index < filled ? 'filled' : 'outline'}.svg`;
+        image.src = `assets/img/recettes/icons/star-${index < filled ? 'filled' : 'outline'}.svg?v=${document.body.dataset.iconVersion}`;
       });
     });
     const formatted = average === null ? null : average.toFixed(1).replace('.', ',');
@@ -109,7 +109,7 @@ document.querySelectorAll('[data-auto-submit]').forEach((select) => {
       stars.setAttribute('aria-label', `Note : ${authorRating} sur 5`);
       for (let star = 1; star <= 5; star += 1) {
         const image = document.createElement('img');
-        image.src = `assets/img/recettes/icons/star-${star <= authorRating ? 'filled' : 'outline'}.svg`;
+        image.src = `assets/img/recettes/icons/star-${star <= authorRating ? 'filled' : 'outline'}.svg?v=${document.body.dataset.iconVersion}`;
         image.alt = '';
         stars.append(image);
       }

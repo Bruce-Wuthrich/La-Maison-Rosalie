@@ -4,7 +4,7 @@
 <main class="about-page">
     <header class="about-intro" data-about-reveal>
         <h1>Qui sommes nous</h1>
-        <img src="assets/img/interface/title-spark.svg" alt="" aria-hidden="true">
+        <img src="assets/img/interface/title-spark.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
     </header>
 
     <section class="about-team" aria-labelledby="aboutFounderTitle">

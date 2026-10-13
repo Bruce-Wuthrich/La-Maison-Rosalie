@@ -13,24 +13,24 @@
                         <h1>Contactez-nous</h1>
 
                         <div class="contact-eye" aria-hidden="true">
-                            <img class="contact-eye-base" src="assets/img/contact/eye.svg" alt="">
+                            <img class="contact-eye-base" src="assets/img/contact/eye.svg?v=<?= (int) $iconVersion ?>" alt="">
 
-                            <img class="contact-eye-pupil" src="assets/img/contact/pupil-center.svg" alt="">
+                            <img class="contact-eye-pupil" src="assets/img/contact/pupil-center.svg?v=<?= (int) $iconVersion ?>" alt="">
                         </div>
 
                         <address class="contact-information">
                             <p>
-                                <img src="assets/img/contact/email.svg" alt="" aria-hidden="true">
+                                <img src="assets/img/contact/email.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span>Rue Léopold 12, 4000 Liège</span>
                             </p>
 
                             <a href="tel:+3242000000">
-                                <img src="assets/img/contact/phone.svg" alt="" aria-hidden="true">
+                                <img src="assets/img/contact/phone.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span>04 200 00 00</span>
                             </a>
 
                             <a href="mailto:contact@maisonrosalie.be">
-                                <img src="assets/img/contact/email.svg" alt="" aria-hidden="true">
+                                <img src="assets/img/contact/email.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span>contact@maisonrosalie.be</span>
                             </a>
                         </address>
@@ -106,9 +106,9 @@
                 <p>Nous contacter</p>
 
                 <div class="contact-social-icons">
-                    <img src="assets/img/social/youtube.svg" alt="YouTube">
-                    <img src="assets/img/social/facebook.svg" alt="Facebook">
-                    <img src="assets/img/social/instagram.svg" alt="Instagram">
+                    <img src="assets/img/social/youtube.svg?v=<?= (int) $iconVersion ?>" alt="YouTube">
+                    <img src="assets/img/social/facebook.svg?v=<?= (int) $iconVersion ?>" alt="Facebook">
+                    <img src="assets/img/social/instagram.svg?v=<?= (int) $iconVersion ?>" alt="Instagram">
                 </div>
             </div>
         </div>

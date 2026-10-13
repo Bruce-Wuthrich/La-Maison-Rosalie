@@ -89,7 +89,8 @@
 
 .about-team-member figcaption {
     margin-top: 0.3rem;
-    font-family: Georgia, serif;
+    font-family: var(--font-display);
+    font-weight: 400;
     font-size: clamp(0.9rem, 1.25vw, 1.15rem);
     line-height: 1.25;
 }
@@ -108,7 +109,7 @@
 .about-story-copy h2 {
     margin: 0;
     color: var(--color-gold-text);
-    font-family: Georgia, serif;
+    font-family: var(--font-display);
     font-size: clamp(1.8rem, 2.5vw, 2.7rem);
     font-weight: 400;
     line-height: 1.15;
@@ -134,8 +135,9 @@
     place-items: center;
     border: 0;
     border-radius: 50%;
-    background-color: var(--color-gold-text);
-    color: var(--color-white);
+    background-color: transparent;
+    color: var(--color-gold-text);
+    border: 1px solid currentColor;
     text-decoration: none;
     cursor: pointer;
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease;
@@ -153,7 +155,8 @@
 
 .about-round-link:hover,
 .about-round-link:focus-visible {
-    background-color: var(--color-brown);
+    background-color: transparent;
+    color: var(--color-brown);
     transform: translateX(0.45rem);
 }
 
@@ -382,7 +385,7 @@
 
 .about-figures h2 {
     margin-bottom: 2rem;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     color: var(--color-brown);
 }
 
@@ -398,7 +401,7 @@
 
 .about-figures-list strong {
     display: block;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: 2.5rem;
     color: var(--color-brown);
 }

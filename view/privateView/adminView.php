@@ -74,7 +74,7 @@ $tabCounters = [
                                         <?php if ($commentRating > 0): ?>
                                         <div class="comment-stars" aria-label="Note : <?= $commentRating ?> sur 5">
                                             <?php for ($star = 1; $star <= 5; $star++): ?>
-                                                <img src="assets/img/recettes/icons/<?= $star <= $commentRating ? 'star-filled' : 'star-outline' ?>.svg" alt="">
+                                                <img src="assets/img/recettes/icons/<?= $star <= $commentRating ? 'star-filled' : 'star-outline' ?>.svg?v=<?= (int) $iconVersion ?>" alt="">
                                             <?php endfor; ?>
                                         </div>
                                         <?php endif; ?>

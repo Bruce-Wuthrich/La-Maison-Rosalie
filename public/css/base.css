@@ -6,10 +6,22 @@
     --color-cream: #fffaf2;
     --color-brown: #5a392b;
     --color-white: #ffffff;
+    --font-body: "Poppins", sans-serif;
+    --font-display: "DM Serif Display", "Poppins", serif;
+    --icon-size: 28px;
+}
+
+/* Police d'affichage distribuée avec sa licence SIL OFL 1.1. */
+@font-face {
+    font-family: "DM Serif Display";
+    src: url("../assets/fonts/dm-serif-display/DMSerifDisplay-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
 
 body {
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-body);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -57,14 +69,14 @@ main {
 .navbar-home .navbar-icon-button,
 .navbar-about .navbar-icon-link,
 .navbar-about .navbar-icon-button {
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
 }
 
 .navbar-home .navbar-icon,
 .navbar-about .navbar-icon {
-    width: 40px;
-    height: 40px;
+    width: var(--icon-size);
+    height: var(--icon-size);
 }
 
 .navbar-brand {
@@ -108,8 +120,8 @@ body.search-open .navbar-brand {
 }
 
 .navbar-icon {
-    width: 24px;
-    height: 24px;
+    width: var(--icon-size);
+    height: var(--icon-size);
     display: block;
 }
 
@@ -140,7 +152,6 @@ body.search-open .navbar-brand {
 
 .navbar-actions-left>.navbar-icon-link:hover .navbar-icon,
 .navbar-actions-left>.navbar-icon-link:focus-visible .navbar-icon,
-.navbar-actions-left>.navbar-icon-link.is-active .navbar-icon,
 .navbar-account-button:hover .navbar-icon,
 .navbar-account-button:focus-visible .navbar-icon {
     filter: brightness(0) saturate(100%) invert(23%) sepia(14%) saturate(1638%) hue-rotate(332deg) brightness(91%) contrast(86%);
@@ -233,8 +244,8 @@ body.search-open .navbar-brand {
 }
 
 .navbar-search-toggle .navbar-icon {
-    width: 40px;
-    height: 40px;
+    width: var(--icon-size);
+    height: var(--icon-size);
 }
 
 .navbar-search-toggle {
@@ -619,7 +630,7 @@ body.auth-open {
 .auth-side-panel h3,
 .auth-form-panel h3 {
     margin: 0;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-body);
     font-weight: 400;
 }
 
@@ -893,13 +904,15 @@ body.auth-open {
 }
 
 .footer-back-to-top circle {
-    fill: currentColor;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
 }
 
 .footer-back-to-top path {
     fill: none;
-    stroke: var(--color-white);
-    stroke-width: 2.4;
+    stroke: currentColor;
+    stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
 }
@@ -1080,6 +1093,7 @@ body.auth-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .navbar-search,
     .navbar-search-input,
     .navbar-actions-left>.navbar-icon-link .navbar-icon,

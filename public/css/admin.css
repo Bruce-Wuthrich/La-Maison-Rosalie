@@ -8,7 +8,7 @@
 
 .admin-section h2 {
     margin-bottom: 2rem;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     color: var(--color-brown);
 }
 

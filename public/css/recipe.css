@@ -92,7 +92,9 @@
     width: 44px;
     height: 44px;
     overflow: visible;
-    fill: currentColor;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 28;
     transition: color 0.25s ease, transform 0.3s cubic-bezier(0.2, 0.85, 0.35, 1.35);
 }
 
@@ -203,13 +205,14 @@
 }
 
 .recipe-meta li {
-    min-width: 112px;
+    min-width: 0;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.2rem;
     position: relative;
-    padding: 0 1.3rem;
+    padding: 0 clamp(0.4rem, 1vw, 1rem);
     border-left: 0;
     background: none;
     text-align: center;
@@ -220,13 +223,13 @@
 }
 
 .recipe-meta img {
-    width: 56px;
-    height: 56px;
+    width: 40px;
+    height: 40px;
 }
 
 .recipe-meta span {
     color: var(--color-gold-text);
-    font-size: 1.15rem;
+    font-size: clamp(0.85rem, 1.2vw, 1rem);
 }
 
 .recipe-actions {
@@ -386,7 +389,7 @@
 
 .comments-heading h2 {
     margin: 0;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(2rem, 4vw, 3.4rem);
     font-weight: 400;
 }
@@ -421,7 +424,7 @@
 
 .comment-form-panel h3 {
     margin: 0 0 2.4rem;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(1.8rem, 3vw, 2.65rem);
     font-weight: 400;
     text-align: center;
@@ -473,7 +476,7 @@
 .comment-message-label {
     width: 100%;
     margin: 0 0 0.8rem;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(1.55rem, 2.5vw, 2rem);
     text-align: center;
 }
@@ -500,6 +503,7 @@
     font-size: clamp(2.65rem, 4vw, 3.55rem);
     line-height: 1;
     -webkit-text-stroke: 2px #e8a000;
+    opacity: 0.4;
     cursor: pointer;
     transition: color 0.18s ease, transform 0.18s ease;
 }
@@ -507,7 +511,10 @@
 .comment-rating-input input:checked ~ label,
 .comment-rating-input label:hover,
 .comment-rating-input label:hover ~ label {
-    color: #e8a000;
+    color: transparent;
+    -webkit-text-stroke-color: #a87500;
+    opacity: 1;
+    transform: scale(1.06);
 }
 
 .comment-rating-input input:focus-visible + label {
@@ -585,7 +592,7 @@
 
 .comments-summary p {
     margin: 0;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(1.5rem, 2.5vw, 2rem);
 }
 
@@ -653,7 +660,7 @@
 .comment-sort-menu a {
     margin: 0;
     padding: 0.55rem 1rem;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: 0.98rem;
     text-align: left;
 }
@@ -756,7 +763,7 @@
 
 .comment-author-line h3 {
     margin: 0;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(1.55rem, 2.4vw, 2rem);
     font-weight: 400;
 }
@@ -897,7 +904,7 @@
 
 .recipe-tags h2 {
     margin: 0 0 0.45rem;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(2.35rem, 4vw, 3.2rem);
     font-weight: 400;
     line-height: 1;
@@ -1011,7 +1018,7 @@
     .recipe-rating-stars img { width: 20px; height: 20px; }
     .recipe-rating a { font-size: 0.86rem; }
     .recipe-meta li { min-width: 0; flex: 1; padding: 0 0.55rem; }
-    .recipe-meta img { width: 44px; height: 44px; }
+    .recipe-meta img { width: 32px; height: 32px; }
     .recipe-meta span { font-size: 0.92rem; }
     .recipe-content .row { gap: 4.5rem !important; }
     .recipe-content h2 { margin-bottom: 2rem; font-size: 2.25rem; }

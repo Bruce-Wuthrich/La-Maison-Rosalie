@@ -16,7 +16,8 @@
 .contact-presentation h1 {
     margin-bottom: 1rem;
     color: var(--color-gold-text);
-    font-family: Georgia, serif;
+    font-family: var(--font-display);
+    font-weight: 400;
     font-size: clamp(3rem, 7vw, 6rem);
     line-height: 1;
 }
@@ -87,7 +88,7 @@
 .contact-form-panel h2 {
     margin-bottom: 1rem;
     color: var(--color-brown);
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(1.8rem, 3vw, 2.5rem);
 }
 

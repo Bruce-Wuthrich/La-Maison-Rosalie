@@ -22,7 +22,7 @@
 .legal-header h1 {
     margin-bottom: 1rem;
     color: var(--color-brown);
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(2.5rem, 6vw, 4.5rem);
 }
 
@@ -48,7 +48,7 @@
 .legal-content h2 {
     margin-bottom: 0.75rem;
     color: var(--color-gold-text);
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(1.45rem, 3vw, 2rem);
 }
 
