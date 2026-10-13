@@ -35,6 +35,7 @@ if ($page === 'recette') {
     $steps = [];
     $categories = [];
     $comments = [];
+    $otherRecipes = [];
     $commentCount = 0;
     $commentHasNext = false;
     $commentFormData = pullFormData('comment');
@@ -60,6 +61,7 @@ if ($page === 'recette') {
         $ingredients = (new RecipeIngredientManager($db))->getByRecipeId($recipe->getId());
         $steps = (new StepManager($db))->getByRecipeId($recipe->getId());
         $categories = (new CategoryManager($db))->getByRecipeId($recipe->getId());
+        $otherRecipes = $recipeManager->getOthers($recipe->getId());
 
         $commentManager = new CommentManager($db);
         $commentCount = $commentManager->countByRecipeId($recipe->getId());
