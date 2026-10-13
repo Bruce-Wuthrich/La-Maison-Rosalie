@@ -345,7 +345,7 @@ const contactEye = document.querySelector(".contact-eye");
 if (contactEye) {
   const pupil = contactEye.querySelector(".contact-eye-pupil");
   const followsPointer = window.matchMedia(
-    "(hover: hover) and (pointer: fine)",
+    "(any-hover: hover) and (any-pointer: fine)",
   ).matches;
   const reducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
