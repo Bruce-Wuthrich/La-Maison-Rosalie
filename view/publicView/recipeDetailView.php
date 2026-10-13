@@ -221,8 +221,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                 </div>
 
                 <div class="col-12 col-lg-7">
-                    <h2>Method</h2>
-
+                    <h2>Préparation</h2>
                     <ol class="recipe-steps">
                         <?php foreach ($steps as $step) { ?>
                             <li>
@@ -230,6 +229,9 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                     Étape <?php echo (int) $step->getStepNumber(); ?> —
                                     <?php echo $escape($step->getTitle()); ?>
                                 </h3>
+                                <p>
+                                <?php echo nl2br($escape($step->getInstructions())); ?>
+                                </p>
                                 <?php if ($step->getImage() !== null && $step->getImage() !== '') { ?>
                                     <img class="recipe-step-image"
                                         src="<?php echo $escape($step->getImage()); ?>"
