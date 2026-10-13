@@ -25,3 +25,129 @@
 .admin-hidden {
     opacity: 0.55;
 }
+
+/* Admin : gestion des recettes (bonus) */
+.admin-recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.5rem;
+}
+
+.admin-recipe-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--color-gold);
+    border-radius: 1rem;
+    background-color: var(--color-white);
+}
+
+.admin-recipe-card-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+}
+
+.admin-recipe-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem 1.25rem;
+}
+
+.admin-recipe-card-body h3 {
+    margin: 0;
+    font-family: Georgia, serif;
+    font-size: 1.25rem;
+}
+
+.admin-recipe-card-body h3 a {
+    color: var(--color-brown);
+    text-decoration: none;
+}
+
+.admin-recipe-card-body h3 a:hover,
+.admin-recipe-card-body h3 a:focus-visible {
+    text-decoration: underline;
+}
+
+.admin-recipe-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
+}
+
+.admin-recipe-form {
+    display: grid;
+    gap: 2.5rem;
+    max-width: 60rem;
+}
+
+.admin-recipe-form fieldset,
+.admin-recipe-rows {
+    display: grid;
+    gap: 1rem;
+}
+
+.admin-recipe-form legend {
+    font-family: Georgia, serif;
+    color: var(--color-brown);
+}
+
+.admin-recipe-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.admin-recipe-form input:not([type="checkbox"]),
+.admin-recipe-form select,
+.admin-recipe-form textarea {
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--color-gold);
+    border-radius: 0.75rem;
+    background-color: var(--color-white);
+    color: var(--color-brown);
+}
+
+.admin-recipe-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.75rem;
+    align-items: end;
+    padding: 1rem;
+    border: 1px solid var(--color-gold);
+    border-radius: 1rem;
+}
+
+.admin-recipe-wide {
+    grid-column: 1 / -1;
+}
+
+.admin-recipe-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-recipe-checks label {
+    flex-direction: row;
+    align-items: center;
+}
+
+.admin-recipe-preview {
+    width: 8rem;
+    height: auto;
+    border-radius: 0.5rem;
+}
+
+.admin-recipe-error {
+    color: #a12a2a;
+    font-weight: 600;
+}
