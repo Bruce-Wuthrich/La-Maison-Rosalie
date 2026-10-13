@@ -138,16 +138,50 @@ $recipeImagePath = static function ($recipe): string {
                                     <?php echo htmlspecialchars((string) $recipe->getDescription(), ENT_QUOTES, 'UTF-8'); ?>
                                 </p>
 
-                                <div class="recipe-card-footer">
-                                    <span>
+                                <div class="recipe-card-footer flex-wrap">
+                                    <span class="d-inline-flex align-items-center gap-1">
+                                        <img src="assets/img/recettes/icons/<?php echo $recipe->getAverageRating() === null ? 'star-outline' : 'star-filled'; ?>.svg" width="18" height="18" alt="" aria-hidden="true">
                                         <?php
                                         echo $recipe->getAverageRating() === null
                                             ? 'Pas encore notée'
                                             : htmlspecialchars($recipe->getFormattedAverage(), ENT_QUOTES, 'UTF-8') . '/5';
                                         ?>
                                     </span>
-                                    <span><?php echo $recipe->getTotalTime(); ?> min</span>
+                                    <span class="d-inline-flex align-items-center gap-1">
+                                        <img src="assets/img/recettes/icons/time.svg" width="18" height="18" alt="" aria-hidden="true">
+                                        <?php echo $recipe->getTotalTime(); ?> min
+                                    </span>
+                                    <span class="d-inline-flex align-items-center gap-1">
+                                        <?php
+                                        $difficultyLevel = match ($recipe->getDifficulty()) {
+                                            'easy' => 1,
+                                            'medium' => 2,
+                                            'hard' => 3,
+                                            default => 0,
+                                        };
+                                        ?>
+                                        <svg width="18" height="18" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+                                            <g stroke="#F1B300" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M32,32V464a16,16,0,0,0,16,16H480" fill="none" />
+                                                <rect x="96" y="224" width="80" height="192" rx="20"
+                                                    fill="<?php echo $difficultyLevel >= 1 ? '#F1B300' : 'none'; ?>" opacity="<?php echo $difficultyLevel >= 1 ? '1' : '0.25'; ?>" />
+                                                <rect x="240" y="176" width="80" height="240" rx="20"
+                                                    fill="<?php echo $difficultyLevel >= 2 ? '#F1B300' : 'none'; ?>" opacity="<?php echo $difficultyLevel >= 2 ? '1' : '0.25'; ?>" />
+                                                <rect x="383.64" y="112" width="80" height="304" rx="20"
+                                                    fill="<?php echo $difficultyLevel >= 3 ? '#F1B300' : 'none'; ?>" opacity="<?php echo $difficultyLevel >= 3 ? '1' : '0.25'; ?>" />
+                                            </g>
+                                        </svg>
+                                        <?php echo htmlspecialchars($recipe->getDifficultyLabel(), ENT_QUOTES, 'UTF-8'); ?>
+                                    </span>
+                                    <span>
+                                        <?php $ratingCount = (int) $recipe->getRatingCount(); ?>
+                                        <?php echo $ratingCount; ?> avis
+                                    </span>
                                 </div>
+                                <a class="recipe-filter d-inline-block mt-3"
+                                    href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>">
+                                    Voir la recette
+                                </a>
                             </div>
                         </article>
                     <?php } ?>
