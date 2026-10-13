@@ -1079,3 +1079,43 @@
         break-inside: avoid;
     }
 }
+
+/* FE-35 : états des commentaires asynchrones. */
+.comment-form[hidden],
+.comment-login-panel[hidden],
+.comments-empty[hidden],
+.comment-pagination[hidden] {
+    display: none;
+}
+
+.comment-subject-input {
+    width: 100%;
+    padding: 0.65rem;
+    border: 1px solid var(--color-gold);
+    border-radius: 0.5rem;
+    background: var(--color-cream);
+    color: var(--color-brown);
+    font: inherit;
+}
+
+.comment-message {
+    white-space: pre-wrap;
+}
+
+.comment-subject {
+    font-size: 1rem;
+}
+
+.comment-action-status {
+    color: var(--color-gold-text);
+}
+
+.comment-action-status[role="alert"] {
+    color: #a12727;
+}
+
+.comment-more[aria-disabled="true"],
+.recipe-comments button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
