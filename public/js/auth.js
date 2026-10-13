@@ -114,7 +114,7 @@ if (authModal) {
       authRoleButtons.forEach((roleButton) => {
         const isActive = roleButton === button;
         roleButton.classList.toggle("is-active", isActive);
-        roleButton.setAttribute("aria-selected", String(isActive));
+        roleButton.setAttribute("aria-pressed", String(isActive));
       });
 
       loginModeInput.value = button.dataset.authRole;

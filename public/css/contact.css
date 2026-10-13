@@ -15,7 +15,7 @@
 
 .contact-presentation h1 {
     margin-bottom: 1rem;
-    color: var(--color-gold);
+    color: var(--color-gold-text);
     font-family: Georgia, serif;
     font-size: clamp(3rem, 7vw, 6rem);
     line-height: 1;
@@ -74,7 +74,7 @@
 
 .contact-information a:hover,
 .contact-information a:focus {
-    color: var(--color-gold);
+    color: var(--color-gold-text);
     text-decoration: underline;
 }
 
@@ -126,7 +126,7 @@
 
 .contact-field input:focus,
 .contact-field textarea:focus {
-    border-color: var(--color-gold);
+    border-color: var(--color-gold-text);
     outline: 3px solid rgba(241, 179, 0, 0.2);
 }
 
@@ -141,7 +141,7 @@
     padding: 0.85rem 1.5rem;
     border: 0;
     border-radius: 0.75rem;
-    background-color: #ad7800;
+    background-color: var(--color-gold-text);
     color: var(--color-white);
     font-weight: 600;
     cursor: pointer;
@@ -174,7 +174,7 @@
 
 .contact-map-title {
     margin-bottom: 1rem;
-    color: var(--color-gold);
+    color: var(--color-gold-text);
 }
 
 .contact-map-wrapper {
@@ -211,7 +211,7 @@
     margin: 0 0 0.5rem;
     padding-bottom: 0.3rem;
     border-bottom: 1px solid var(--color-gold);
-    color: #ad7800;
+    color: var(--color-gold-text);
     font-weight: 600;
     text-align: center;
 }

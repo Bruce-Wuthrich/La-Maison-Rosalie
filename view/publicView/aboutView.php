@@ -14,7 +14,7 @@
                 data-role="Chocolatier créateur"
                 data-biography="Né à Namur dans une famille de boulangers, Lucas a grandi au milieu des parfums de cacao et de pâte chaude. Après une formation de chocolatier, il a parcouru plusieurs maisons belges avant de rejoindre Rosalie. Il imagine aujourd’hui les nouvelles recettes et veille à préserver l’équilibre entre tradition, précision et gourmandise.">
                 <button class="about-team-select" type="button" aria-label="Découvrir la vie de Lucas Delcourt">
-                    <img src="assets/img/about/team-lucas.webp" alt="Portrait de Lucas Delcourt">
+                    <img src="assets/img/about/team-lucas.webp" alt="Portrait de Lucas Delcourt" loading="lazy">
                 </button>
                 <figcaption>Lucas Delcourt</figcaption>
             </figure>
@@ -24,7 +24,7 @@
                 data-role="Responsable de l’atelier"
                 data-biography="Camille est née à Bruxelles et s’est très tôt passionnée pour les gestes minutieux de la pâtisserie. Organisée et attentive, elle accompagne chaque étape de fabrication, de la sélection des ingrédients aux dernières finitions. Elle transmet aussi aux nouveaux artisans les méthodes et les valeurs qui font l’identité de Maison Rosalie.">
                 <button class="about-team-select" type="button" aria-label="Découvrir la vie de Camille Moreau">
-                    <img src="assets/img/about/team-camille.webp" alt="Portrait de Camille Moreau">
+                    <img src="assets/img/about/team-camille.webp" alt="Portrait de Camille Moreau" loading="lazy">
                 </button>
                 <figcaption>Camille Moreau</figcaption>
             </figure>
@@ -34,7 +34,7 @@
                 data-role="Fondatrice"
                 data-biography="Rosalie a grandi dans une maison où les recettes se transmettaient de génération en génération. Animée par le désir de faire vivre cet héritage, elle a créé Maison Rosalie comme un lieu de partage, d’élégance et de création. Entourée de son équipe, elle continue d’imaginer une chocolaterie profondément belge, généreuse et tournée vers l’avenir.">
                 <button class="about-team-select" type="button" aria-label="Découvrir la vie de Rosalie Moreau" aria-current="true">
-                    <img src="assets/img/about/team-rosalie.webp" alt="Portrait de Rosalie Moreau">
+                    <img src="assets/img/about/team-rosalie.webp" alt="Portrait de Rosalie Moreau" loading="lazy">
                 </button>
                 <figcaption>Rosalie Moreau</figcaption>
             </figure>
@@ -61,15 +61,15 @@
         <div class="about-story-gallery">
             <figure class="about-story-visual" data-about-reveal>
                 <img src="assets/img/about/legacy-1928.webp"
-                    alt="Une grand-mère partageant son savoir-faire en cuisine avec une enfant">
+                    alt="Une grand-mère partageant son savoir-faire en cuisine avec une enfant" loading="lazy">
             </figure>
 
             <figure class="about-story-visual" data-about-reveal>
-                <img src="assets/img/about/craft.webp" alt="Une pâtissière travaillant avec précision en cuisine">
+                <img src="assets/img/about/craft.webp" alt="Une pâtissière travaillant avec précision en cuisine" loading="lazy">
             </figure>
 
             <figure class="about-story-visual" data-about-reveal>
-                <img src="assets/img/about/family.webp" alt="Une grand-mère et un enfant préparant une recette ensemble">
+                <img src="assets/img/about/family.webp" alt="Une grand-mère et un enfant préparant une recette ensemble" loading="lazy">
             </figure>
         </div>
 
@@ -97,9 +97,9 @@
         </ul>
     </section>
 
-    <section class="about-recipes" data-about-reveal>
+    <div class="about-recipes" data-about-reveal>
         <img src="assets/img/about/recipes-banner.webp"
-            alt="Une enfant et une adulte préparant une recette au chocolat">
+            alt="Une enfant et une adulte préparant une recette au chocolat" loading="lazy">
         <div class="about-recipes-overlay">
             <p>
                 Rosalie a rencontré un tel succès qu’elle a voulu se lancer dans la création de recettes
@@ -108,7 +108,7 @@
             </p>
         </div>
         <p class="about-tasting">Bonne dégustation.</p>
-    </section>
+    </div>
 </main>
 
 <?php require RACINE_PATH . '/view/inc/footer.php'; ?>

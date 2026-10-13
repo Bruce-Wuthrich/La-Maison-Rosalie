@@ -17,7 +17,7 @@
 
 .recipes-eyebrow {
     margin-bottom: 0.75rem;
-    color: var(--color-gold);
+    color: var(--color-gold-text);
     font-weight: 500;
 }
 
@@ -49,7 +49,7 @@
 .recipe-filter:hover,
 .recipe-filter:focus-visible,
 .recipe-filter.is-active {
-    background-color: var(--color-gold);
+    background-color: var(--color-gold-text);
     color: var(--color-white);
 }
 
@@ -89,7 +89,7 @@
 
 .recipe-card-category {
     margin-bottom: 0.5rem;
-    color: var(--color-gold);
+    color: var(--color-gold-text);
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -107,7 +107,7 @@
 
 .recipe-card h2 a:hover,
 .recipe-card h2 a:focus {
-    color: var(--color-gold);
+    color: var(--color-gold-text);
 }
 
 .recipe-card-description {
@@ -118,7 +118,7 @@
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    color: var(--color-gold);
+    color: var(--color-gold-text);
 }
 
 /* Le catalogue passe progressivement de trois à une colonne. */

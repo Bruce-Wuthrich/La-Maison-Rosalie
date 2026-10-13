@@ -33,7 +33,7 @@ $recipeImagePath = static function ($recipe): string {
             </a>
         </div>
 
-        <div class="hero-pagination" aria-label="Choisir une catégorie">
+        <div class="hero-pagination" role="group" aria-label="Choisir une catégorie">
             <button type="button" data-category-index="0" aria-label="Afficher la catégorie Tartes"></button>
             <button type="button" data-category-index="1" aria-label="Afficher la catégorie Gâteaux"></button>
             <button type="button" data-category-index="2" aria-label="Afficher la catégorie Glaces"></button>
@@ -143,7 +143,7 @@ $recipeImagePath = static function ($recipe): string {
                     <?php foreach ($topRecipes as $recipe): ?>
                         <?php $roundedRating = (int) round($recipe->getAverageRating() ?? 0); ?>
                         <article class="star-card">
-                            <p class="star-card-rating" aria-label="Note : <?= $recipe->getFormattedAverage() !== '' ? $recipe->getFormattedAverage() . ' sur 5' : 'pas encore notée' ?>">
+                            <p class="star-card-rating" role="img" aria-label="Note : <?= $recipe->getFormattedAverage() !== '' ? $recipe->getFormattedAverage() . ' sur 5' : 'pas encore notée' ?>">
                                 <?php for ($star = 1; $star <= 5; $star++): ?>
                                     <svg
                                         class="star-icon <?= $star <= $roundedRating ? 'is-filled' : 'is-empty' ?>"

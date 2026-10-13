@@ -116,7 +116,7 @@
 
 .about-founder-role {
     margin: 0.25rem 0 2rem;
-    color: rgba(151, 103, 0, 0.6);
+    color: var(--color-gold-text);
     font-size: 1.05rem;
 }
 
@@ -226,7 +226,7 @@
     align-items: center;
     justify-content: flex-end;
     padding: clamp(1.5rem, 4vw, 3.5rem);
-    background: rgba(21, 13, 9, 0.55);
+    background: rgba(21, 13, 9, 0.65);
 }
 
 .about-recipes-overlay p {

@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 use model\manager\RecipeManager;
 
-// affiche directement la page a propos car elle a pas besoin des recettes
+// Affiche directement les pages statiques qui n'ont pas besoin des recettes.
 if ($page === 'a-propos') {
     require RACINE_PATH . '/view/publicView/aboutView.php';
+    return;
+}
+
+if ($page === 'mentions-legales') {
+    require RACINE_PATH . '/view/publicView/legalView.php';
     return;
 }
 

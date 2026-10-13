@@ -119,7 +119,7 @@ try {
 $page = $_GET['pg'] ?? 'accueil';
 
 $controller = match ($page) {
-    'accueil', 'a-propos' => 'HomeController',
+    'accueil', 'a-propos', 'mentions-legales' => 'HomeController',
     'recettes', 'recette' => 'RecipeController',
     'contact'             => 'ContactController',
     'compte'              => 'AuthController',     // login/logout
