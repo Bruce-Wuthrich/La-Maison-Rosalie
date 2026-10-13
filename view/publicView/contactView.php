@@ -2,13 +2,13 @@
 <?php require RACINE_PATH . '/view/inc/navbar.php'; ?>
 
 <main class="contact-page">
-    <section class="contact-section">
+    <div class="contact-section">
         <div class="container">
 
-            <div class="row align-items-center g-5">
+            <div class="row align-items-center g-4">
 
                 <div class="col-12 col-lg-6">
-                    <section class="contact-presentation">
+                    <div class="contact-presentation">
                         <p class="contact-eyebrow">Maison Rosalie</p>
                         <h1>Contactez-nous</h1>
 
@@ -34,7 +34,7 @@
                                 <span>contact@maisonrosalie.be</span>
                             </a>
                         </address>
-                    </section>
+                    </div>
                 </div>
 
                 <div class="col-12 col-lg-6">
@@ -112,7 +112,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 </main>
 
 <script src="js/contact.js" defer></script>

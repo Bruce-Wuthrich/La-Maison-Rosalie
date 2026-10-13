@@ -1,6 +1,6 @@
 <?php
 // path: view/privateView/adminView.php
-// Page admin : modération des avis et messages de contact.
+// Page admin en 3 onglets : commentaires (modération), messages de contact et recettes (bonus).
 // Réutilise l'en-tête et les filtres de la page Recettes, et les cartes d'avis de la fiche recette.
 
 $escape = static fn(mixed $value): string => htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -10,6 +10,13 @@ $formatDate = static function (?string $date): string {
 };
 $statusLabels = ['new' => 'Nouveau', 'read' => 'Lu', 'processed' => 'Traité'];
 $newMessageCount = count(array_filter($contactMessages, static fn($message) => $message->getStatus() === 'new'));
+
+// Libellé de chaque onglet avec son compteur
+$tabCounters = [
+    'commentaires' => count($adminComments),
+    'contact' => $newMessageCount . ' nouveau' . ($newMessageCount > 1 ? 'x' : ''),
+    'recettes' => count($adminRecipes),
+];
 ?>
 <?php require RACINE_PATH . '/view/inc/header.php'; ?>
 <?php require RACINE_PATH . '/view/inc/navbar.php'; ?>
@@ -23,7 +30,7 @@ $newMessageCount = count(array_filter($contactMessages, static fn($message) => $
             <h1>Bonjour <?= $escape($connectedUser->getUsername()) ?></h1>
 
             <p class="recipes-introduction">
-                Modérez les avis laissés sur les recettes et consultez les messages reçus par le formulaire de contact.
+                Modérez les avis, consultez les messages de contact et gérez les recettes du livre.
             </p>
         </div>
     </section>
@@ -32,14 +39,20 @@ $newMessageCount = count(array_filter($contactMessages, static fn($message) => $
         <div class="container">
 
             <nav class="recipe-filters" aria-label="Sections de l’administration">
-                <a class="recipe-filter is-active" href="#avis">Avis (<?= count($adminComments) ?>)</a>
-                <a class="recipe-filter" href="#messages">Messages (<?= $newMessageCount ?> nouveau<?= $newMessageCount > 1 ? 'x' : '' ?>)</a>
+                <?php foreach ($adminTabs as $tabKey => $tabLabel): ?>
+                    <a class="recipe-filter<?= $activeTab === $tabKey ? ' is-active' : '' ?>"
+                        href="?pg=admin&amp;onglet=<?= $tabKey ?>"
+                        <?= $activeTab === $tabKey ? 'aria-current="page"' : '' ?>>
+                        <?= $escape($tabLabel) ?> (<?= $escape($tabCounters[$tabKey]) ?>)
+                    </a>
+                <?php endforeach; ?>
             </nav>
 
             <?php if ($adminError !== null): ?>
                 <p role="alert"><?= $escape($adminError) ?></p>
             <?php endif; ?>
 
+            <?php if ($activeTab === 'commentaires'): ?>
             <section class="admin-section" id="avis" aria-labelledby="adminCommentsTitle">
                 <h2 id="adminCommentsTitle">Avis des membres</h2>
 
@@ -103,7 +116,9 @@ $newMessageCount = count(array_filter($contactMessages, static fn($message) => $
                     </div>
                 <?php endif; ?>
             </section>
+            <?php endif; ?>
 
+            <?php if ($activeTab === 'contact'): ?>
             <section class="admin-section" id="messages" aria-labelledby="adminMessagesTitle">
                 <h2 id="adminMessagesTitle">Messages de contact</h2>
 
@@ -134,6 +149,49 @@ $newMessageCount = count(array_filter($contactMessages, static fn($message) => $
                     </div>
                 <?php endif; ?>
             </section>
+            <?php endif; ?>
+
+            <?php if ($activeTab === 'recettes' && $recipeForm !== null): ?>
+                <?php require RACINE_PATH . '/view/privateView/adminRecipeForm.php'; ?>
+            <?php elseif ($activeTab === 'recettes'): ?>
+            <section class="admin-section" id="recettes" aria-labelledby="adminRecipesTitle">
+                <h2 id="adminRecipesTitle">Recettes</h2>
+                <p><a class="recipe-filter" href="?pg=admin&amp;onglet=recettes&amp;recette=nouvelle">Ajouter une recette</a></p>
+
+                <?php if (empty($adminRecipes)): ?>
+                    <p>Aucune recette pour le moment.</p>
+                <?php else: ?>
+                    <div class="admin-recipe-grid">
+                        <?php foreach ($adminRecipes as $adminRecipe): ?>
+                            <?php $adminRecipeSlug = rawurlencode((string) $adminRecipe->getSlug()); ?>
+                            <article class="admin-recipe-card" data-recipe-row>
+                                <img class="admin-recipe-card-image" src="<?= $escape($adminRecipe->getMainImage()) ?>"
+                                    alt="" width="400" height="260" loading="lazy">
+
+                                <div class="admin-recipe-card-body">
+                                    <h3>
+                                        <a href="?pg=recette&amp;slug=<?= $adminRecipeSlug ?>"><?= $escape($adminRecipe->getTitle()) ?></a>
+                                    </h3>
+                                    <p class="admin-meta">
+                                        <?= $escape($adminRecipe->getCategoryTitles() ?? '') ?> · <?= $escape($adminRecipe->getDifficultyLabel()) ?>
+                                        · <?= (int) $adminRecipe->getTotalTime() ?> min
+                                    </p>
+
+                                    <div class="admin-recipe-card-actions">
+                                        <a class="recipe-filter" href="?pg=admin&amp;onglet=recettes&amp;recette=<?= $adminRecipeSlug ?>">Modifier</a>
+                                        <form action="?pg=admin&amp;onglet=recettes&amp;action=delete&amp;recette=<?= $adminRecipeSlug ?>" method="post" data-admin-recipe-delete>
+                                            <input type="hidden" name="csrf_token" value="<?= $escape($csrfToken) ?>">
+                                            <input type="hidden" name="recipe_id" value="<?= (int) $adminRecipe->getId() ?>">
+                                            <button class="comment-delete" type="submit">Supprimer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </section>
+            <?php endif; ?>
 
         </div>
     </section>
@@ -141,4 +199,7 @@ $newMessageCount = count(array_filter($contactMessages, static fn($message) => $
 </main>
 
 <script src="js/admin.js" defer></script>
+<?php if ($recipeForm !== null): ?>
+<script src="js/admin-recette.js" defer></script>
+<?php endif; ?>
 <?php require RACINE_PATH . '/view/inc/footer.php'; ?>

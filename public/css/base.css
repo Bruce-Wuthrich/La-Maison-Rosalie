@@ -100,11 +100,11 @@ body.search-open .navbar-brand {
 }
 
 .nav-link:hover {
-    color: var(--color-gold);
+    color: var(--color-gold-text);
 }
 
 .nav-link:focus {
-    color: var(--color-gold);
+    color: var(--color-gold-text);
 }
 
 .navbar-actions {
@@ -206,7 +206,7 @@ body.search-open .navbar-brand {
 
 .navbar-logout-button:hover,
 .navbar-logout-button:focus-visible {
-    color: var(--color-gold);
+    color: var(--color-gold-text);
 }
 
 @media (max-width: 575.98px) {
@@ -287,7 +287,8 @@ body.search-open .navbar-brand {
 }
 
 .navbar-search-input::placeholder {
-    color: rgba(151, 103, 0, 0.58);
+    color: var(--color-gold-text);
+    opacity: 1;
 }
 
 .navbar-search-input::-webkit-search-cancel-button {
@@ -516,7 +517,7 @@ body.menu-open .navbar-brand {
     position: absolute;
     width: 36px;
     height: 2px;
-    background-color: var(--color-gold);
+    background-color: var(--color-gold-text);
 }
 
 .navbar-toggler[aria-expanded="true"]::before {
@@ -597,7 +598,7 @@ body.auth-open {
     left: 50%;
     width: 38px;
     height: 2px;
-    background-color: var(--color-gold);
+    background-color: var(--color-gold-text);
 }
 
 .auth-modal-close::before {
@@ -649,7 +650,7 @@ body.auth-open {
     border: 0;
     border-bottom: 1px solid transparent;
     background: transparent;
-    color: rgba(151, 103, 0, 0.52);
+    color: var(--color-brown);
     font-family: inherit;
 }
 
@@ -846,59 +847,46 @@ body.auth-open {
     padding: 1.35rem 0 2.8rem;
 }
 
-.footer-contact-link {
+.footer-navigation ul {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 0.45rem 1.5rem;
+    justify-items: end;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.footer-navigation a {
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 1.25rem;
-    padding-bottom: 0.25rem;
-    border-bottom: 1px solid rgba(151, 103, 0, 0.28);
+    display: inline-block;
+    padding-bottom: 0.15rem;
     color: var(--color-gold-text);
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     text-decoration: none;
 }
 
-.footer-contact-link::after {
+.footer-navigation a::after {
     content: "";
     position: absolute;
     right: 0;
-    bottom: -1px;
+    bottom: 0;
     left: 0;
     height: 2px;
     background-color: currentColor;
     transform: scaleX(0);
     transform-origin: left center;
-    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.35s ease;
 }
 
-.footer-contact-link svg {
-    width: 32px;
-    height: 12px;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    opacity: 0;
-    transform: translateX(0.8rem);
-    transition:
-        opacity 0.25s ease,
-        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+.footer-navigation a:hover,
+.footer-navigation a:focus-visible {
+    color: var(--color-brown);
 }
 
-.footer-contact-link:hover,
-.footer-contact-link:focus-visible {
-    color: var(--color-gold-text);
-}
-
-.footer-contact-link:hover::after,
-.footer-contact-link:focus-visible::after {
+.footer-navigation a:hover::after,
+.footer-navigation a:focus-visible::after {
     transform: scaleX(1);
-}
-
-.footer-contact-link:hover svg,
-.footer-contact-link:focus-visible svg {
-    opacity: 1;
-    transform: translateX(0);
 }
 
 .footer-back-to-top {
@@ -934,7 +922,7 @@ body.auth-open {
     color: var(--color-brown);
 }
 
-.footer-contact-link:focus-visible,
+.footer-navigation a:focus-visible,
 .footer-back-to-top:focus-visible {
     outline: 2px solid var(--color-brown);
     outline-offset: 4px;
@@ -1090,11 +1078,17 @@ body.auth-open {
 
     .footer-actions {
         grid-row: 3;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 2rem;
+        gap: 1.5rem;
         padding: 0;
+    }
+
+    .footer-navigation ul {
+        grid-template-columns: repeat(2, auto);
+        justify-items: center;
+        text-align: center;
     }
 }
 
@@ -1108,8 +1102,7 @@ body.auth-open {
     .navbar-nav .dropdown-menu>li::after,
     .navbar-nav .dropdown-item::before,
     .navbar-nav .dropdown-item::after,
-    .footer-contact-link::after,
-    .footer-contact-link svg {
+    .footer-navigation a::after {
         transition-duration: 0.01ms;
         transition-delay: 0s;
     }

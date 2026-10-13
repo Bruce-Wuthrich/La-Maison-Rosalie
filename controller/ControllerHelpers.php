@@ -163,3 +163,95 @@ function recipeRedirect(string $slug): string
         ? '?pg=recette&slug=' . rawurlencode($slug)
         : '?pg=recettes';
 }
+
+// Bloque l'action si le membre n'est pas administrateur : le rôle est relu en base, pas seulement en session.
+function requireAdmin(\model\MyPDO $db, string $redirect): \model\mapping\UserMapping
+{
+    $sessionUser = requireLogin($redirect);
+
+    try {
+        $connectedUser = (new \model\manager\UserManager($db))->getById($sessionUser['id']);
+    } catch (Throwable $exception) {
+        error_log('Vérification administrateur impossible : ' . $exception->getMessage());
+        respond(false, 'La vérification de votre compte est momentanément indisponible.', $redirect, 503);
+    }
+
+    if ($connectedUser === null || !$connectedUser->isAdmin()) {
+        respond(false, 'Cette page est réservée aux administrateurs.', $redirect, 403);
+    }
+
+    return $connectedUser;
+}
+
+// Fichier envoyé par un champ simple (main_image) ou tableau (step_images[2]), null si aucun fichier choisi.
+function uploadedFile(string $field, ?int $index = null): ?array
+{
+    $files = $_FILES[$field] ?? null;
+    if (!is_array($files)) {
+        return null;
+    }
+
+    $file = [];
+    foreach (['name', 'tmp_name', 'error', 'size'] as $key) {
+        $value = $files[$key] ?? null;
+        if ($index !== null) {
+            $value = is_array($value) ? ($value[$index] ?? null) : null;
+        }
+        if (is_array($value)) {
+            return null; // structure inattendue : ignorée
+        }
+        $file[$key] = $value;
+    }
+
+    return (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE ? null : $file;
+}
+
+// Enregistre une image après contrôle de son contenu réel (jamais du nom ni du type annoncés par le navigateur).
+// WebP, JPEG ou PNG, 300 Ko maximum (FE-66). Renvoie le chemin public à stocker en base.
+function storeUploadedImage(array $file, string $directory, string $baseName): string
+{
+    $tmpName = (string) ($file['tmp_name'] ?? '');
+    $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
+    if ($error === UPLOAD_ERR_INI_SIZE || $error === UPLOAD_ERR_FORM_SIZE) {
+        throw new InvalidArgumentException('Chaque image doit peser 300 Ko maximum.');
+    }
+    if ($error !== UPLOAD_ERR_OK || !is_uploaded_file($tmpName)) {
+        throw new InvalidArgumentException('Une image n’a pas pu être envoyée. Réessayez.');
+    }
+    if ((int) ($file['size'] ?? 0) > 300 * 1024) {
+        throw new InvalidArgumentException('Chaque image doit peser 300 Ko maximum.');
+    }
+
+    $extensions = ['image/webp' => 'webp', 'image/jpeg' => 'jpg', 'image/png' => 'png'];
+    $mimeType = (new finfo(FILEINFO_MIME_TYPE))->file($tmpName);
+    if (!isset($extensions[$mimeType]) || getimagesize($tmpName) === false) {
+        throw new InvalidArgumentException('Les images doivent être au format WebP, JPEG ou PNG.');
+    }
+
+    $absoluteDirectory = RACINE_PATH . '/public/' . $directory;
+    if (!is_dir($absoluteDirectory) && !mkdir($absoluteDirectory, 0755, true)) {
+        throw new RuntimeException('Création du dossier d’images impossible : ' . $directory);
+    }
+
+    // nom choisi par le serveur, jamais par le visiteur
+    $fileName = $baseName . '-' . bin2hex(random_bytes(4)) . '.' . $extensions[$mimeType];
+    if (!move_uploaded_file($tmpName, $absoluteDirectory . '/' . $fileName)) {
+        throw new RuntimeException('Enregistrement de l’image impossible : ' . $fileName);
+    }
+
+    return $directory . '/' . $fileName;
+}
+
+// Supprime des images envoyées par l'admin. Seul le dossier public/uploads est touché :
+// les images du dépôt (assets) ne sont jamais effacées.
+function deleteUploadedImages(array $paths): void
+{
+    foreach ($paths as $path) {
+        if (is_string($path) && preg_match('#^uploads/recettes/[a-z0-9-]+/[a-z0-9-]+\.(webp|jpg|png)$#', $path) === 1) {
+            $absolutePath = RACINE_PATH . '/public/' . $path;
+            if (is_file($absolutePath)) {
+                unlink($absolutePath);
+            }
+        }
+    }
+}

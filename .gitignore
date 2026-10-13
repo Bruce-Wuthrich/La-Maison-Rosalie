@@ -6,3 +6,5 @@ logs/
 .DS_Store
 Thumbs.db
 data/create-app-user.sql
+# images envoyées depuis l'admin
+public/uploads/

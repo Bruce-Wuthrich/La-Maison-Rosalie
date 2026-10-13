@@ -15,7 +15,7 @@ CREATE TABLE users (
   username      VARCHAR(50)  NOT NULL,
   email         VARCHAR(254) NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
-  role          ENUM('member', 'author', 'admin') NOT NULL DEFAULT 'member',
+  role          ENUM('member', 'admin') NOT NULL DEFAULT 'member',
   created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_users_username (username),
@@ -83,6 +83,7 @@ CREATE TABLE recipe_ingredients (
   sort_order    INT UNSIGNED NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_recipe_ingredients_order (recipe_id, sort_order),
+  UNIQUE KEY uq_recipe_ingredients_ingredient (recipe_id, ingredient_id),
   KEY idx_recipe_ingredients_ingredient (ingredient_id),
   CONSTRAINT chk_recipe_ingredients_quantity CHECK (quantity IS NULL OR quantity > 0),
   CONSTRAINT chk_recipe_ingredients_order CHECK (sort_order > 0),
@@ -122,6 +123,19 @@ CREATE TABLE ratings (
     REFERENCES recipes (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
+-- Bonus : recettes favorites par utilisateur (une seule fois chaque recette par compte)
+CREATE TABLE favorites (
+  user_id    INT UNSIGNED NOT NULL,
+  recipe_id  INT UNSIGNED NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, recipe_id),
+  KEY idx_favorites_recipe (recipe_id),
+  CONSTRAINT fk_favorites_user FOREIGN KEY (user_id)
+    REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_favorites_recipe FOREIGN KEY (recipe_id)
+    REFERENCES recipes (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 CREATE TABLE comments (
   id                 INT UNSIGNED NOT NULL AUTO_INCREMENT,
   author_id          INT UNSIGNED NOT NULL,
@@ -134,7 +148,7 @@ CREATE TABLE comments (
   UNIQUE KEY uq_comments_author_recipe (author_id, recipe_id),
   KEY idx_comments_recipe_date (recipe_id, created_at),
   KEY idx_comments_author_date (author_id, created_at),
-  CONSTRAINT chk_comments_message CHECK (CHAR_LENGTH(message) BETWEEN 3 AND 500),
+  CONSTRAINT chk_comments_message CHECK (CHAR_LENGTH(TRIM(message)) BETWEEN 3 AND 500),
   CONSTRAINT fk_comments_author FOREIGN KEY (author_id)
     REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT fk_comments_recipe FOREIGN KEY (recipe_id)
@@ -268,14 +282,15 @@ INSERT INTO steps (recipe_id, step_number, title, instructions, image) VALUES
   (5, 3, 'Fouetter la crème', 'Montez le reste de la crème bien froide en chantilly ferme, environ 3 minutes au batteur.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-3.webp'),
   (5, 4, 'Mélanger et congeler', 'Incorporez délicatement la chantilly au chocolat, versez dans un moule et congelez 6 heures.', 'assets/img/recettes/glace-au-chocolat-sans-sorbetiere/etape-4.webp');
 
+-- L'admin (id 1) est l'auteur des 5 recettes : il ne les note pas, comme dans l'application. 20 notes au total (BE-60).
 INSERT INTO ratings (user_id, recipe_id, rating, rated_at) VALUES
-  (1, 1, 4, NOW() - INTERVAL 28 DAY), (2, 1, 4, NOW() - INTERVAL 27 DAY), (3, 1, 3, NOW() - INTERVAL 26 DAY),
+  (2, 1, 4, NOW() - INTERVAL 27 DAY), (3, 1, 3, NOW() - INTERVAL 26 DAY),
   (4, 1, 4, NOW() - INTERVAL 18 DAY), (5, 1, 5, NOW() - INTERVAL 8 DAY),
-  (1, 2, 5, NOW() - INTERVAL 24 DAY), (2, 2, 4, NOW() - INTERVAL 23 DAY), (3, 2, 5, NOW() - INTERVAL 22 DAY),
+  (2, 2, 4, NOW() - INTERVAL 23 DAY), (3, 2, 5, NOW() - INTERVAL 22 DAY),
   (4, 2, 4, NOW() - INTERVAL 17 DAY), (5, 2, 5, NOW() - INTERVAL 7 DAY),
   (2, 3, 5, NOW() - INTERVAL 19 DAY), (3, 3, 5, NOW() - INTERVAL 18 DAY), (4, 3, 4, NOW() - INTERVAL 16 DAY),
   (5, 3, 5, NOW() - INTERVAL 6 DAY),
-  (1, 4, 5, NOW() - INTERVAL 14 DAY), (2, 4, 4, NOW() - INTERVAL 13 DAY), (3, 4, 4, NOW() - INTERVAL 12 DAY),
+  (2, 4, 4, NOW() - INTERVAL 13 DAY), (3, 4, 4, NOW() - INTERVAL 12 DAY), (4, 4, 4, NOW() - INTERVAL 11 DAY),
   (5, 4, 5, NOW() - INTERVAL 5 DAY),
   (2, 5, 3, NOW() - INTERVAL 4 DAY), (3, 5, 4, NOW() - INTERVAL 3 DAY), (4, 5, 4, NOW() - INTERVAL 2 DAY),
   (5, 5, 3, NOW() - INTERVAL 1 DAY);

@@ -43,3 +43,21 @@ document.querySelectorAll("[data-admin-status]").forEach((form) => {
         form.querySelector('[type="submit"]').textContent = isHidden ? "Republier" : "Masquer";
     });
 });
+
+// Suppression d'une recette après confirmation (bonus gestion des recettes)
+document.querySelectorAll("[data-admin-recipe-delete]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!window.confirm("Supprimer définitivement cette recette, ses notes et ses avis ?")) {
+            return;
+        }
+
+        const result = await sendJsonForm(form);
+        showFlash(result.success ? "success" : "error", result.message);
+
+        if (result.success) {
+            form.closest("[data-recipe-row]")?.remove();
+        }
+    });
+});

@@ -3,7 +3,7 @@
 <footer class="site-footer">
     <div class="container footer-layout">
         <div class="footer-left">
-            <div class="footer-social" aria-label="Réseaux sociaux de Maison Rosalie">
+            <nav class="footer-social" aria-label="Réseaux sociaux de Maison Rosalie">
                 <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer"
                     aria-label="YouTube de Maison Rosalie (nouvel onglet)">
                     <img src="assets/img/social/youtube.svg?v=<?= (int) $iconVersion ?>" alt="YouTube">
@@ -16,7 +16,7 @@
                     aria-label="Instagram de Maison Rosalie (nouvel onglet)">
                     <img src="assets/img/social/instagram.svg?v=<?= (int) $iconVersion ?>" alt="Instagram">
                 </a>
-            </div>
+            </nav>
 
             <p class="footer-copyright">© 2026 Maison Rosalie – Tous droits réservés</p>
         </div>
@@ -24,12 +24,15 @@
         <img class="footer-emblem" src="assets/img/logo/picto.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
 
         <div class="footer-actions">
-            <a class="footer-contact-link" href="?pg=contact">
-                <span>Nous contacter</span>
-                <svg viewBox="0 0 34 12" aria-hidden="true" focusable="false">
-                    <path d="M1 6H32M27 1L32 6L27 11" />
-                </svg>
-            </a>
+            <nav class="footer-navigation" aria-label="Navigation du pied de page">
+                <ul>
+                    <li><a href="?pg=accueil">Accueil</a></li>
+                    <li><a href="?pg=recettes">Recettes</a></li>
+                    <li><a href="?pg=a-propos">À propos</a></li>
+                    <li><a href="?pg=contact">Contact</a></li>
+                    <li><a href="?pg=mentions-legales">Mentions légales</a></li>
+                </ul>
+            </nav>
 
             <a class="footer-back-to-top" href="#top" aria-label="Revenir en haut de la page">
                 <svg viewBox="0 0 44 44" aria-hidden="true" focusable="false">

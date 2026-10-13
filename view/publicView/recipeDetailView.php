@@ -121,7 +121,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
 
                         <p class="recipe-description"><?php echo $escape($recipe->getDescription()); ?></p>
 
-                        <div class="recipe-rating"
+                        <div class="recipe-rating" role="group"
                             aria-label="<?php echo $averageRating === null
                                 ? 'Cette recette n’a pas encore de note'
                                 : 'Note moyenne : ' . $escape($recipe->getFormattedAverage()) . ' sur 5'; ?>">
@@ -298,7 +298,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
 
                             <fieldset class="comment-rating-fieldset">
                                 <legend>Votre note (facultative)</legend>
-                                <div class="comment-rating-input" aria-label="Votre note sur 5">
+                                <div class="comment-rating-input" role="radiogroup" aria-label="Votre note sur 5">
                                     <?php for ($rating = 5; $rating >= 1; $rating--) { ?>
                                         <input id="commentRating<?php echo $rating; ?>" type="radio" name="rating"
                                             value="<?php echo $rating; ?>" <?php echo $selectedRating === $rating ? 'checked' : ''; ?>>
@@ -371,7 +371,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                         <div class="comment-author-line">
                                             <h3><?php echo $escape($comment->getAuthorUsername()); ?></h3>
                                        <?php if ($commentRating > 0) { // pas d'étoiles si l'auteur n'a pas noté ?>
-                                                <div class="comment-stars" aria-label="Note : <?php echo $commentRating; ?> sur 5">
+                                                <div class="comment-stars" role="img" aria-label="Note : <?php echo $commentRating; ?> sur 5">
                                                     <?php for ($star = 1; $star <= 5; $star++) { ?>
                                                         <img src="assets/img/recettes/icons/<?php echo $star <= $commentRating ? 'star-filled' : 'star-outline'; ?>.svg?v=<?= (int) $iconVersion ?>" alt="">
                                                     <?php } ?>
@@ -416,14 +416,32 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
         <section class="recipe-tags" aria-labelledby="recipeTagsTitle">
             <h2 id="recipeTagsTitle">Tags</h2>
             <div class="recipe-tags-band">
-                <div class="recipe-tags-list" role="list">
+                <ul class="recipe-tags-list">
                     <?php foreach ($visibleTags as $tag) { ?>
-                        <a class="recipe-tag" role="listitem"
-                            href="?pg=recettes&amp;recherche=<?php echo rawurlencode((string) $tag['name']); ?>">
-                            <?php echo $escape($tag['name']); ?>(<?php echo (int) $tag['count']; ?>)
-                        </a>
+                        <li>
+                            <a class="recipe-tag"
+                                href="?pg=recettes&amp;recherche=<?php echo rawurlencode((string) $tag['name']); ?>">
+                                <?php echo $escape($tag['name']); ?>(<?php echo (int) $tag['count']; ?>)
+                            </a>
+                        </li>
                     <?php } ?>
-                </div>
+                </ul>
+            </div>
+        </section>
+    <?php } ?>
+    <?php if ($otherRecipes !== []) { ?>
+        <section class="recipe-related" aria-labelledby="otherRecipesTitle">
+            <div class="container">
+                <h2 id="otherRecipesTitle">Découvrez aussi nos autres recettes</h2>
+                <ul class="recipe-related-list">
+                    <?php foreach ($otherRecipes as $otherRecipe) { ?>
+                        <li>
+                            <a href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $otherRecipe->getSlug()); ?>">
+                                <?php echo $escape($otherRecipe->getTitle()); ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
             </div>
         </section>
     <?php } ?>

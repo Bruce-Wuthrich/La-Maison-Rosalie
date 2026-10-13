@@ -21,7 +21,7 @@
 
 .error-code {
     margin: 0;
-    color: var(--color-gold);
+    color: var(--color-gold-text);
     font-size: clamp(3rem, 10vw, 5rem);
     font-weight: 600;
     line-height: 1;

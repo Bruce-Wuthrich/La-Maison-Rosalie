@@ -42,7 +42,7 @@ $recipeImagePath = static function ($recipe): string {
         </div>
     </section>
 
-    <section class="recipes-catalog">
+    <div class="recipes-catalog">
         <div class="container">
         <?php
             // filtre qui garde les autres critères actifs (catégorie, recherche, difficulté, temps).
@@ -71,7 +71,7 @@ $recipeImagePath = static function ($recipe): string {
                 <?php } ?>
             </nav>
 
-            <form class="recipe-extra-filters" action="" method="get" aria-label="Filtrer par difficulté et par temps">
+            <form class="recipe-extra-filters" method="get" aria-label="Filtrer par difficulté et par temps">
                 <input type="hidden" name="pg" value="recettes">
                 <?php if ($categorySlug !== '') { ?>
                     <input type="hidden" name="categorie" value="<?php echo htmlspecialchars($categorySlug, ENT_QUOTES, 'UTF-8'); ?>">
@@ -176,6 +176,6 @@ $recipeImagePath = static function ($recipe): string {
                 </div>
             <?php } ?>
         </div>
-    </section>
+    </div>
 </main>
 <?php require RACINE_PATH . '/view/inc/footer.php'; ?>

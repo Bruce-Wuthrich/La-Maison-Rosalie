@@ -25,9 +25,9 @@ $initialAuthPanel = ($registerFormData['form_name'] ?? '') === 'register' ? 'reg
             <header class="auth-modal-header">
                 <h2 id="authModalTitle">Se connecter</h2>
 
-                <div class="auth-role-tabs" role="tablist" aria-label="Type de connexion">
-                    <button class="is-active" type="button" role="tab" aria-selected="true" data-auth-role="user">Utilisateur</button>
-                    <button type="button" role="tab" aria-selected="false" data-auth-role="admin">Admin</button>
+                <div class="auth-role-tabs" role="group" aria-label="Type de connexion">
+                    <button class="is-active" type="button" aria-pressed="true" data-auth-role="user">Utilisateur</button>
+                    <button type="button" aria-pressed="false" data-auth-role="admin">Admin</button>
                 </div>
             </header>
 

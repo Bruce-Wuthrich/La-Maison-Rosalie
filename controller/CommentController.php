@@ -13,7 +13,7 @@ $slug = stringInput($_POST['slug'] ?? null);
 $redirect = recipeRedirect($slug) . '#comments';
 // Une suppression lancée depuis la page admin y revient (formulaire classique, sans js).
 if (stringInput($_POST['from'] ?? null) === 'admin') {
-    $redirect = '?pg=admin#avis';
+    $redirect = '?pg=admin&onglet=commentaires';
     }
     $action = stringInput($_GET['action'] ?? null);
 
