@@ -65,7 +65,7 @@ $activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '
                 <li class="nav-item dropdown">
                     <a href="?pg=recettes" class="nav-link dropdown-toggle<?= $isRecipesPage ? ' is-active' : '' ?>"
                         data-bs-toggle="dropdown" aria-expanded="false"
-                        <?= $isRecipesPage ? 'aria-current="page"' : '' ?>>Recettes</a>
+                        <?= $isRecipesPage ? 'aria-current="page"' : '' ?>><span>Recettes</span></a>
                     <ul class="dropdown-menu">
                         <li><a href="?pg=recettes" class="dropdown-item<?= $page === 'recettes' ? ' is-active' : '' ?>"
                                 <?= $page === 'recettes' ? 'aria-current="page"' : '' ?>>Toutes les recettes</a></li>
