@@ -105,6 +105,7 @@ document.querySelectorAll('[data-auto-submit]').forEach((select) => {
     const authorRating = Number(comment.authorRating) || 0;
     if (authorRating > 0) {
       const stars = element('div', 'comment-stars');
+      stars.setAttribute('role', 'img');
       stars.setAttribute('aria-label', `Note : ${authorRating} sur 5`);
       for (let star = 1; star <= 5; star += 1) {
         const image = document.createElement('img');

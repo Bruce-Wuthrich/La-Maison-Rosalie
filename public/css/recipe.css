@@ -118,7 +118,7 @@
 .recipe-favorite:hover,
 .recipe-favorite:focus-visible,
 .recipe-favorite.is-active {
-    color: var(--color-gold);
+    color: var(--color-gold-text);
     box-shadow: 0 0.45rem 1.15rem rgba(90, 57, 43, 0.13);
 }
 
@@ -155,7 +155,7 @@
 
 .recipe-breadcrumb a:hover,
 .recipe-breadcrumb a:focus {
-    color: var(--color-gold);
+    color: var(--color-gold-text);
     text-decoration: underline;
 }
 
@@ -189,7 +189,7 @@
 
 .recipe-rating a:hover,
 .recipe-rating a:focus {
-    color: var(--color-gold);
+    color: var(--color-gold-text);
     text-decoration: underline;
 }
 
@@ -245,7 +245,7 @@
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--color-gold);
+    color: var(--color-gold-text);
     cursor: pointer;
 }
 
@@ -537,7 +537,7 @@
     padding: 0.75rem 1.2rem;
     border: 0;
     border-radius: 0.75rem;
-    background-color: #a87400;
+    background-color: var(--color-gold-text);
     color: var(--color-white);
     font-weight: 600;
     cursor: pointer;
@@ -908,17 +908,19 @@
     display: flex;
     align-items: center;
     padding: 1.2rem 1.5rem 1.35rem;
-    background-color: #a97200;
+    background-color: var(--color-gold-text);
 }
 
 .recipe-tags-list {
     width: min(1220px, 100%);
     margin: 0 auto;
+    padding: 0;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 1rem 3rem;
+    list-style: none;
 }
 
 .recipe-tag {

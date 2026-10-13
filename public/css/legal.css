@@ -1,0 +1,74 @@
+/* Page des mentions légales */
+
+.legal-page {
+    background-color: var(--color-white);
+    color: var(--color-brown);
+}
+
+.legal-header {
+    padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3.5rem);
+    background-color: var(--color-white);
+    text-align: center;
+}
+
+.legal-eyebrow {
+    margin-bottom: 0.6rem;
+    color: var(--color-gold-text);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.legal-header h1 {
+    margin-bottom: 1rem;
+    color: var(--color-brown);
+    font-family: Georgia, serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.legal-header p:last-child {
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+.legal-content {
+    width: min(900px, calc(100% - 2rem));
+    display: grid;
+    gap: 1.5rem;
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+}
+
+.legal-content section {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border-left: 4px solid var(--color-gold-text);
+    background-color: var(--color-white);
+}
+
+.legal-content h2 {
+    margin-bottom: 0.75rem;
+    color: var(--color-gold-text);
+    font-family: Georgia, serif;
+    font-size: clamp(1.45rem, 3vw, 2rem);
+}
+
+.legal-content p {
+    margin: 0;
+    line-height: 1.75;
+}
+
+.legal-content a {
+    color: var(--color-gold-text);
+    font-weight: 600;
+    text-underline-offset: 0.2em;
+}
+
+.legal-content a:hover,
+.legal-content a:focus-visible {
+    color: var(--color-brown);
+}
+
+.legal-content a:focus-visible {
+    outline: 2px solid var(--color-brown);
+    outline-offset: 3px;
+}

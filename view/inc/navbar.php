@@ -14,7 +14,7 @@ $activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '
             </a>
 
             <?php $navbarSearch = stringInput($_GET['recherche'] ?? null); ?>
-            <form class="navbar-search<?= $navbarSearch !== '' ? ' is-open' : '' ?>" action="" method="get"
+            <form class="navbar-search<?= $navbarSearch !== '' ? ' is-open' : '' ?>" method="get"
                 role="search" data-navbar-search>
                 <input type="hidden" name="pg" value="recettes">
                 <button type="button" class="navbar-search-toggle" data-search-toggle
