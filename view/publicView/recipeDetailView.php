@@ -421,6 +421,22 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
             </div>
         </section>
     <?php } ?>
+    <?php if ($otherRecipes !== []) { ?>
+        <section class="recipe-related" aria-labelledby="otherRecipesTitle">
+            <div class="container">
+                <h2 id="otherRecipesTitle">Découvrez aussi nos autres recettes</h2>
+                <ul class="recipe-related-list">
+                    <?php foreach ($otherRecipes as $otherRecipe) { ?>
+                        <li>
+                            <a href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $otherRecipe->getSlug()); ?>">
+                                <?php echo $escape($otherRecipe->getTitle()); ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </section>
+    <?php } ?>
 </main>
 
 <?php require RACINE_PATH . '/view/inc/footer.php'; ?>
