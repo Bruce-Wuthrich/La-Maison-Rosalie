@@ -128,7 +128,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                             <div class="recipe-rating-stars" aria-hidden="true">
                                 <?php for ($star = 1; $star <= 5; $star++) { ?>
                                     <img
-                                        src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg"
+                                        src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg?v=<?= (int) $iconVersion ?>"
                                         alt=""
                                     >
                                 <?php } ?>
@@ -150,41 +150,47 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
 
                         <ul class="recipe-meta">
                             <li>
-                                <img src="assets/img/recettes/icons/servings.svg" alt="" aria-hidden="true">
+                                <img src="assets/img/recettes/icons/servings.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span><?php echo (int) $recipe->getServings(); ?> pers.</span>
                             </li>
 
                             <li>
-                                <img src="assets/img/recettes/icons/difficulty.svg" alt="" aria-hidden="true">
+                                <?php $difficultyIcon = match ($recipe->getDifficulty()) {
+                                    'easy' => 'difficulty-easy',
+                                    'medium' => 'difficulty-medium',
+                                    'hard' => 'difficulty-hard',
+                                    default => 'difficulty',
+                                }; ?>
+                                <img src="assets/img/recettes/icons/<?php echo $difficultyIcon; ?>.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span><?php echo $escape($recipe->getDifficultyLabel()); ?></span>
                             </li>
 
                                                         <li>
-                                <img src="assets/img/recettes/icons/time.svg" alt="" aria-hidden="true">
+                                <img src="assets/img/recettes/icons/time.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span>Préparation <?php echo (int) $recipe->getPrepTimeMinutes(); ?> min</span>
                             </li>
 
                             <li>
-                                <img src="assets/img/recettes/icons/time.svg" alt="" aria-hidden="true">
+                                <img src="assets/img/recettes/icons/time.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span><?php echo (int) $recipe->getCookTimeMinutes() > 0
                                     ? 'Cuisson ' . (int) $recipe->getCookTimeMinutes() . ' min'
                                     : 'Sans cuisson'; ?></span>
                             </li>
 
                             <li>
-                                <img src="assets/img/recettes/icons/time.svg" alt="" aria-hidden="true">
+                                <img src="assets/img/recettes/icons/time.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span>Total <?php echo $recipe->getTotalTime(); ?> min</span>
                             </li>
                         </ul>
 
                         <div class="recipe-actions">
                             <button class="recipe-action" type="button" id="printRecipe">
-                                <img src="assets/img/recettes/icons/print.svg" alt="" aria-hidden="true">
+                                <img src="assets/img/recettes/icons/print.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span>Imprimer</span>
                             </button>
 
                             <button class="recipe-action" type="button" id="shareRecipe">
-                                <img src="assets/img/recettes/icons/share.svg" alt="" aria-hidden="true">
+                                <img src="assets/img/recettes/icons/share.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                                 <span>Partager</span>
                             </button>
 
@@ -254,7 +260,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
         data-author-id="<?php echo (int) $recipe->getAuthorId(); ?>">
         <div class="container">
             <div class="comments-heading">
-                <img src="assets/img/recettes/icons/comment.svg" alt="" aria-hidden="true">
+                <img src="assets/img/recettes/icons/comment.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                 <h2>Commentaires</h2>
             </div>
 
@@ -330,7 +336,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                     <header class="comments-summary">
                         <div class="comments-average-stars" aria-hidden="true">
                             <?php for ($star = 1; $star <= 5; $star++) { ?>
-                                <img src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
+                                <img src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg?v=<?= (int) $iconVersion ?>" alt="">
                             <?php } ?>
                         </div>
                         <p data-comment-count><?php echo $commentCount; ?> commentaire<?php echo $commentCount === 1 ? '' : 's'; ?></p>
@@ -367,7 +373,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                        <?php if ($commentRating > 0) { // pas d'étoiles si l'auteur n'a pas noté ?>
                                                 <div class="comment-stars" aria-label="Note : <?php echo $commentRating; ?> sur 5">
                                                     <?php for ($star = 1; $star <= 5; $star++) { ?>
-                                                        <img src="assets/img/recettes/icons/<?php echo $star <= $commentRating ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
+                                                        <img src="assets/img/recettes/icons/<?php echo $star <= $commentRating ? 'star-filled' : 'star-outline'; ?>.svg?v=<?= (int) $iconVersion ?>" alt="">
                                                     <?php } ?>
                                                 </div>
                                             <?php } ?>

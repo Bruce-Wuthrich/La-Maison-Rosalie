@@ -14,7 +14,7 @@ $recipeImagePath = static function ($recipe): string {
 ?>
 <main class="home-main">
     <div class="hero-top-marker" aria-hidden="true">
-        <img src="assets/img/logo/picto.svg" alt="">
+        <img src="assets/img/logo/picto.svg?v=<?= (int) $iconVersion ?>" alt="">
     </div>
 
     <section class="hero-home">
@@ -25,12 +25,16 @@ $recipeImagePath = static function ($recipe): string {
                 <img class="hero-sunburst" src="assets/img/logo/sunburst-home.png" alt="" aria-hidden="true">
             </button>
 
-            <img class="hero-logo" src="assets/img/logo/logo.svg" alt="Maison Rosalie">
+            <img class="hero-logo" src="assets/img/logo/logo.svg?v=<?= (int) $iconVersion ?>" alt="Maison Rosalie">
 
-            <a class="hero-category-current is-active" href="?pg=recettes" aria-live="polite"
-                aria-expanded="false" aria-controls="heroCategoryPanel">
-                Pâtisserie
-            </a>
+            <div class="hero-category-stack" aria-label="Catégories de recettes">
+                <button class="hero-category-preview" type="button" data-category-neighbor="previous"
+                    aria-label="Afficher la catégorie Mousses">Mousses</button>
+                <a class="hero-category-current is-active" href="?pg=recettes" aria-live="off"
+                    aria-expanded="false" aria-controls="heroCategoryPanel">Pâtisserie</a>
+                <button class="hero-category-preview" type="button" data-category-neighbor="next"
+                    aria-label="Afficher la catégorie Tartes">Tartes</button>
+            </div>
         </div>
 
         <div class="hero-pagination" aria-label="Choisir une catégorie">
@@ -40,6 +44,9 @@ $recipeImagePath = static function ($recipe): string {
             <button type="button" data-category-index="3" aria-label="Afficher la catégorie Mousses"></button>
             <button class="is-active" type="button" data-category-index="4" aria-label="Afficher la catégorie Pâtisserie" aria-current="true"></button>
         </div>
+
+        <button class="hero-rotation-toggle" type="button" hidden
+            aria-label="Mettre en pause la rotation automatique" aria-pressed="false">Pause</button>
 
         <button class="hero-category-backdrop" type="button"
             aria-label="Fermer la présentation de la catégorie"></button>

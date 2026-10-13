@@ -10,7 +10,7 @@ $activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '
         <div class="navbar-actions navbar-actions-left">
             <a class="navbar-icon-link<?= $page === 'accueil' ? ' is-active' : '' ?>" href="?pg=accueil"
                 aria-label="Accueil" <?= $page === 'accueil' ? 'aria-current="page"' : '' ?>>
-                <img class="navbar-icon" src="assets/img/interface/home.svg" alt="Accueil">
+                <img class="navbar-icon" src="assets/img/interface/home.svg?v=<?= (int) $iconVersion ?>" alt="Accueil">
             </a>
 
             <?php $navbarSearch = stringInput($_GET['recherche'] ?? null); ?>
@@ -20,7 +20,7 @@ $activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '
                 <button type="button" class="navbar-search-toggle" data-search-toggle
                     aria-label="Ouvrir la recherche" aria-expanded="<?= $navbarSearch !== '' ? 'true' : 'false' ?>"
                     aria-controls="navbarSearchInput">
-                    <img class="navbar-icon" src="assets/img/interface/search.svg" alt="">
+                    <img class="navbar-icon" src="assets/img/interface/search.svg?v=<?= (int) $iconVersion ?>" alt="">
                 </button>
                 <input id="navbarSearchInput" class="navbar-search-input" type="search" name="recherche"
                     value="<?= htmlspecialchars($navbarSearch, ENT_QUOTES, 'UTF-8') ?>" placeholder="Chercher..."
@@ -30,7 +30,7 @@ $activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '
 
         <?php if (!$isHomeNavbar): ?>
             <a href="?pg=accueil" class="navbar-brand">
-                <img src="assets/img/logo/picto.svg" alt="Maison Rosalie" class="navbar-logo">
+                <img src="assets/img/logo/picto.svg?v=<?= (int) $iconVersion ?>" alt="Maison Rosalie" class="navbar-logo">
             </a>
         <?php endif; ?>
 
@@ -38,7 +38,7 @@ $activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '
 
             <?php // Les deux états sont toujours présents : le JavaScript bascule de l'un à l'autre sans recharger la page ?>
             <span class="navbar-user" data-auth-member<?= $currentUser === null ? ' hidden' : '' ?>>
-                <img class="navbar-icon" src="assets/img/interface/account.svg" alt="" aria-hidden="true">
+                <img class="navbar-icon" src="assets/img/interface/account.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
                 <span class="navbar-user-name" data-auth-username><?= htmlspecialchars($currentUser['username'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
             </span>
 
@@ -49,14 +49,14 @@ $activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '
 
             <button type="button" class="navbar-icon-button navbar-account-button" data-auth-open data-auth-guest<?= $currentUser !== null ? ' hidden' : '' ?>
                 aria-label="Se connecter" aria-haspopup="dialog" aria-controls="authModal">
-                <img class="navbar-icon" src="assets/img/interface/account.svg" alt="Compte">
+                <img class="navbar-icon" src="assets/img/interface/account.svg?v=<?= (int) $iconVersion ?>" alt="Compte">
                 <span class="navbar-icon-tooltip" aria-hidden="true">Login</span>
             </button>
 
             <button class="navbar-toggler navbar-icon-button" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navigationPrincipale" aria-controls="navigationPrincipale" aria-expanded="false"
                 aria-label="Ouvrir le menu">
-                <img class="navbar-icon" src="assets/img/interface/menu.svg" alt="Ouvrir le menu">
+                <img class="navbar-icon" src="assets/img/interface/menu.svg?v=<?= (int) $iconVersion ?>" alt="Ouvrir le menu">
             </button>
 
         </div>

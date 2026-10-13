@@ -10,7 +10,7 @@
 
 .recipes-header h1 {
     margin-bottom: 0.75rem;
-    font-family: Georgia, serif;
+    font-family: var(--font-body);
     font-size: clamp(2.25rem, 5vw, 4rem);
     color: var(--color-brown);
 }

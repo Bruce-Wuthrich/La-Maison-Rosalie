@@ -48,6 +48,12 @@ if (heroWheel) {
   ];
   const heroHome = document.querySelector(".hero-home");
   const categoryLink = document.querySelector(".hero-category-current");
+  const previousCategory = document.querySelector(
+    '[data-category-neighbor="previous"]',
+  );
+  const nextCategory = document.querySelector(
+    '[data-category-neighbor="next"]',
+  );
   const categoryButtons = document.querySelectorAll(".hero-pagination button");
   const categoryBackdrop = document.querySelector(".hero-category-backdrop");
   const categoryPanel = document.querySelector(".hero-category-panel");
@@ -62,6 +68,41 @@ if (heroWheel) {
   const categoryPanelLink = document.querySelector(".hero-category-panel-link");
   let categoryIndex = 4;
   let nextCategoryIndex = categoryIndex;
+  const rotationToggle = document.querySelector(".hero-rotation-toggle");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let autoRotationTimer;
+  let rotationFallback;
+  let userPaused = false;
+  let heroVisible = false;
+
+  // Un délai neuf après chaque interaction évite une rotation inattendue.
+  const scheduleAutoRotation = () => {
+    clearTimeout(autoRotationTimer);
+    const activeElement = document.activeElement;
+    // Un clic souris ne doit pas laisser l'automatisme bloqué par le focus.
+    // La navigation au clavier garde une pause pour utiliser les commandes.
+    const controlsFocused =
+      heroHome.contains(activeElement) &&
+      activeElement !== rotationToggle &&
+      activeElement.matches(":focus-visible");
+    if (
+      userPaused ||
+      reducedMotion.matches ||
+      document.hidden ||
+      !heroVisible ||
+      heroWheel.disabled ||
+      controlsFocused ||
+      heroHome.classList.contains("is-detail-open") ||
+      document.body.matches(".menu-open, .auth-open, .search-open")
+    ) {
+      return;
+    }
+    autoRotationTimer = setTimeout(() => {
+      rotateToCategory((categoryIndex + 1) % categories.length, {
+        automatic: true,
+      });
+    }, 4000);
+  };
 
   const showActiveIndicator = (index) => {
     categoryButtons.forEach((button, buttonIndex) => {
@@ -98,6 +139,7 @@ if (heroWheel) {
     categoryPanel.setAttribute("aria-hidden", String(!isOpen));
     categoryPanel.inert = !isOpen;
     categoryLink.setAttribute("aria-expanded", String(isOpen));
+    scheduleAutoRotation();
 
     if (isOpen) {
       updateCategoryPanel(categories[categoryIndex]);
@@ -115,11 +157,28 @@ if (heroWheel) {
   };
 
   const showCategory = (index) => {
+    clearTimeout(rotationFallback);
+    heroHome.classList.remove("is-rotating");
     categoryIndex = index;
     const currentCategory = categories[categoryIndex];
 
     categoryLink.textContent = currentCategory.name;
     categoryLink.href = currentCategory.href;
+    const previous =
+      categories[(categoryIndex - 1 + categories.length) % categories.length];
+    const next = categories[(categoryIndex + 1) % categories.length];
+    previousCategory.textContent = previous.name;
+    previousCategory.setAttribute(
+      "aria-label",
+      `Afficher la catégorie ${previous.name}`,
+    );
+    nextCategory.textContent = next.name;
+    nextCategory.setAttribute(
+      "aria-label",
+      `Afficher la catégorie ${next.name}`,
+    );
+    previousCategory.disabled = false;
+    nextCategory.disabled = false;
     updateCategoryPanel(currentCategory);
 
     showActiveIndicator(categoryIndex);
@@ -127,22 +186,43 @@ if (heroWheel) {
     void categoryLink.offsetWidth;
     categoryLink.classList.add("is-active");
     heroWheel.disabled = false;
+    categoryButtons.forEach((button) => {
+      button.disabled = false;
+    });
+    scheduleAutoRotation();
   };
 
-  const rotateToCategory = (index) => {
+  const rotateToCategory = (index, { automatic = false } = {}) => {
     if (heroWheel.disabled || index === categoryIndex) {
       return;
     }
 
+    clearTimeout(autoRotationTimer);
+    heroHome.classList.add("is-rotating");
+    categoryLink.setAttribute("aria-live", automatic ? "off" : "polite");
+    categoryButtons.forEach((button) => {
+      button.disabled = true;
+    });
     heroWheel.disabled = true;
+    previousCategory.disabled = true;
+    nextCategory.disabled = true;
     categoryLink.classList.remove("is-active");
     nextCategoryIndex = index;
-    showActiveIndicator(nextCategoryIndex);
 
-    const steps =
-      (index - categoryIndex + categories.length) % categories.length;
-    rotation += 30 * (steps || 1);
+    // Le voisin du bas remonte vers le rayon horizontal ; celui du haut descend.
+    let steps = (index - categoryIndex + categories.length) % categories.length;
+    if (steps > categories.length / 2) steps -= categories.length;
+    rotation -= 30 * steps;
     heroWheel.style.transform = `rotate(${rotation}deg)`;
+    if (reducedMotion.matches) {
+      showCategory(nextCategoryIndex);
+    } else {
+      // Réactive aussi les commandes si le navigateur interrompt la transition.
+      rotationFallback = setTimeout(
+        () => showCategory(nextCategoryIndex),
+        2600,
+      );
+    }
   };
 
   categoryLink.addEventListener("click", (event) => {
@@ -151,6 +231,7 @@ if (heroWheel) {
     }
 
     event.preventDefault();
+    if (heroWheel.disabled) return;
     const isOpen = heroHome.classList.contains("is-detail-open");
     setCategoryPanelOpen(!isOpen, { returnFocus: isOpen });
   });
@@ -176,6 +257,17 @@ if (heroWheel) {
     }
   }
 
+  previousCategory.addEventListener("click", () => {
+    rotateToCategory(
+      (categoryIndex - 1 + categories.length) % categories.length,
+    );
+  });
+  nextCategory.addEventListener("click", () => {
+    rotateToCategory((categoryIndex + 1) % categories.length);
+  });
+
+  showCategory(categoryIndex);
+
   heroWheel.addEventListener("click", () => {
     rotateToCategory((categoryIndex + 1) % categories.length);
   });
@@ -187,9 +279,58 @@ if (heroWheel) {
   });
 
   heroWheel.addEventListener("transitionend", (event) => {
-    if (event.propertyName === "transform") {
+    if (
+      event.target === heroWheel &&
+      event.propertyName === "transform" &&
+      heroWheel.disabled
+    ) {
       showCategory(nextCategoryIndex);
     }
+  });
+
+  rotationToggle.hidden = reducedMotion.matches;
+  rotationToggle.addEventListener("click", () => {
+    userPaused = !userPaused;
+    rotationToggle.textContent = userPaused ? "Reprendre" : "Pause";
+    rotationToggle.setAttribute("aria-pressed", String(userPaused));
+    rotationToggle.setAttribute(
+      "aria-label",
+      userPaused
+        ? "Reprendre la rotation automatique"
+        : "Mettre en pause la rotation automatique",
+    );
+    scheduleAutoRotation();
+  });
+
+  heroHome.addEventListener("focusin", scheduleAutoRotation);
+  heroHome.addEventListener("focusout", () =>
+    setTimeout(scheduleAutoRotation, 0),
+  );
+  document.addEventListener("visibilitychange", scheduleAutoRotation);
+  reducedMotion.addEventListener("change", () => {
+    rotationToggle.hidden = reducedMotion.matches;
+    if (reducedMotion.matches && heroWheel.disabled)
+      showCategory(nextCategoryIndex);
+    scheduleAutoRotation();
+  });
+  new IntersectionObserver(
+    ([entry]) => {
+      heroVisible = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+      scheduleAutoRotation();
+    },
+    { threshold: [0, 0.2] },
+  ).observe(heroHome);
+  new MutationObserver(scheduleAutoRotation).observe(document.body, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  window.addEventListener("pagehide", () => {
+    clearTimeout(autoRotationTimer);
+    clearTimeout(rotationFallback);
+  });
+  window.addEventListener("pageshow", () => {
+    if (heroWheel.disabled) showCategory(nextCategoryIndex);
+    scheduleAutoRotation();
   });
 }
 

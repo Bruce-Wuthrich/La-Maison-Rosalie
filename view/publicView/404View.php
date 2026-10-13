@@ -9,7 +9,7 @@ $stylePage = 'error';
     <section class="hero-home error-hero" aria-labelledby="errorTitle">
         <div class="hero-emblem">
             <img class="hero-sunburst" src="assets/img/logo/sunburst-home.png" alt="" aria-hidden="true">
-            <img class="hero-logo" src="assets/img/logo/logo.svg" alt="Maison Rosalie">
+            <img class="hero-logo" src="assets/img/logo/logo.svg?v=<?= (int) $iconVersion ?>" alt="Maison Rosalie">
         </div>
 
         <div class="error-message">

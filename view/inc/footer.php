@@ -6,22 +6,22 @@
             <div class="footer-social" aria-label="Réseaux sociaux de Maison Rosalie">
                 <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer"
                     aria-label="YouTube de Maison Rosalie (nouvel onglet)">
-                    <img src="assets/img/social/youtube.svg" alt="YouTube">
+                    <img src="assets/img/social/youtube.svg?v=<?= (int) $iconVersion ?>" alt="YouTube">
                 </a>
                 <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"
                     aria-label="Facebook de Maison Rosalie (nouvel onglet)">
-                    <img src="assets/img/social/facebook.svg" alt="Facebook">
+                    <img src="assets/img/social/facebook.svg?v=<?= (int) $iconVersion ?>" alt="Facebook">
                 </a>
                 <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"
                     aria-label="Instagram de Maison Rosalie (nouvel onglet)">
-                    <img src="assets/img/social/instagram.svg" alt="Instagram">
+                    <img src="assets/img/social/instagram.svg?v=<?= (int) $iconVersion ?>" alt="Instagram">
                 </a>
             </div>
 
             <p class="footer-copyright">© 2026 Maison Rosalie – Tous droits réservés</p>
         </div>
 
-        <img class="footer-emblem" src="assets/img/logo/picto.svg" alt="" aria-hidden="true">
+        <img class="footer-emblem" src="assets/img/logo/picto.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
 
         <div class="footer-actions">
             <a class="footer-contact-link" href="?pg=contact">
