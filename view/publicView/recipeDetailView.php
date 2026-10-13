@@ -143,7 +143,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 <?php } ?>
                             </p>
 
-                            <a href="#comments">
+                            <a href="#comments" data-comment-count>
                                 <?php echo $commentCount; ?> commentaire<?php echo $commentCount === 1 ? '' : 's'; ?>
                             </a>
                         </div>
@@ -243,7 +243,13 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
         </div>
     </section>
 
-    <section class="recipe-comments" id="comments">
+    <section class="recipe-comments" id="comments" data-comments-section
+        data-slug="<?php echo $escape($recipe->getSlug()); ?>"
+        data-comment-page="<?php echo (int) $commentPage; ?>"
+        data-comment-count="<?php echo (int) $commentCount; ?>"
+        data-comment-sort="<?php echo $escape($commentSort); ?>"
+        data-user-id="<?php echo (int) ($connectedUser?->getId() ?? 0); ?>"
+        data-author-id="<?php echo (int) $recipe->getAuthorId(); ?>">
         <div class="container">
             <div class="comments-heading">
                 <img src="assets/img/recettes/icons/comment.svg" alt="" aria-hidden="true">
@@ -256,16 +262,17 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                 </p>
             <?php } ?>
 
+            <p class="comment-action-status" data-comment-status role="status" aria-live="polite"></p>
+
             <div class="comments-layout">
                 <aside class="comment-form-panel" aria-labelledby="commentFormTitle">
                     <h3 id="commentFormTitle">Partagez votre expérience</h3>
 
-                    <?php if ($connectedUser !== null) { ?>
                         <?php
                         $selectedRating = (int) ($commentFormData['rating'] ?? $recipe->getUserRating() ?? 0);
                         $oldMessage = (string) ($commentFormData['message'] ?? '');
                         ?>
-                        <form class="comment-form" action="?pg=commentaire&amp;action=add" method="post">
+                        <form class="comment-form" action="?pg=commentaire&amp;action=add" method="post" data-auth-member<?php echo $connectedUser === null ? ' hidden' : ''; ?>>
                             <input type="hidden" name="csrf_token" value="<?php echo $escape($csrfToken); ?>">
                             <input type="hidden" name="recipe_id" value="<?php echo (int) $recipe->getId(); ?>">
                             <input type="hidden" name="slug" value="<?php echo $escape($recipe->getSlug()); ?>">
@@ -273,11 +280,11 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                             <div class="comment-identity">
                                 <label>
                                     <span class="visually-hidden">Votre nom</span>
-                                    <input type="text" value="<?php echo $escape($connectedUser->getUsername()); ?>" readonly>
+                                    <input type="text" data-comment-username value="<?php echo $escape($connectedUser?->getUsername()); ?>" readonly>
                                 </label>
                                 <label>
                                     <span class="visually-hidden">Votre e-mail</span>
-                                    <input type="email" value="<?php echo $escape($connectedUser->getEmail()); ?>" readonly>
+                                    <input type="email" data-comment-email value="<?php echo $escape($connectedUser?->getEmail()); ?>" readonly>
                                 </label>
                             </div>
 
@@ -295,16 +302,19 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 </div>
                             </fieldset>
 
+                            <label class="comment-message-label" for="commentSubject">Sujet (facultatif)</label>
+                            <input class="comment-subject-input" id="commentSubject" name="subject" type="text" maxlength="120"
+                                value="<?php echo $escape($commentFormData['subject'] ?? ''); ?>">
+
                             <label class="comment-message-label" for="commentMessage">Votre commentaire</label>
                             <textarea id="commentMessage" name="message" minlength="3" maxlength="500" required
                                 placeholder="Dites-nous ce que vous pensez de cette recette."><?php echo $escape($oldMessage); ?></textarea>
                             <small class="comment-character-count" data-comment-counter>0/500 caractères</small>
 
                             <button class="comment-submit" type="submit">Publier le commentaire</button>
-                            <p class="comment-moderation-note">Votre commentaire sera vérifié avant sa publication</p>
+                            <p class="comment-moderation-note">Votre avis est publié après validation des champs. Un avis existant est mis à jour.</p>
                         </form>
-                    <?php } else { ?>
-                        <div class="comment-login-panel">
+                        <div class="comment-login-panel" data-auth-guest<?php echo $connectedUser !== null ? ' hidden' : ''; ?>>
                             <div class="comment-identity" aria-hidden="true">
                                 <input type="text" placeholder="Votre nom" disabled>
                                 <input type="email" placeholder="Votre e-mail" disabled>
@@ -312,7 +322,6 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                             <p>Connectez-vous pour noter cette recette et partager votre commentaire.</p>
                             <button class="comment-submit" type="button" data-auth-open>Se connecter pour commenter</button>
                         </div>
-                    <?php } ?>
                 </aside>
 
                 <div class="comments-feed">
@@ -322,7 +331,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 <img src="assets/img/recettes/icons/<?php echo $star <= $filledStars ? 'star-filled' : 'star-outline'; ?>.svg" alt="">
                             <?php } ?>
                         </div>
-                        <p>(<?php echo $commentCount; ?> commentaire<?php echo $commentCount === 1 ? '' : 's'; ?>)</p>
+                        <p data-comment-count><?php echo $commentCount; ?> commentaire<?php echo $commentCount === 1 ? '' : 's'; ?></p>
                         <details class="comment-sort">
                             <summary aria-label="Trier les commentaires" title="Trier les commentaires">
                                 <span></span><span></span><span></span>
@@ -339,9 +348,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                         </details>
                     </header>
 
-                    <?php if (empty($comments)) { ?>
-                        <p class="comments-empty">Soyez la première personne à partager son expérience.</p>
-                    <?php } else { ?>
+                        <p class="comments-empty"<?php echo !empty($comments) ? ' hidden' : ''; ?>>Soyez la première personne à partager son expérience.</p>
                         <div class="comments-list-panel<?php echo $commentPage > 1 ? ' is-expanded' : ''; ?>">
                             <?php foreach ($comments as $index => $comment) { ?>
                                 <?php
@@ -349,7 +356,7 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 $commentDate = strtotime((string) $comment->getCreatedAt());
                                 $isOwnComment = $connectedUser !== null && $comment->getAuthorId() === $connectedUser->getId();
                                 ?>
-                                <article class="recipe-comment<?php echo $index % 2 === 1 ? ' recipe-comment-reversed' : ''; ?>">
+                                <article class="recipe-comment<?php echo $index % 2 === 1 ? ' recipe-comment-reversed' : ''; ?>" data-comment-id="<?php echo (int) $comment->getId(); ?>">
                                     <div class="comment-avatar" aria-hidden="true"><span></span></div>
 
                                     <div class="comment-body">
@@ -367,7 +374,10 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                             </time>
                                         </div>
 
-                                        <p><?php echo nl2br($escape($comment->getMessage())); ?></p>
+                                        <?php if ($comment->getSubject() !== null) { ?>
+                                            <h4 class="comment-subject"><?php echo $escape($comment->getSubject()); ?></h4>
+                                        <?php } ?>
+                                        <p class="comment-message"><?php echo $escape($comment->getMessage()); ?></p>
 
                                         <div class="comment-footer-row">
                                             <?php if ($isOwnComment || ($connectedUser !== null && $connectedUser->isAdmin())) { ?>
@@ -383,15 +393,12 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 </article>
                             <?php } ?>
                         </div>
-                    <?php } ?>
 
-                    <?php if ($commentHasNext) { ?>
-                        <nav class="comment-pagination" aria-label="Pagination des commentaires">
+                        <nav class="comment-pagination" aria-label="Pagination des commentaires"<?php echo !$commentHasNext ? ' hidden' : ''; ?>>
                             <a class="comment-more" href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>&amp;comment_sort=<?php echo $commentSort; ?>&amp;comment_page=<?php echo $commentPage + 1; ?>#comments">
                                 Voir plus
                             </a>
                         </nav>
-                    <?php } ?>
                 </div>
             </div>
         </div>

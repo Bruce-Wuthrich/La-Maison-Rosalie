@@ -124,6 +124,7 @@ $controller = match ($page) {
     'contact'             => 'ContactController',
     'compte'              => 'AuthController',     // login/logout
     'noter'               => 'RatingController',
+    'commentaires'        => 'CommentListController', // lecture JSON publique par groupes de 10
     'commentaire'         => 'CommentController',  // com add/delete
     'admin'               => 'AdminController',   
     default               => null,
