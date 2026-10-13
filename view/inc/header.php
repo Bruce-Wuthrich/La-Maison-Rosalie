@@ -18,6 +18,20 @@
     if ($page === 'recette' && isset($recipe)) {
         $documentTitle = (string) $recipe->getTitle();
     }
+
+    // La vue peut préciser un style différent de la route (par exemple une recette introuvable).
+    $stylesheetPage = $stylePage ?? $page;
+    $pageStylesheets = match ($stylesheetPage) {
+        'accueil' => ['home.css'],
+        'recettes' => ['recipes.css'],
+        'recette' => ['recipe.css'],
+        'a-propos' => ['about.css'],
+        'contact' => ['contact.css'],
+        'admin' => ['recipes.css', 'recipe.css', 'admin.css'],
+        'error' => ['home.css', 'error.css'],
+        default => ['home.css', 'error.css'],
+    };
+    $stylesheets = array_merge(['base.css'], $pageStylesheets);
     ?>
     <title><?= htmlspecialchars($documentTitle . ' | Maison Rosalie', ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="icon" href="assets/img/logo/picto.svg" type="image/svg+xml">
@@ -26,7 +40,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <?php foreach ($stylesheets as $stylesheet): ?>
+        <link rel="stylesheet" href="css/<?= $stylesheet ?>?v=<?= filemtime(RACINE_PATH . '/public/css/' . $stylesheet) ?>">
+    <?php endforeach; ?>
 </head>
 
 <body id="top">

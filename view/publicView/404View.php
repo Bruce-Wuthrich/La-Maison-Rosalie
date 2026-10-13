@@ -1,5 +1,6 @@
 <?php
 $navbarHome = true;
+$stylePage = 'error';
 ?>
 <?php require RACINE_PATH . '/view/inc/header.php'; ?>
 <?php require RACINE_PATH . '/view/inc/navbar.php'; ?>

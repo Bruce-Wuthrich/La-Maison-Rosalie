@@ -1,0 +1,414 @@
+/* Page À propos */
+
+/******************************* Page À propos ***************************************/
+.about-page {
+    overflow-x: clip;
+    background-color: var(--color-white);
+    color: var(--color-gold-text);
+}
+
+.about-intro {
+    padding: clamp(2.7rem, 5vw, 4.8rem) 1.25rem clamp(4rem, 8vw, 7.5rem);
+    text-align: center;
+}
+
+.about-intro h1 {
+    margin: 0;
+    color: var(--color-gold-text);
+    font-size: clamp(2rem, 3.1vw, 3rem);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.about-intro img {
+    display: block;
+    width: min(240px, 56vw);
+    height: 40px;
+    margin: 0.55rem auto 0;
+    object-fit: contain;
+}
+
+.about-team {
+    width: min(1260px, calc(100% - 3rem));
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(290px, 0.9fr);
+    align-items: center;
+    gap: clamp(2.25rem, 5vw, 5rem);
+    padding-bottom: clamp(6rem, 10vw, 10rem);
+}
+
+.about-team-gallery {
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end;
+    gap: 0.65rem;
+}
+
+.about-team-member {
+    margin: 0;
+    text-align: center;
+    will-change: transform;
+}
+
+.about-team-select {
+    width: 100%;
+    display: block;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.about-team-select:focus-visible {
+    outline: 2px solid var(--color-gold-text);
+    outline-offset: 4px;
+}
+
+.about-team-member img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    transition: aspect-ratio 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.3s ease;
+}
+
+.about-team-member.is-active img {
+    aspect-ratio: 0.52;
+}
+
+.about-team-member:not(.is-active) .about-team-select:hover img,
+.about-team-member:not(.is-active) .about-team-select:focus-visible img {
+    transform: scale(1.035);
+    filter: brightness(0.92);
+}
+
+.about-team-member figcaption {
+    margin-top: 0.3rem;
+    font-family: Georgia, serif;
+    font-size: clamp(0.9rem, 1.25vw, 1.15rem);
+    line-height: 1.25;
+}
+
+.about-founder-copy {
+    max-width: 430px;
+    transition: opacity 0.2s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-founder-copy.is-changing {
+    opacity: 0;
+    transform: translateX(1.5rem);
+}
+
+.about-founder-copy h2,
+.about-story-copy h2 {
+    margin: 0;
+    color: var(--color-gold-text);
+    font-family: Georgia, serif;
+    font-size: clamp(1.8rem, 2.5vw, 2.7rem);
+    font-weight: 400;
+    line-height: 1.15;
+}
+
+.about-founder-role {
+    margin: 0.25rem 0 2rem;
+    color: rgba(151, 103, 0, 0.6);
+    font-size: 1.05rem;
+}
+
+.about-founder-copy>p:last-of-type {
+    margin: 0;
+    font-size: clamp(0.95rem, 1.35vw, 1.15rem);
+    line-height: 1.55;
+}
+
+.about-round-link {
+    width: 50px;
+    height: 50px;
+    margin-top: 3rem;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background-color: var(--color-gold-text);
+    color: var(--color-white);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease;
+}
+
+.about-round-link svg {
+    width: 38px;
+    height: 38px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.5;
+}
+
+.about-round-link:hover,
+.about-round-link:focus-visible {
+    background-color: var(--color-brown);
+    transform: translateX(0.45rem);
+}
+
+.about-story-sequence {
+    width: min(1334px, calc(100% - 3rem));
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.18fr);
+    align-items: start;
+    gap: clamp(3rem, 6vw, 7rem);
+    padding: clamp(2rem, 5vw, 4.5rem) 0 0;
+}
+
+.about-story-gallery {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.about-story-visual {
+    margin: 0;
+    overflow: hidden;
+}
+
+.about-story-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-story-visual:hover img {
+    transform: scale(1.025);
+}
+
+.about-story-copy {
+    position: sticky;
+    top: clamp(2rem, 7vh, 5rem);
+    max-width: 700px;
+    justify-self: end;
+    text-align: right;
+}
+
+.about-story-copy p {
+    margin: clamp(2.5rem, 5vw, 5rem) 0 0;
+    font-size: clamp(0.92rem, 1.3vw, 1.1rem);
+    line-height: 1.6;
+}
+
+.about-recipes {
+    width: min(1334px, calc(100% - 3rem));
+    margin: 2.5rem auto 0;
+    padding-bottom: 1.5rem;
+}
+
+.about-recipes>img {
+    display: block;
+    width: 100%;
+    height: clamp(250px, 24vw, 360px);
+    object-fit: cover;
+    object-position: center 44%;
+}
+
+.about-recipes-overlay {
+    min-height: clamp(250px, 24vw, 360px);
+    margin-top: clamp(-360px, -24vw, -250px);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+    background: rgba(21, 13, 9, 0.55);
+}
+
+.about-recipes-overlay p {
+    max-width: 850px;
+    margin: 0;
+    color: var(--color-white);
+    font-size: clamp(0.95rem, 1.35vw, 1.2rem);
+    line-height: 1.5;
+    text-align: right;
+}
+
+.about-tasting {
+    margin: 1.15rem 1rem 0;
+    color: var(--color-gold-text);
+    font-size: clamp(1.1rem, 1.8vw, 1.55rem);
+    text-align: right;
+}
+
+.about-page.is-reveal-ready [data-about-reveal] {
+    opacity: 0;
+    transform: translateY(2.5rem);
+    transition: opacity 0.75s ease, transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-page.is-reveal-ready .about-team-gallery,
+.about-page.is-reveal-ready .about-story-visual {
+    transform: translateX(-3.5rem);
+}
+
+.about-page.is-reveal-ready .about-founder-copy,
+.about-page.is-reveal-ready .about-story-copy {
+    transform: translateX(3.5rem);
+}
+
+.about-page.is-reveal-ready .about-recipes {
+    transform: none;
+}
+
+.about-page.is-reveal-ready [data-about-reveal].is-visible {
+    opacity: 1;
+    transform: translate(0);
+}
+
+.about-page.is-reveal-ready .about-founder-copy.is-visible.is-changing {
+    opacity: 0;
+    transform: translateX(1.5rem);
+}
+
+@media (max-width: 991.98px) {
+    .about-team {
+        grid-template-columns: 1fr;
+        min-height: 0;
+    }
+
+    .about-founder-copy {
+        max-width: 680px;
+        justify-self: center;
+        text-align: center;
+    }
+
+    .about-round-link {
+        margin-inline: auto;
+    }
+
+    .about-story-sequence {
+        grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+        gap: 2.5rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .about-intro {
+        padding-bottom: 3.5rem;
+    }
+
+    .about-team,
+    .about-story-sequence,
+    .about-recipes {
+        width: min(100% - 2rem, 620px);
+    }
+
+    .about-team {
+        gap: 3rem;
+        padding-bottom: 5rem;
+    }
+
+    .about-team-gallery {
+        gap: 0.35rem;
+    }
+
+    .about-team-member figcaption {
+        font-size: clamp(0.68rem, 3vw, 0.9rem);
+    }
+
+    .about-story-sequence {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        padding: 2.75rem 0 0;
+    }
+
+    .about-recipes {
+        margin-top: 2rem;
+    }
+
+    .about-story-gallery {
+        gap: 0.9rem;
+    }
+
+    .about-story-copy {
+        position: static;
+        order: -1;
+        justify-self: stretch;
+        text-align: center;
+    }
+
+    .about-story-copy p {
+        margin-top: 1.5rem;
+    }
+
+    .about-recipes>img,
+    .about-recipes-overlay {
+        height: 360px;
+        min-height: 360px;
+    }
+
+    .about-recipes-overlay {
+        margin-top: -360px;
+        justify-content: center;
+    }
+
+    .about-recipes-overlay p {
+        text-align: center;
+    }
+
+    .about-tasting {
+        margin-inline: 0;
+        text-align: center;
+    }
+
+    .about-page.is-reveal-ready .about-team-gallery,
+    .about-page.is-reveal-ready .about-founder-copy,
+    .about-page.is-reveal-ready .about-story-visual,
+    .about-page.is-reveal-ready .about-story-copy {
+        transform: translateY(2rem);
+    }
+}
+
+/* À propos : chiffres clés (FE-40) */
+.about-figures {
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.about-figures h2 {
+    margin-bottom: 2rem;
+    font-family: Georgia, serif;
+    color: var(--color-brown);
+}
+
+.about-figures-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 2rem;
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+.about-figures-list strong {
+    display: block;
+    font-family: Georgia, serif;
+    font-size: 2.5rem;
+    color: var(--color-brown);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about-round-link,
+    .about-team-member img,
+    .about-founder-copy,
+    .about-story-visual img {
+        transition-duration: 0.01ms;
+        transition-delay: 0s;
+    }
+}
