@@ -45,12 +45,18 @@
 }
 
 .recipe-category {
-    display: none;
+    margin: 0 0 0.75rem;
+    color: var(--color-gold-text);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
 }
 
 .recipe-introduction h1 {
     max-width: 500px;
-    margin: 0 auto 1.8rem;
+    margin: 0 auto 1rem;
     color: var(--color-gold-text);
     font-family: inherit;
     font-size: clamp(2.6rem, 3.4vw, 3.25rem);
@@ -60,7 +66,12 @@
 }
 
 .recipe-description {
-    display: none;
+    max-width: 500px;
+    margin: 0 auto 1.8rem;
+    color: var(--color-brown);
+    font-size: clamp(1rem, 1.5vw, 1.1rem);
+    line-height: 1.65;
+    overflow-wrap: anywhere;
 }
 
 
