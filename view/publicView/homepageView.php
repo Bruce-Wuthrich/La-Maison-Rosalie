@@ -83,10 +83,8 @@ $recipeImagePath = static function ($recipe): string {
                     loading="lazy">
 
                 <p class="about-home-copy">
-                    Sorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum,
-                    ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-                    inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis. Ut commodo
-                    efficitur neque.
+                    Depuis 1987, la famille Moreau perpétue la tradition des chocolatiers artisanaux belges.
+                    Chaque recette est transmise de génération en génération avec amour et savoir-faire.
                 </p>
 
                 <img
@@ -97,7 +95,7 @@ $recipeImagePath = static function ($recipe): string {
 
                 <div class="about-home-more">
                     <a class="about-home-link" href="?pg=a-propos">
-                        <span>À propos</span>
+                        <span>Notre histoire</span>
                         <span aria-hidden="true">⟶</span>
                     </a>
 

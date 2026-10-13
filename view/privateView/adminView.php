@@ -48,18 +48,23 @@ $newMessageCount = count(array_filter($contactMessages, static fn($message) => $
                 <?php else: ?>
                     <div class="admin-list">
                         <?php foreach ($adminComments as $comment): ?>
-                            <?php $commentRating = $comment->getAuthorRating() ?? 0; ?>
-                            <article class="recipe-comment">
+                            <?php
+                            $commentRating = $comment->getAuthorRating() ?? 0;
+                            $isHidden = $comment->getPublicationStatus() === 'hidden';
+                            ?>
+                            <article class="recipe-comment<?= $isHidden ? ' admin-hidden' : '' ?>">
                                 <div class="comment-avatar" aria-hidden="true"><span></span></div>
 
                                 <div class="comment-body">
                                     <div class="comment-author-line">
                                         <h3><?= $escape($comment->getAuthorUsername()) ?></h3>
+                                        <?php if ($commentRating > 0): ?>
                                         <div class="comment-stars" aria-label="Note : <?= $commentRating ?> sur 5">
                                             <?php for ($star = 1; $star <= 5; $star++): ?>
                                                 <img src="assets/img/recettes/icons/<?= $star <= $commentRating ? 'star-filled' : 'star-outline' ?>.svg" alt="">
                                             <?php endfor; ?>
                                         </div>
+                                        <?php endif; ?>
                                         <time datetime="<?= $escape($comment->getCreatedAt()) ?>"><?= $formatDate($comment->getCreatedAt()) ?></time>
                                     </div>
 
@@ -71,11 +76,19 @@ $newMessageCount = count(array_filter($contactMessages, static fn($message) => $
                                         <?php if ($comment->getSubject() !== null && $comment->getSubject() !== ''): ?>
                                             · <strong><?= $escape($comment->getSubject()) ?></strong>
                                         <?php endif; ?>
+                                     · <span data-admin-status-label><?= $isHidden ? 'Masqué' : 'Publié' ?></span>   
                                     </p>
 
                                     <p><?= nl2br($escape($comment->getMessage())) ?></p>
 
                                     <div class="comment-footer-row">
+                                        <form action="?pg=commentaire&amp;action=status" method="post" data-admin-status>
+                                            <input type="hidden" name="csrf_token" value="<?= $escape($csrfToken) ?>">
+                                            <input type="hidden" name="comment_id" value="<?= (int) $comment->getId() ?>">
+                                            <input type="hidden" name="from" value="admin">
+                                            <input type="hidden" name="status" value="<?= $isHidden ? 'published' : 'hidden' ?>">
+                                            <button class="comment-delete" type="submit"><?= $isHidden ? 'Republier' : 'Masquer' ?></button>
+                                        </form>
                                         <form action="?pg=commentaire&amp;action=delete" method="post" data-admin-delete>
                                             <input type="hidden" name="csrf_token" value="<?= $escape($csrfToken) ?>">
                                             <input type="hidden" name="comment_id" value="<?= (int) $comment->getId() ?>">

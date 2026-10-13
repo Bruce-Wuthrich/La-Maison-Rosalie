@@ -83,7 +83,7 @@ if ($page === 'recette') {
 // Prepare toutes les recettes pour la page recettes.
 $recipes = [];
 $error = null;
-$categorySlug = trim((string) ($_GET['categorie'] ?? ''));
+$categorySlug = stringInput($_GET['categorie'] ?? null);
 $searchTerm = stringInput($_GET['recherche'] ?? null);
 $searchTerm = function_exists('mb_substr')
     ? mb_substr($searchTerm, 0, 80)

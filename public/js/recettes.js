@@ -17,15 +17,31 @@ if (commentForm !== null) {
     ratingInput.addEventListener("change", async () => {
       const ratingData = new FormData(commentForm);
       ratingData.delete("message");
-      const response = await fetch("?pg=noter", {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: ratingData,
+      // étoiles bloquées pendant l'envoi, pas de double note
+      ratingInputs.forEach((input) => {
+        input.disabled = true;
       });
-      const result = await response.json();
 
-      if (result.success === true) {
-        const filledStars = Math.round(result.data.average);
+      let result;
+      try {
+        const response = await fetch("?pg=noter", {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: ratingData,
+        });
+        result = await response.json();
+      } catch (error) {
+        showFlash("error", "La note n'a pas pu être enregistrée. Vérifiez votre connexion.");
+        return;
+      } finally {
+        ratingInputs.forEach((input) => {
+          input.disabled = false;
+        });
+      }
+
+        if (result.success === true) {
+          showFlash("success", result.message);
+          const filledStars = Math.round(result.data.average);
 
         averageStars.forEach((starImage, index) => {
           const starNumber = (index % 5) + 1;
@@ -50,7 +66,7 @@ if (commentForm !== null) {
           }
         }
       } else {
-        console.log(result.message);
+        showFlash("error", result.message);
       }
     });
   });
