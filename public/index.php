@@ -126,6 +126,7 @@ $controller = match ($page) {
     'noter'               => 'RatingController',
     'commentaires'        => 'CommentListController', // lecture JSON publique par groupes de 10
     'commentaire'         => 'CommentController',  // com add/delete
+    'favori'              => 'FavoriteController', // bonus favoris (POST)
     'admin'               => 'AdminController',
     default               => null,
 };

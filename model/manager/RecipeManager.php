@@ -137,7 +137,7 @@ class RecipeManager implements ManagerInterface{
 
     // liste filtré de la page recettes (bonus) recherche, catégorie, difficulté et temps total.
     //Chaque critère est facultatif et toutes les valeurs passent par bindValue
-    public function filter(string $searchTerm = '', ?string $categorySlug = null, ?string $difficulty = null, ?int $maxTotalTime = null): array {
+    public function filter(string $searchTerm = '', ?string $categorySlug = null, ?string $difficulty = null, ?int $maxTotalTime = null, ?int $favoriteUserId = null): array {
         $conditions = [];
         $params = [];
 
@@ -182,6 +182,12 @@ class RecipeManager implements ManagerInterface{
             // calculé jamais stocké 
             $conditions[] = '(r.prep_time_minutes + r.cook_time_minutes) <= :max_total_time';
             $params[':max_total_time'] = $maxTotalTime;
+        }
+
+        if ($favoriteUserId !== null){
+            // bonus favoris : uniquement les recettes enregistrées par ce membre
+            $conditions[] = 'EXISTS (SELECT 1 FROM favorites f WHERE f.recipe_id = r.id AND f.user_id = :favorite_user_id)';
+            $params[':favorite_user_id'] = $favoriteUserId;
         }
 
         return $this->fetchList(implode(' AND ', $conditions), 'r.title', null, $params);

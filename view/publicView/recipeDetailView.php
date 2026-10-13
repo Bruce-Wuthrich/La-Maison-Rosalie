@@ -44,14 +44,32 @@ $visibleTags = $recipeTags;
             <div class="row align-items-center g-5">
                 <div class="col-12 col-lg-5">
                     <figure class="recipe-figure">
-                        <button class="recipe-favorite" type="button"
-                            data-recipe-slug="<?php echo $escape($recipe->getSlug()); ?>"
-                            aria-label="Ajouter aux favoris" aria-pressed="false">
+                        <?php if ($connectedUser !== null) { ?>
+                        <!-- Bonus favoris : enregistré en base pour le membre (POST ?pg=favori, sans rechargement avec JS) -->
+                        <form action="?pg=favori" method="post" data-favorite-form>
+                            <input type="hidden" name="csrf_token" value="<?php echo $escape($csrfToken); ?>">
+                            <input type="hidden" name="recipe_id" value="<?php echo (int) $recipe->getId(); ?>">
+                            <input type="hidden" name="slug" value="<?php echo $escape($recipe->getSlug()); ?>">
+                            <input type="hidden" name="favorite" value="<?php echo $isFavorite ? '0' : '1'; ?>">
+                            <button class="recipe-favorite<?php echo $isFavorite ? ' is-active' : ''; ?>" type="submit"
+                                aria-label="<?php echo $isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'; ?>"
+                                aria-pressed="<?php echo $isFavorite ? 'true' : 'false'; ?>">
+                            <svg viewBox="0 0 512 512" aria-hidden="true">
+                                <path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64C106.32 80 64.54 124.14 64 176.81c-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0 0 18 0c96.26-65.34 184.09-143.09 183-252.42C447.46 124.14 405.68 80 352.92 80Z" />
+                            </svg>
+                                <span class="recipe-favorite-tooltip" aria-hidden="true"><?php echo $isFavorite ? 'Enregistré' : 'Enregistrez'; ?></span>
+                            </button>
+                        </form>
+                        <?php } else { ?>
+                        <!-- Visiteur : le cœur ouvre la fenêtre de connexion -->
+                        <button class="recipe-favorite" type="button" data-auth-open
+                            aria-label="Se connecter pour ajouter aux favoris">
                             <svg viewBox="0 0 512 512" aria-hidden="true">
                                 <path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64C106.32 80 64.54 124.14 64 176.81c-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0 0 18 0c96.26-65.34 184.09-143.09 183-252.42C447.46 124.14 405.68 80 352.92 80Z" />
                             </svg>
                             <span class="recipe-favorite-tooltip" aria-hidden="true">Enregistrez</span>
                         </button>
+                        <?php } ?>
 
                         <img class="recipe-image"
                             src="<?php echo $escape($recipeImage); ?>"
@@ -399,4 +417,5 @@ $visibleTags = $recipeTags;
     <?php } ?>
 </main>
 
+<script src="js/favoris.js" defer></script>
 <?php require RACINE_PATH . '/view/inc/footer.php'; ?>
