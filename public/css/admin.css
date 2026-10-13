@@ -1,0 +1,27 @@
+/* Page d'administration */
+
+/* Page admin : réutilise l'en-tête et les filtres de la page Recettes, et les avis de la fiche recette */
+.admin-section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 6rem;
+}
+
+.admin-section h2 {
+    margin-bottom: 2rem;
+    font-family: Georgia, serif;
+    color: var(--color-brown);
+}
+
+.admin-list {
+    display: grid;
+    gap: 2.5rem;
+}
+
+.admin-meta {
+    margin: 0.5rem 0 0;
+    font-size: 0.95rem;
+}
+
+.admin-hidden {
+    opacity: 0.55;
+}
