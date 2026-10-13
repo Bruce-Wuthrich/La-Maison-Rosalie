@@ -24,6 +24,7 @@ class RecipeMapping extends AbstractMapping{
     protected ?int $rating_count = null;
     protected ?int $user_rating = null;
     protected ?string $category_titles = null; 
+    protected ?string $ingredient_names = null;
     
 
     public function getId(): ?int{
@@ -214,6 +215,14 @@ class RecipeMapping extends AbstractMapping{
 
     public function setCategoryTitles(?string $categoryTitles): void{
         $this->category_titles = $categoryTitles; 
+    }
+
+    public function getIngredientNames(): ?string{
+        return $this->ingredient_names;
+    }
+
+    public function setIngredientNames(?string $ingredientNames): void{
+        $this->ingredient_names = $ingredientNames;
     }
 
     // ajoute valeur calculé pour le json

@@ -71,3 +71,29 @@ if (commentForm !== null) {
     });
   });
 }
+
+// Bonus : recherche en temps réel par titre, catégorie ou ingrédient (accents et majuscules ignorés)
+const liveSearch = document.querySelector("[data-live-search]");
+if (liveSearch !== null) {
+  const normalize = (text) =>
+    text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  const cards = document.querySelectorAll("[data-search-text]");
+  const emptyMessage = document.querySelector("[data-live-empty]");
+
+  liveSearch.addEventListener("input", () => {
+    const term = normalize(liveSearch.value);
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const isMatch = term === "" || normalize(card.dataset.searchText).includes(term);
+      card.hidden = !isMatch;
+      if (isMatch) {
+        visibleCount++;
+      }
+    });
+
+    if (emptyMessage !== null) {
+      emptyMessage.hidden = visibleCount > 0;
+    }
+  });
+}

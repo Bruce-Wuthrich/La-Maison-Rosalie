@@ -71,14 +71,17 @@ $recipeImagePath = static function ($recipe): string {
                 <?php } ?>
             </nav>
 
-            <form class="recipe-extra-filters" action="" method="get" aria-label="Filtrer par difficulté et par temps">
+            <form class="recipe-extra-filters" action="" method="get" aria-label="Rechercher et filtrer les recettes">
                 <input type="hidden" name="pg" value="recettes">
                 <?php if ($categorySlug !== '') { ?>
                     <input type="hidden" name="categorie" value="<?php echo htmlspecialchars($categorySlug, ENT_QUOTES, 'UTF-8'); ?>">
                 <?php } ?>
-                <?php if ($searchTerm !== '') { ?>
-                    <input type="hidden" name="recherche" value="<?php echo htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8'); ?>">
-                <?php } ?>
+                <label>
+                    <span>Recherche</span>
+                    <input type="search" name="recherche" maxlength="80"
+                        value="<?php echo htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8'); ?>"
+                        placeholder="Titre ou ingrédient" data-live-search>
+                </label>
 
                 <label>
                     <span>Difficulté</span>
@@ -114,8 +117,12 @@ $recipeImagePath = static function ($recipe): string {
             <?php } else { ?>
                 <div class="recipes-grid">
                     <?php foreach ($recipes as $recipe) { ?>
-                        <article class="recipe-card">
-                            <a class="recipe-card-image-link"
+                        <?php
+                        // Texte lu par la recherche en temps réel : titre, catégories et ingrédients
+                        $searchText = implode(' ', [$recipe->getTitle(), $recipe->getCategoryTitles(), $recipe->getIngredientNames()]);
+                        ?>
+                        <article class="recipe-card" data-search-text="<?php echo htmlspecialchars($searchText, ENT_QUOTES, 'UTF-8'); ?>">
+                                <a class="recipe-card-image-link"
                                 href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>">
                                 <img class="recipe-card-image"
                                     src="<?php echo htmlspecialchars($recipeImagePath($recipe), ENT_QUOTES, 'UTF-8'); ?>"
@@ -143,12 +150,19 @@ $recipeImagePath = static function ($recipe): string {
                                         <?php
                                         echo $recipe->getAverageRating() === null
                                             ? 'Pas encore notée'
-                                            : htmlspecialchars($recipe->getFormattedAverage(), ENT_QUOTES, 'UTF-8') . '/5';
+                                            : htmlspecialchars($recipe->getFormattedAverage(), ENT_QUOTES, 'UTF-8') . '/5 (' . (int) $recipe->getRatingCount() . ' avis)';
                                         ?>
                                     </span>
-                                    <span><?php echo $recipe->getTotalTime(); ?> min</span>
+                                    <span>
+                                        <?php echo $recipe->getTotalTime(); ?> min ·
+                                        <?php echo htmlspecialchars($recipe->getDifficultyLabel(), ENT_QUOTES, 'UTF-8'); ?>
+                                    </span>
                                 </div>
+
+                                <a class="recipe-filter"
+                                    href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>">Voir la recette</a>
                             </div>
+                            <p data-live-empty hidden>Aucune recette ne correspond à votre recherche.</p>
                         </article>
                     <?php } ?>
                 </div>

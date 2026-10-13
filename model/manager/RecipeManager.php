@@ -21,7 +21,11 @@ class RecipeManager implements ManagerInterface{
                 (SELECT GROUP_CONCAT(c.title ORDER BY c.title SEPARATOR \', \')
                  FROM categories c
                  JOIN recipe_categories rc ON rc.category_id = c.id
-                 WHERE rc.recipe_id = r.id) AS category_titles
+                 WHERE rc.recipe_id = r.id) AS category_titles,
+                (SELECT GROUP_CONCAT(i.name ORDER BY i.name SEPARATOR \', \')
+                 FROM ingredients i
+                 JOIN recipe_ingredients ri ON ri.ingredient_id = i.id
+                 WHERE ri.recipe_id = r.id) AS ingredient_names
          FROM recipes r
          LEFT JOIN ratings ra ON ra.recipe_id = r.id';
 
@@ -119,12 +123,19 @@ class RecipeManager implements ManagerInterface{
                     FROM recipe_categories rc_search
                     JOIN categories c_search ON c_search.id = rc_search.category_id
                     WHERE rc_search.recipe_id = r.id
-                    AND c_search.title LIKE :search_category
+                    AND c_search.title LIKE :search_category)
+                OR EXISTS (
+                    SELECT 1
+                    FROM recipe_ingredients ri_search
+                    JOIN ingredients i_search ON i_search.id = ri_search.ingredient_id
+                    WHERE ri_search.recipe_id = r.id
+                    AND i_search.name LIKE :search_ingredient
             )
         )';
         $params[':search_title'] = $searchPattern;
         $params[':search_description'] = $searchPattern;
         $params[':search_category'] = $searchPattern;
+        $params[':search_ingredient'] = $searchPattern;
         }
 
         if ($categorySlug !== null){
