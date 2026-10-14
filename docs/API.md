@@ -22,6 +22,7 @@ Le site n'utilise pas de framework. Toutes les requêtes passent par un point d'
 | `commentaire` | `CommentController` | POST uniquement |
 | `favori` | `FavoriteController` | POST uniquement (bonus favoris) |
 | `verification` | `VerificationController` | GET (lien de confirmation reçu par e-mail) |
+| `sitemap` | `SitemapController` | GET (plan du site XML) |
 | `admin` | `AdminController` | GET (page, onglets) et POST (actions sur les recettes) |
 | toute autre valeur | aucun | réponse **404** et page d'erreur |
 
@@ -127,6 +128,19 @@ Ce fonctionnement repose sur trois fonctions de `controller/ControllerHelpers.ph
   - 200 avec la fiche.
   - 404 si le slug est invalide ou ne correspond à aucune recette, avec une page d'erreur et un lien de retour (BE-13, FE-38).
   - 503 si la base ne répond pas.
+
+### GET `?pg=sitemap`
+
+- **Rôle** : plan du site XML pour les moteurs de recherche (déclaré dans `public/robots.txt`).
+- **Accès** : tout le monde.
+- **Contenu** : l'accueil, les pages Recettes, À propos, Contact et Mentions légales, puis une adresse par recette, lues en base (même liste que le menu déroulant). Une recette ajoutée en base y apparaît sans modifier le code.
+- **Réponse** : 200, `Content-Type: application/xml`. Les adresses sont construites à partir de `RACINE_URL`.
+
+### Fichiers publics pour les robots
+
+- `public/robots.txt` : tout le site public peut être exploré, sauf `?pg=admin` et `?pg=verification`.
+- `public/llms.txt` : présentation du site pour les assistants IA (moteurs génératifs).
+- Chaque page publique contient une adresse canonique, des balises Open Graph et, selon la page, des données structurées schema.org en JSON-LD (`Recipe` et `BreadcrumbList` sur une fiche, `Organization` et `WebSite` sur l'accueil). Les pages admin et d'erreur sont en `noindex`, sans ces données.
 
 ## 3. Comptes utilisateurs
 
@@ -432,6 +446,7 @@ L'espace d'administration (bonus « panneau d'administration ») tient sur une s
 | `?pg=commentaire&action=status` | POST | admin | oui | non |
 | `?pg=favori` | POST | connecté | oui | un favori par recette |
 | `?pg=verification&token=` | GET | tous | non (jeton à usage unique) | 24 h de validité |
+| `?pg=sitemap` | GET | tous | non | non |
 | `?pg=admin&onglet=` | GET | admin | non | non |
 | `?pg=admin&onglet=recettes&action=save` | POST | admin | oui | images de 300 Ko max |
 | `?pg=admin&onglet=recettes&action=delete` | POST | admin | oui | non |
