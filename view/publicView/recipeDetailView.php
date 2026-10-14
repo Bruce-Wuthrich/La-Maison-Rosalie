@@ -125,7 +125,7 @@ $visibleTags = $recipeTags;
                         <ul class="recipe-meta">
                             <li>
                                 <img src="assets/img/recettes/icons/servings.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
-                                <span><?php echo (int) $recipe->getServings(); ?> pers.</span>
+                                <span><span data-servings-value><?php echo (int) $recipe->getServings(); ?></span> pers.</span>
                             </li>
 
                             <li>
@@ -184,20 +184,31 @@ $visibleTags = $recipeTags;
                 <div class="col-12 col-lg-5">
                     <h2>Ingrédients</h2>
 
+                    <!-- Bonus portions : recalcul des quantités côté navigateur (portions.js) -->
+                    <div class="recipe-servings" data-servings data-servings-base="<?php echo (int) $recipe->getServings(); ?>">
+                        <button class="recipe-servings-button" type="button" data-servings-step="-1"
+                            aria-label="Une portion de moins">−</button>
+                        <output class="recipe-servings-value" aria-live="polite">
+                            <span data-servings-value><?php echo (int) $recipe->getServings(); ?></span> pers.
+                        </output>
+                        <button class="recipe-servings-button" type="button" data-servings-step="1"
+                            aria-label="Une portion de plus">+</button>
+                    </div>
+
                     <ul class="ingredient-list">
                         <?php foreach ($ingredients as $ingredient) { ?>
                             <?php
-                            $ingredientParts = array_filter([
-                                $ingredient->getFormattedQuantity(),
-                                $ingredient->getUnit() ?? '',
-                                $ingredient->getIngredientName() ?? '',
-                            ], static fn (string $part): bool => $part !== '');
-                            $ingredientLabel = implode(' ', $ingredientParts);
+                            $ingredientRest = trim(($ingredient->getUnit() ?? '') . ' ' . ($ingredient->getIngredientName() ?? ''));
                             if ($ingredient->getDetails() !== null && $ingredient->getDetails() !== '') {
-                                $ingredientLabel .= ' (' . $ingredient->getDetails() . ')';
+                                $ingredientRest .= ' (' . $ingredient->getDetails() . ')';
                             }
                             ?>
-                            <li><?php echo $escape($ingredientLabel); ?></li>
+                            <li>
+                                <?php if ($ingredient->getQuantity() !== null) { ?>
+                                    <span data-quantity="<?php echo $escape($ingredient->getQuantity()); ?>"<?php echo $ingredient->getUnit() === null || $ingredient->getUnit() === '' ? ' data-quantity-count' : ''; ?>><?php echo $escape($ingredient->getFormattedQuantity()); ?></span>
+                                <?php } ?>
+                                <?php echo $escape($ingredientRest); ?>
+                            </li>
                         <?php } ?>
                     </ul>
                 </div>
@@ -426,4 +437,5 @@ $visibleTags = $recipeTags;
 </main>
 
 <script src="js/favoris.js" defer></script>
+<script src="js/portions.js" defer></script>
 <?php require RACINE_PATH . '/view/inc/footer.php'; ?>
