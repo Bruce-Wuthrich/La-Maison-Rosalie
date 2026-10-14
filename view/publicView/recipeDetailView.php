@@ -165,21 +165,23 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                                 <span><?php echo $escape($recipe->getDifficultyLabel()); ?></span>
                             </li>
 
-                                                        <li>
+                            <li>
                                 <img src="assets/img/recettes/icons/time.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
-                                <span>Préparation <?php echo (int) $recipe->getPrepTimeMinutes(); ?> min</span>
+                                <span>Préparation <span class="recipe-meta-value"><?php echo (int) $recipe->getPrepTimeMinutes(); ?> min</span></span>
                             </li>
 
                             <li>
                                 <img src="assets/img/recettes/icons/time.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
-                                <span><?php echo (int) $recipe->getCookTimeMinutes() > 0
-                                    ? 'Cuisson ' . (int) $recipe->getCookTimeMinutes() . ' min'
-                                    : 'Sans cuisson'; ?></span>
+                                <span><?php if ((int) $recipe->getCookTimeMinutes() > 0) { ?>
+                                    Cuisson <span class="recipe-meta-value"><?php echo (int) $recipe->getCookTimeMinutes(); ?> min</span>
+                                <?php } else { ?>
+                                    Sans cuisson
+                                <?php } ?></span>
                             </li>
 
                             <li>
                                 <img src="assets/img/recettes/icons/time.svg?v=<?= (int) $iconVersion ?>" alt="" aria-hidden="true">
-                                <span>Total <?php echo $recipe->getTotalTime(); ?> min</span>
+                                <span>Total <span class="recipe-meta-value"><?php echo $recipe->getTotalTime(); ?> min</span></span>
                             </li>
                         </ul>
 
