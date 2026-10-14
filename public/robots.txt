@@ -1,0 +1,7 @@
+# Maison Rosalie : tout le site public peut être exploré, sauf l'administration.
+User-agent: *
+Allow: /
+Disallow: /?pg=admin
+Disallow: /?pg=verification
+
+Sitemap: https://maison-rosalie.webdev-cf2m.be/?pg=sitemap

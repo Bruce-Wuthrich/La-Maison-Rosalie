@@ -1,0 +1,17 @@
+# Maison Rosalie
+
+> Livre de recettes au chocolat de Maison Rosalie, chocolaterie artisanale belge fondée en 1987 à Liège par la famille Moreau (entreprise fictive, projet de formation CF2M). Chaque recette est détaillée pas à pas, avec ses ingrédients, ses temps, sa difficulté et une photo par étape.
+
+Contenus fictifs mais cohérents. Les recettes, leurs ingrédients et leurs notes viennent de la base de données du site.
+
+## Pages principales
+
+- [Accueil](https://maison-rosalie.webdev-cf2m.be/) : présentation de la maison et les 3 recettes les mieux notées par les visiteurs.
+- [Toutes les recettes](https://maison-rosalie.webdev-cf2m.be/?pg=recettes) : liste filtrable par catégorie (Gâteaux, Mousses, Boissons, Glacé), difficulté et temps total.
+- [À propos](https://maison-rosalie.webdev-cf2m.be/?pg=a-propos) : histoire de la famille Moreau et valeurs de la maison.
+- [Contact](https://maison-rosalie.webdev-cf2m.be/?pg=contact) : Rue Léopold 12, 4000 Liège, contact@maisonrosalie.be.
+
+## Pour les robots
+
+- [Plan du site (XML)](https://maison-rosalie.webdev-cf2m.be/?pg=sitemap) : adresse de chaque fiche recette.
+- Chaque fiche recette contient des données structurées schema.org « Recipe » (JSON-LD) : ingrédients, étapes, temps, portions et note moyenne.
