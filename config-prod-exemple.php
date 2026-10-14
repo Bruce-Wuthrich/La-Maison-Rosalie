@@ -15,7 +15,7 @@ const DB_CHARSET = "utf8mb4";
 const RACINE_PATH = __DIR__;
 // adresse publique du site en HTTPS, avec la barre finale : utilisée pour le lien de confirmation par e-mail,
 // l'adresse canonique, les aperçus de partage et le plan du site
-const RACINE_URL = "https://www.exemple.be/";
+const RACINE_URL = "https://chez-rosalie.webdev-cf2m.be/";
 // jamais d'erreur PHP à l'écran en ligne (SEC-10) : les erreurs vont dans le journal du serveur
 const DISPLAY_ERRORS = false;
 
