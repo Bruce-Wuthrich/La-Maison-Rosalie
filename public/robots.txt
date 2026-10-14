@@ -4,4 +4,4 @@ Allow: /
 Disallow: /?pg=admin
 Disallow: /?pg=verification
 
-Sitemap: https://maison-rosalie.webdev-cf2m.be/?pg=sitemap
+Sitemap: https://chez-rosalie.webdev-cf2m.be/?pg=sitemap

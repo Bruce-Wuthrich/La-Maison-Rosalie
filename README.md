@@ -163,7 +163,7 @@ Le site a été mis en ligne sur l'hébergement fourni par le CF2M (Nuxit) :
 1. Le domaine pointe sur le dossier `public/` : seul ce dossier est servi par le navigateur.
 2. Envoi par FTP de `controller/`, `lib/`, `model/`, `view/`, `public/` et d'un fichier `config-prod.php` à la racine, au-dessus de `public/`. Ce fichier se crée en copiant le modèle `config-prod-exemple.php` puis en le remplissant avec les accès de l'hébergeur ; il n'est jamais commité. `index.php` le charge automatiquement s'il existe, à la place de `config-dev.php`. `RACINE_URL` y contient l'adresse publique en HTTPS.
 3. Fichiers `.htaccess` « Require all denied » dans `controller/`, `model/`, `view/` et `lib/`, et protection des fichiers `config-*` à la racine, en sécurité supplémentaire.
-4. Import de la base dans phpMyAdmin avec une copie du script sans `DROP/CREATE DATABASE` ni `USE` (la base est créée par l'hébergeur).
+4. Import de la base dans phpMyAdmin avec `data/maison_rosalie_hebergement.sql` : même contenu que le script d'installation, sans `DROP/CREATE DATABASE` ni `USE`, car sur un hébergement mutualisé la base est créée par l'hébergeur.
 5. Dossier `public/uploads/recettes/` accessible en écriture pour les photos de l'admin.
 
 ## 5. Comptes de test
@@ -180,7 +180,7 @@ Les mots de passe sont stockés hachés avec `password_hash` (bcrypt). Ils ne so
 
 Pour tester la notation, utiliser un compte **membre** : l'administrateur est l'auteur des recettes de démonstration, et on ne peut pas noter sa propre recette.
 
-Données de démonstration : 5 recettes, 4 catégories, 12 ingrédients, 20 étapes, 22 notes et 8 commentaires.
+Données de démonstration : 5 recettes, 4 catégories, 12 ingrédients, 20 étapes, 20 notes et 8 commentaires.
 
 ## 6. Les 5 recettes
 
