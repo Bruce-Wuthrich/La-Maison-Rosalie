@@ -147,9 +147,12 @@ $recipeImagePath = static function ($recipe): string {
                 <p class="home-empty-state">Le classement sera disponible après les premières notes.</p>
             <?php else: ?>
                 <div class="star-grid">
-                    <?php foreach ($topRecipes as $recipe): ?>
+                    <?php foreach ($topRecipes as $index => $recipe): ?>
                         <?php $roundedRating = (int) round($recipe->getAverageRating() ?? 0); ?>
                         <article class="star-card">
+                            <p class="star-card-rank" aria-label="Rang <?= $index + 1 ?>">
+                                N° <?= $index + 1 ?>
+                            </p>
                             <p class="star-card-rating" role="img" aria-label="Note : <?= $recipe->getFormattedAverage() !== '' ? $recipe->getFormattedAverage() . ' sur 5' : 'pas encore notée' ?>">
                                 <?php for ($star = 1; $star <= 5; $star++): ?>
                                     <svg
@@ -163,10 +166,20 @@ $recipeImagePath = static function ($recipe): string {
                             </p>
                             <a href="?pg=recette&amp;slug=<?= htmlspecialchars((string) $recipe->getSlug(), ENT_QUOTES, 'UTF-8') ?>">
                                 <img
+                                    class="star-card-image"
                                     src="<?= htmlspecialchars($recipeImagePath($recipe), ENT_QUOTES, 'UTF-8') ?>"
                                     alt="<?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?>"
                                     loading="lazy">
                                 <h3><?= htmlspecialchars((string) $recipe->getTitle(), ENT_QUOTES, 'UTF-8') ?></h3>
+                            </a>
+                            <div class="star-card-details">
+                                <span><?= $recipe->getFormattedAverage() !== '' ? htmlspecialchars($recipe->getFormattedAverage(), ENT_QUOTES, 'UTF-8') . '/5' : 'Pas encore notée' ?></span>
+                                <span><?= (int) $recipe->getRatingCount() ?> avis</span>
+                                <span><?= $recipe->getTotalTime() ?> min</span>
+                                <span><?= htmlspecialchars($recipe->getDifficultyLabel(), ENT_QUOTES, 'UTF-8') ?></span>
+                            </div>
+                            <a class="star-card-button" href="?pg=recette&amp;slug=<?= htmlspecialchars((string) $recipe->getSlug(), ENT_QUOTES, 'UTF-8') ?>">
+                                Voir la recette
                             </a>
                         </article>
                     <?php endforeach; ?>
