@@ -10,6 +10,7 @@ const DB_PWD = "";
 const DB_CHARSET = "utf8mb4";
 
 const RACINE_PATH = __DIR__;
+// adresse du site, utilisée aussi pour le lien de confirmation envoyé par e-mail
 const RACINE_URL = "http://maison-rosalie/";
 // affichage des erreurs PHP à l'écran : false par défaut (SEC-10), true seulement pour déboguer en local
 const DISPLAY_ERRORS = false;

@@ -16,6 +16,9 @@ use InvalidArgumentException;
 
 class UserManager implements ManagerInterface, UserInterface{
     private MyPDO $db;
+
+    // Compte dont le mot de passe est bon mais l'adresse pas encore confirmée (lu par AuthController pour renvoyer le lien)
+    private ?UserMapping $unverifiedUser = null;
     
     // password_verify tourne même quand l'email existe pas,
     // pour que le temps de réponse ne révèle pas si un compte existe.
@@ -136,7 +139,7 @@ class UserManager implements ManagerInterface, UserInterface{
         // recherche par mail (unique endroit ou on select hash)
         try{
             $query = $this->db->prepare(
-                'SELECT id, username, role, password_hash FROM users WHERE email = :email'
+                'SELECT id, username, email, role, password_hash, email_verified_at FROM users WHERE email = :email'
             );
             $query->bindValue(':email', $user->getEmail());
             $query->execute();
@@ -154,6 +157,17 @@ class UserManager implements ManagerInterface, UserInterface{
             return false;
         }
 
+        // Adresse pas encore confirmée : pas de session tant que le lien n'est pas cliqué
+        // (seulement si les e-mails partent vraiment, sinon personne ne pourrait se connecter)
+        if ($row['email_verified_at'] === null && \model\Mailer::isConfigured()){
+            $this->unverifiedUser = new UserMapping([
+                'id' => (int) $row['id'],
+                'username' => $row['username'],
+                'email' => $row['email'],
+            ]);
+            return false;
+        }
+
         // new id session 
         session_regenerate_id(true);
 
@@ -163,6 +177,10 @@ class UserManager implements ManagerInterface, UserInterface{
         $_SESSION['role'] = $row['role'];
 
         return true; 
+    }
+
+    public function getUnverifiedUser(): ?UserMapping{
+        return $this->unverifiedUser;
     }
 
     public function disconnect(): bool{

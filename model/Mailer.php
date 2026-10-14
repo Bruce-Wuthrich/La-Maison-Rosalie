@@ -24,15 +24,27 @@ class Mailer{
             && defined('MAIL_FROM') && MAIL_FROM !== '';
     }
 
-    // Confirmation envoyée après la création d'un compte.
-    public static function sendRegistrationConfirmation(UserMapping $user): bool{
-        $body = 'Bonjour ' . $user->getUsername() . ",\n\n"
-            . "Votre compte sur le site de La Maison Rosalie a bien été créé avec cette adresse e-mail.\n"
-            . "Vous pouvez maintenant vous connecter pour noter les recettes, laisser vos avis et enregistrer vos favorites.\n\n"
-            . "Si vous n'êtes pas à l'origine de cette inscription, vous pouvez ignorer ce message.\n\n"
+    // Après une inscription : lien cliquable pour confirmer l'adresse (valable 24 heures).
+    public static function sendRegistrationConfirmation(UserMapping $user, string $verificationUrl): bool{
+        $name = (string) $user->getUsername();
+        $text = 'Bonjour ' . $name . ",\n\n"
+            . "Merci pour votre inscription sur le site de La Maison Rosalie.\n"
+            . "Pour activer votre compte, confirmez votre adresse e-mail en ouvrant ce lien (valable 24 heures) :\n\n"
+            . $verificationUrl . "\n\n"
+            . "Si vous n'êtes pas à l'origine de cette inscription, ignorez simplement ce message.\n\n"
             . "À très bientôt,\nLa Maison Rosalie";
 
-        return self::send((string) $user->getEmail(), (string) $user->getUsername(), 'Bienvenue à La Maison Rosalie', $body);
+        $html = '<p>Bonjour ' . self::escape($name) . ',</p>'
+            . '<p>Merci pour votre inscription sur le site de La Maison Rosalie.<br>'
+            . 'Pour activer votre compte, confirmez votre adresse e-mail (lien valable 24 heures) :</p>'
+            . '<p><a href="' . self::escape($verificationUrl) . '" style="display:inline-block;padding:10px 20px;'
+            . 'background:#976700;color:#ffffff;text-decoration:none;border-radius:20px;">Confirmer mon adresse e-mail</a></p>'
+            . '<p style="font-size:13px;color:#5a392b;">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>'
+            . self::escape($verificationUrl) . '</p>'
+            . '<p>Si vous n\'êtes pas à l\'origine de cette inscription, ignorez simplement ce message.</p>'
+            . '<p>À très bientôt,<br>La Maison Rosalie</p>';
+
+        return self::send((string) $user->getEmail(), $name, 'Confirmez votre adresse e-mail - La Maison Rosalie', $text, $html);
     }
 
     // Accusé de réception envoyé à la personne qui a écrit via le formulaire de contact.
@@ -43,12 +55,19 @@ class Mailer{
             . "Votre message :\n" . $message->getMessage() . "\n\n"
             . "Merci de votre intérêt,\nLa Maison Rosalie";
 
-        return self::send((string) $message->getEmail(), (string) $message->getName(), 'Nous avons bien reçu votre message', $body);
+        $html = '<p>' . nl2br(self::escape($body)) . '</p>';
+
+        return self::send((string) $message->getEmail(), (string) $message->getName(), 'Nous avons bien reçu votre message', $body, $html);
     }
 
-    // Envoi en texte brut (aucun HTML venant d'un visiteur). Ne lève jamais d'exception :
+    // Texte saisi par un visiteur, inoffensif dans la version HTML de l'e-mail
+    private static function escape(string $value): string{
+        return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    }
+
+    // Envoi en HTML + version texte (meilleure délivrabilité). Ne lève jamais d'exception :
     // un e-mail qui ne part pas ne doit pas faire échouer l'inscription ou le contact déjà enregistrés.
-    private static function send(string $toEmail, string $toName, string $subject, string $body): bool{
+    private static function send(string $toEmail, string $toName, string $subject, string $text, string $html): bool{
         if (!self::isConfigured()) {
             return false;
         }
@@ -77,11 +96,19 @@ class Mailer{
             }
 
             $mail->setFrom(MAIL_FROM, defined('MAIL_FROM_NAME') ? MAIL_FROM_NAME : 'La Maison Rosalie');
+            // Anti-spam : identifiants du message au nom du domaine d'envoi (pas « localhost »),
+            // adresse de retour cohérente et pas d'en-tête « X-Mailer: PHPMailer »
+            $mail->Hostname = substr((string) strrchr(MAIL_FROM, '@'), 1);
+            $mail->Sender = MAIL_FROM;
+            $mail->addReplyTo(MAIL_FROM, defined('MAIL_FROM_NAME') ? MAIL_FROM_NAME : 'La Maison Rosalie');
+            $mail->XMailer = ' ';
             // les noms viennent des formulaires : sauts de ligne retirés par sécurité
             $mail->addAddress($toEmail, str_replace(["\r", "\n"], ' ', $toName));
-            $mail->isHTML(false);
+            $mail->isHTML(true);
             $mail->Subject = $subject;
-            $mail->Body = $body;
+            $mail->Body = '<!doctype html><html lang="fr"><body style="font-family:Arial,sans-serif;color:#5a392b;">'
+                . $html . '</body></html>';
+            $mail->AltBody = $text;
 
             return $mail->send();
         } catch (Throwable $exception) {
