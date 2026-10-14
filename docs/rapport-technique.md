@@ -1,7 +1,5 @@
 # Rapport technique : La Maison Rosalie
 
-> Brouillon à finaliser en équipe. Les passages marqués *À COMPLÉTER* demandent l'avis de chacun. Longueur visée : 2 à 3 pages une fois exporté en PDF.
-
 ## 1. Choix de la stack
 
 | Couche | Choix | Raison |
@@ -57,22 +55,27 @@
 
 ## 4. Difficultés rencontrées
 
-*À COMPLÉTER en équipe*. Pistes à partir de l'historique du projet :
+**Organisation et calendrier**
 
-- **Coordination à trois sur un même dépôt** : beaucoup de Pull Requests en parallèle, des branches à remettre à jour avec `main`, des conflits à éviter en séparant bien les fichiers de chacun.
-- **Évolutions de la base en cours de projet** : des migrations ont d'abord été créées pour mettre à jour les bases existantes, puis intégrées au script principal pour garder un seul script d'installation.
-- **Écart entre la maquette et le cahier des charges** : certains éléments demandés (photos d'étapes, bouton de déconnexion, suppression de commentaire) n'étaient pas dans la maquette, et d'autres éléments de la maquette n'étaient pas demandés. Il a fallu arbitrer en gardant le cahier des charges comme référence.
-- **Bugs discrets** : un formulaire de contact refusé à chaque envoi à cause d'un jeton CSRF manquant dans la vue, des messages de succès invisibles parce qu'ils ne s'affichaient que dans la fenêtre de connexion.
+- **Visuels arrivés tard** : la maquette a reçu des corrections jusqu'en fin de projet. L'intégration du style a dû attendre les versions définitives, et certaines pages ont été reprises plusieurs fois.
+- **Consignes parfois différentes** entre le cahier des charges et les indications données en cours. Nous avons pris le cahier des charges comme référence et documenté nos arbitrages.
+- **Absences pour maladie** de deux membres de l'équipe (Bryan et Meidhy) pendant le projet.
+- **Rendez-vous client repoussé plusieurs fois** : le premier rendez-vous a finalement eu lieu 24 heures avant la présentation, et ses retours ont été intégrés dans la foulée.
+
+Malgré ces contretemps, la communication et la répartition des tâches se sont faites naturellement : chacun savait sur quoi travailler, et nous ne nous sommes jamais réellement retrouvés en difficulté.
+
+**Sur le plan technique**
+
+- **Coordination sur un même dépôt** : beaucoup de Pull Requests en parallèle, des branches à remettre à jour avec `main` et des conflits à éviter en séparant bien les fichiers de chacun.
+- **Évolutions de la base en cours de projet** : les migrations ont d'abord servi à mettre à jour les bases existantes, puis ont été intégrées au script principal pour garder un seul script d'installation.
 - **Photos des étapes** : impossible de cuisiner les 5 recettes pendant le projet, d'où des photos générées par IA, déclarées dans le README.
 
 ## 5. Ce que nous referions autrement
 
-*À COMPLÉTER en équipe*. Pistes :
-
-- Définir dès la semaine 1 le **format des réponses JSON** et la documentation des points d'accès, pour que les vues, les contrôleurs et le JavaScript avancent en parallèle.
-- Comparer la maquette au cahier des charges **avant** l'intégration, pour éviter de coder des éléments à retirer ensuite.
-- Écrire le plan de tests au fur et à mesure, et pas en fin de projet.
-- Factoriser plus tôt les requêtes SQL qui se ressemblent (une seule base de `SELECT` pour la liste des recettes).
+- **Travailler de façon plus globale** : avancer exigence par exigence, ticket par ticket, nous a parfois fait faire puis défaire, surtout sur les bonus. Penser chaque fonctionnalité dans son ensemble dès le départ aurait évité ces retours en arrière.
+- **Moins se disperser** : avec beaucoup de petites tâches en parallèle, il était facile de passer de l'une à l'autre. Nous fixerions des priorités plus nettes : d'abord l'obligatoire, ensuite les bonus.
+- **Comparer la maquette au cahier des charges avant l'intégration**, pour ne pas coder des éléments à modifier ou retirer ensuite.
+- **Définir dès la semaine 1 le format des réponses JSON** et la documentation des points d'accès, pour que les vues, les contrôleurs et le JavaScript avancent en parallèle.
 
 ## 6. Mesures à prévoir avant une mise en ligne réelle (SEC-12)
 
