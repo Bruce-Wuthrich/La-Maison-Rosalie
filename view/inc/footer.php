@@ -48,6 +48,9 @@
 <script src="js/ajax.js"></script>
 <script src="js/scripts.js?v=<?= filemtime(RACINE_PATH . '/public/js/scripts.js') ?>"></script>
 <script src="js/auth.js"></script>
+<?php if ($page === 'recettes'): ?>
+    <script src="js/recherche.js?v=<?= filemtime(RACINE_PATH . '/public/js/recherche.js') ?>"></script>
+<?php endif; ?>
 <script src="js/recettes.js"></script>
 </body>
 

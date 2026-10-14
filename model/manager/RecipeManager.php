@@ -21,7 +21,11 @@ class RecipeManager implements ManagerInterface{
                 (SELECT GROUP_CONCAT(c.title ORDER BY c.title SEPARATOR \', \')
                  FROM categories c
                  JOIN recipe_categories rc ON rc.category_id = c.id
-                 WHERE rc.recipe_id = r.id) AS category_titles
+                 WHERE rc.recipe_id = r.id) AS category_titles,
+                (SELECT GROUP_CONCAT(DISTINCT i.name ORDER BY i.name SEPARATOR \' \')
+                 FROM ingredients i
+                 JOIN recipe_ingredients ri ON ri.ingredient_id = i.id
+                 WHERE ri.recipe_id = r.id) AS ingredient_names
          FROM recipes r
          LEFT JOIN ratings ra ON ra.recipe_id = r.id';
 
