@@ -6,10 +6,10 @@ Le modèle et les 10 tables ont été créés ; l'import MariaDB fonctionne d'ap
 
 Stack de préparation : PHP objet sans framework, PDO, MariaDB, HTML5, Bootstrap 5, CSS et JavaScript natif. Faire confirmer le choix objet par l'équipe et l'inscrire au README. Les maquettes sont fournies par les designers selon votre organisation : coordonner T04/T05 avec eux.
 
+## Choix de DB
 
-## Choix de DB 
+Notre choix c'est porté sur MariaDB pour plusieur raison :
 
-Notre choix c'est porté sur MariaDB pour plusieur raison : 
 - elle est gratuite
 - elle fonctionne très bien avec PHP (Fonctionnement du backend uniquement en PHP)
 - elle utilise le langage SQL qui est le langage utilisé pour la base de donnée de ce projet
@@ -17,19 +17,17 @@ Notre choix c'est porté sur MariaDB pour plusieur raison :
 - elle est majoritairement utilisé en Europe
 
 ## Choix des liaisons de la base de donnée
+
 En résumé :
 
 - Utilisateur:
 - peut écrire plusieurs recettes
 - peut écrire plusieurs commentaires et les cacher
-- peut noter les recettes disponibles sauf la sienne 
-- 
-
-
-
+- peut noter les recettes disponibles sauf la sienne
+-
 
 - Admin
--  peut supprimer ou modifier les commentaires et recettes. 
+- peut supprimer ou modifier les commentaires et recettes.
 
 # La Maison Rosalie
 
@@ -54,11 +52,11 @@ Site web du livre de recettes au chocolat de **La Maison Rosalie**, chocolaterie
 
 ## 1. Équipe
 
-| Membre | Rôle principal | Référent |
-|---|---|---|
-| Lass (TNK-Sempai) | Base de données, modèle (classes Mapping et Manager), point d'entrée `index.php`, sécurité | Base de données et sécurité |
-| Bruce (Bruce-Wuthrich) | Contrôleurs | |
-| Bryan | Vues, CSS et JavaScript d'interface | |
+| Membre                 | Rôle principal                                                                             | Référent                    |
+| ---------------------- | ------------------------------------------------------------------------------------------ | --------------------------- |
+| Lass (TNK-Sempai)      | Base de données, modèle (classes Mapping et Manager), point d'entrée `index.php`, sécurité | Base de données et sécurité |
+| Bruce (Bruce-Wuthrich) | Contrôleurs                                                                                |                             |
+| Bryan                  | Vues, CSS et JavaScript d'interface                                                        |                             |
 
 Chaque développeur travaille sur sa propre branche. Toute fusion sur `main` passe par une Pull Request relue par un autre membre.
 
@@ -83,14 +81,14 @@ Chaque développeur travaille sur sa propre branche. Toute fusion sur `main` pas
 
 ### Bonus du cahier des charges (section 12)
 
-| Bonus | Niveau | Où le montrer pendant la démo |
-|---|---|---|
-| Recherche de recettes en temps réel par titre ou ingrédient | Facile | Page Recettes : taper « noix » ou « crème » dans la barre de recherche, les cartes se filtrent pendant la frappe |
-| Feuille de style d'impression propre pour une page recette | Facile | Bouton « Imprimer » d'une fiche (voir ci-dessous) |
-| Filtres par catégorie, difficulté et temps | Moyen | Page Recettes |
-| Changement du nombre de portions avec recalcul des quantités | Moyen | Fiche recette : boutons − / + au-dessus des ingrédients (Brownies 12 → 6 personnes) |
-| Recettes favorites par utilisateur | Moyen | Cœur d'une fiche (connecté), puis « Mes favoris » sur la page Recettes |
-| Panneau d'administration : ajouter ou modifier une recette, modérer les commentaires | Difficile | Compte administrateur, `?pg=admin` |
+| Bonus                                                                                | Niveau    | Où le montrer pendant la démo                                                                                    |
+| ------------------------------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------- |
+| Recherche de recettes en temps réel par titre ou ingrédient                          | Facile    | Page Recettes : taper « noix » ou « crème » dans la barre de recherche, les cartes se filtrent pendant la frappe |
+| Feuille de style d'impression propre pour une page recette                           | Facile    | Bouton « Imprimer » d'une fiche (voir ci-dessous)                                                                |
+| Filtres par catégorie, difficulté et temps                                           | Moyen     | Page Recettes                                                                                                    |
+| Changement du nombre de portions avec recalcul des quantités                         | Moyen     | Fiche recette : boutons − / + au-dessus des ingrédients (Brownies 12 → 6 personnes)                              |
+| Recettes favorites par utilisateur                                                   | Moyen     | Cœur d'une fiche (connecté), puis « Mes favoris » sur la page Recettes                                           |
+| Panneau d'administration : ajouter ou modifier une recette, modérer les commentaires | Difficile | Compte administrateur, `?pg=admin`                                                                               |
 
 ### Imprimer une fiche recette (bonus)
 
@@ -107,14 +105,14 @@ Le style est entièrement dans `public/css/recipe.css` (bloc `@media print`), sa
 
 ## 3. Choix techniques
 
-| Couche | Technologie | Pourquoi |
-|---|---|---|
-| Structure | HTML5 sémantique | Imposé |
-| Style | Bootstrap 5.3 + CSS personnalisé | Imposé. Bootstrap pour la grille responsive et la navigation repliable, notre CSS pour l'identité de la marque. |
-| Interactions | JavaScript natif (ES6+) | Imposé, sans framework |
-| Backend | **PHP 8 orienté objet**, sans framework | Voir ci-dessous |
-| Base de données | **MariaDB** | Voir ci-dessous |
-| Versioning | Git et GitHub | Imposé |
+| Couche          | Technologie                             | Pourquoi                                                                                                        |
+| --------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Structure       | HTML5 sémantique                        | Imposé                                                                                                          |
+| Style           | Bootstrap 5.3 + CSS personnalisé        | Imposé. Bootstrap pour la grille responsive et la navigation repliable, notre CSS pour l'identité de la marque. |
+| Interactions    | JavaScript natif (ES6+)                 | Imposé, sans framework                                                                                          |
+| Backend         | **PHP 8 orienté objet**, sans framework | Voir ci-dessous                                                                                                 |
+| Base de données | **MariaDB**                             | Voir ci-dessous                                                                                                 |
+| Versioning      | Git et GitHub                           | Imposé                                                                                                          |
 
 ### Pourquoi PHP orienté objet
 
@@ -200,13 +198,13 @@ Le site a été mis en ligne sur l'hébergement fourni par le CF2M (Nuxit) :
 
 ## 5. Comptes de test
 
-| Rôle | Email | Mot de passe |
-|---|---|---|
-| Administrateur | `admin@maisonrosalie.be` | `Rosalie-Admin-2026` |
-| Membre | `marie@example.com` | `Rosalie-Membre-2026` |
-| Membre | `bruce@example.com` | `Rosalie-Membre-2026` |
-| Membre | `bryan@example.com` | `Rosalie-Membre-2026` |
-| Membre | `meidhy@example.com` | `Rosalie-Membre-2026` |
+| Rôle           | Email                    | Mot de passe          |
+| -------------- | ------------------------ | --------------------- |
+| Administrateur | `admin@maisonrosalie.be` | `Rosalie-Admin-2026`  |
+| Membre         | `marie@example.com`      | `Rosalie-Membre-2026` |
+| Membre         | `bruce@example.com`      | `Rosalie-Membre-2026` |
+| Membre         | `bryan@example.com`      | `Rosalie-Membre-2026` |
+| Membre         | `meidhy@example.com`     | `Rosalie-Membre-2026` |
 
 Les mots de passe sont stockés hachés avec `password_hash` (bcrypt). Ils ne sont lisibles nulle part dans la base.
 
@@ -216,13 +214,13 @@ Données de démonstration : 5 recettes, 4 catégories, 12 ingrédients, 20 éta
 
 ## 6. Les 5 recettes
 
-| N° | Recette | Catégorie | Difficulté | Préparation | Cuisson | Portions | Développeur |
-|---|---|---|---|---|---|---|---|
-| 1 | Chocolat chaud à l'ancienne | Boissons | Facile | 5 min | 10 min | 2 | *À COMPLÉTER* |
-| 2 | Mousse au chocolat noir | Mousses | Moyen | 25 min | 5 min | 6 | *À COMPLÉTER* |
-| 3 | Brownies aux noix | Gâteaux | Facile | 15 min | 25 min | 12 | *À COMPLÉTER* |
-| 4 | Fondant au cœur coulant | Gâteaux | Difficile | 20 min | 10 min | 4 | *À COMPLÉTER* |
-| 5 | Glace au chocolat sans sorbetière | Glacé | Moyen | 20 min | 5 min | 6 | *À COMPLÉTER* |
+| N°  | Recette                           | Catégorie | Difficulté | Préparation | Cuisson | Portions | Développeur   |
+| --- | --------------------------------- | --------- | ---------- | ----------- | ------- | -------- | ------------- |
+| 1   | Chocolat chaud à l'ancienne       | Boissons  | Facile     | 5 min       | 10 min  | 2        | _À COMPLÉTER_ |
+| 2   | Mousse au chocolat noir           | Mousses   | Moyen      | 25 min      | 5 min   | 6        | _À COMPLÉTER_ |
+| 3   | Brownies aux noix                 | Gâteaux   | Facile     | 15 min      | 25 min  | 12       | _À COMPLÉTER_ |
+| 4   | Fondant au cœur coulant           | Gâteaux   | Difficile  | 20 min      | 10 min  | 4        | _À COMPLÉTER_ |
+| 5   | Glace au chocolat sans sorbetière | Glacé     | Moyen      | 20 min      | 5 min   | 6        | _À COMPLÉTER_ |
 
 4 catégories utilisées, au moins une recette de chaque difficulté, et 4 étapes illustrées par recette.
 
@@ -230,13 +228,13 @@ Données de démonstration : 5 recettes, 4 catégories, 12 ingrédients, 20 éta
 
 ### Palette
 
-| Variable CSS | Couleur | Usage |
-|---|---|---|
-| `--color-gold` | `#f1b300` | Accents, étoiles, survols |
+| Variable CSS        | Couleur   | Usage                                         |
+| ------------------- | --------- | --------------------------------------------- |
+| `--color-gold`      | `#f1b300` | Accents, étoiles, survols                     |
 | `--color-gold-text` | `#976700` | Titres et liens dorés lisibles sur fond clair |
-| `--color-brown` | `#5a392b` | Texte principal |
-| `--color-cream` | `#fffaf2` | Fond de page |
-| `--color-white` | `#ffffff` | Cartes et navigation |
+| `--color-brown`     | `#5a392b` | Texte principal                               |
+| `--color-cream`     | `#fffaf2` | Fond de page                                  |
+| `--color-white`     | `#ffffff` | Cartes et navigation                          |
 
 ### Typographies
 
@@ -245,8 +243,67 @@ Données de démonstration : 5 recettes, 4 catégories, 12 ingrédients, 20 éta
 
 ### Composants
 
-*À COMPLÉTER par Bryan* : boutons, cartes de recette, formulaires, fenêtres modales, notifications.
+L'interface de La Maison Rosalie a été développée en HTML5, CSS3 et JavaScript natif, avec l'utilisation de Bootstrap 5.3 pour certains composants et la mise en page responsive.
 
+L'objectif était de créer une expérience utilisateur moderne, fluide et accessible, tout en respectant l'identité visuelle de la maquette reçu par la designeuse (Vladyslava Yastrebova).
+
+- Navigation et menu responsive
+
+La barre de navigation permet d'accéder aux différentes pages du site, de rechercher une recette et de se connecter à son compte.
+
+Sur ordinateur, les différentes actions sont directement accessibles depuis la navbar. Sur mobile, la recherche et la connexion sont intégrées au menu burger afin de libérer de l'espace.
+
+Le menu utilise le composant Collapse de Bootstrap, complété par du JavaScript pour gérer le déplacement des éléments en fonction de la largeur de l'écran.
+
+- Hero et animations de l'accueil
+
+La page d'accueil possède un élément central en forme de soleil, servant de navigation interactive entre les catégories de recettes.
+
+Ce composant propose une rotation automatique, une navigation manuelle, des indicateurs de pagination et un panneau présentant la catégorie sélectionnée.
+
+Les catégories sont récupérées depuis la base de données par PHP, puis transmises au JavaScript. Le hero s'adapte ainsi aux catégories disponibles sans devoir modifier manuellement leurs noms dans le code.
+
+- Cartes de recettes
+
+Les recettes sont présentées sous forme de cartes contenant une photographie, le nom, la catégorie, une description et plusieurs informations pratiques.
+
+Une animation de zoom sur l'image accompagne le survol de la carte.
+
+La disposition s'adapte à la taille de l'écran : trois colonnes sur grand écran, deux sur tablette et une sur mobile.
+
+- Boutons et interactions
+
+Les boutons et les liens interactifs utilisent les couleurs principales de la charte graphique.
+
+Des changements de couleur, des transitions et des effets au survol permettent d'identifier les éléments interactifs.
+
+Les filtres de recettes possèdent également un état actif pour indiquer à l'utilisateur la sélection en cours.
+
+Sur les fiches recettes, le bouton Favoris prend la forme d'un cœur transparent avec un contour doré. Lorsqu'une recette est ajoutée aux favoris, le cœur se remplit.
+
+- Formulaires et fenêtres modales
+
+Les formulaires utilisent des champs et des boutons cohérents avec l'identité visuelle du site.
+
+Les fenêtres de connexion et d'inscription sont accessibles depuis la navigation. Une transition animée permet de passer d'un formulaire à l'autre.
+
+La disposition des champs s'adapte à la taille de l'écran afin de faciliter leur utilisation sur mobile.
+
+- Notifications
+
+Le site utilise des notifications temporaires pour informer l'utilisateur du résultat de certaines actions.
+
+Les messages de réussite et d'erreur possèdent des styles distincts. Les notifications peuvent être fermées manuellement et certains messages disparaissent automatiquement après quelques secondes.
+
+- Responsive design et accessibilité
+
+L'interface a été adaptée aux ordinateurs, tablettes et smartphones grâce aux Media Queries CSS, aux grilles responsives et à certaines fonctionnalités de Bootstrap.
+
+Une attention particulière a été portée à la lisibilité, aux contrastes, aux états de focus et aux libellés accessibles des boutons.
+
+Les animations tiennent également compte de la préférence système prefers-reduced-motion afin de limiter les mouvements lorsque l'utilisateur le souhaite.
+
+L'ensemble des composants vise à conserver une expérience cohérente sur les différentes pages du site.
 Le logo a été créé par l'équipe (format SVG) et est utilisé dans la navigation, le hero et le pied de page.
 
 ## 8. Sécurité et règles de gestion
@@ -257,11 +314,11 @@ Le logo a été créé par l'équipe (format SVG) et est utilisé dans la naviga
 
 ### Limites anti-abus
 
-| Action | Limite | Exigence |
-|---|---|---|
-| Connexion | 5 échecs en 15 minutes (par email ou par IP), puis blocage 15 minutes | BE-03 |
-| Commentaire | 5 commentaires maximum par utilisateur sur 10 minutes | BE-44 |
-| Contact | 3 messages maximum par adresse IP sur une heure | BE-50 |
+| Action      | Limite                                                                | Exigence |
+| ----------- | --------------------------------------------------------------------- | -------- |
+| Connexion   | 5 échecs en 15 minutes (par email ou par IP), puis blocage 15 minutes | BE-03    |
+| Commentaire | 5 commentaires maximum par utilisateur sur 10 minutes                 | BE-44    |
+| Contact     | 3 messages maximum par adresse IP sur une heure                       | BE-50    |
 
 ### Mesures en place
 
@@ -310,19 +367,19 @@ Les vues ne contiennent aucun accès aux données : les contrôleurs préparent 
 
 ## 10. Crédits et bibliothèques
 
-| Élément | Source | Justification |
-|---|---|---|
-| Bootstrap 5.3.8 (CDN jsDelivr) | getbootstrap.com | Imposé par le cahier des charges |
-| Police Poppins | Google Fonts | Lisibilité, style moderne et chaleureux |
-| Police DM Serif Display | Google Fonts, fichier local (licence SIL OFL, `public/assets/fonts/dm-serif-display/OFL.txt`) | Titres élégants dans l'esprit d'une maison artisanale |
-| Icônes | Feather Icons (licence MIT, `public/assets/img/LICENSE-feather.txt`) | Icônes au trait cohérentes sur tout le site |
-| PHPMailer 6.9.3 | github.com/PHPMailer/PHPMailer (licence LGPL 2.1, `lib/PHPMailer/LICENSE`), 3 fichiers copiés sans Composer | Envoi d'e-mails par SMTP authentifié et chiffré, que la fonction `mail()` de PHP ne gère pas |
-| Photos principales des recettes | Générées avec Canva, droits d'utilisation couverts par la licence Canva payée par Tanuki Corporation | Photo d'en-tête de chaque fiche |
-| Photos des étapes | Générées par intelligence artificielle (Canva) à partir de descriptions écrites par l'équipe. Aucun style d'artiste, marque, logo ni personne réelle n'a été demandé. | Illustrer chaque étape (FE-33) |
+| Élément                         | Source                                                                                                                                                                | Justification                                                                                |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Bootstrap 5.3.8 (CDN jsDelivr)  | getbootstrap.com                                                                                                                                                      | Imposé par le cahier des charges                                                             |
+| Police Poppins                  | Google Fonts                                                                                                                                                          | Lisibilité, style moderne et chaleureux                                                      |
+| Police DM Serif Display         | Google Fonts, fichier local (licence SIL OFL, `public/assets/fonts/dm-serif-display/OFL.txt`)                                                                         | Titres élégants dans l'esprit d'une maison artisanale                                        |
+| Icônes                          | Feather Icons (licence MIT, `public/assets/img/LICENSE-feather.txt`)                                                                                                  | Icônes au trait cohérentes sur tout le site                                                  |
+| PHPMailer 6.9.3                 | github.com/PHPMailer/PHPMailer (licence LGPL 2.1, `lib/PHPMailer/LICENSE`), 3 fichiers copiés sans Composer                                                           | Envoi d'e-mails par SMTP authentifié et chiffré, que la fonction `mail()` de PHP ne gère pas |
+| Photos principales des recettes | Générées avec Canva, droits d'utilisation couverts par la licence Canva payée par Tanuki Corporation                                                                  | Photo d'en-tête de chaque fiche                                                              |
+| Photos des étapes               | Générées par intelligence artificielle (Canva) à partir de descriptions écrites par l'équipe. Aucun style d'artiste, marque, logo ni personne réelle n'a été demandé. | Illustrer chaque étape (FE-33)                                                               |
 
 ## 11. Captures d'écran
 
-*À COMPLÉTER* : accueil, page recettes, fiche recette, fenêtre de connexion, page contact, version mobile.
+_À COMPLÉTER_ : accueil, page recettes, fiche recette, fenêtre de connexion, page contact, version mobile.
 
 ## 12. Documentation
 
