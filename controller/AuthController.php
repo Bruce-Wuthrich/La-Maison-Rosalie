@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use model\Mailer;
 use model\manager\LoginAttemptManager;
 use model\manager\UserManager;
 
@@ -33,6 +34,10 @@ try {
         }
 
         unset($_SESSION['form_data']['register']);
+
+        // Bonus mailer : e-mail de confirmation (sans effet si le SMTP n'est pas configuré)
+        Mailer::sendRegistrationConfirmation($registeredUser);
+
         respond(
             true,
             'Votre compte a bien été créé. Vous pouvez maintenant vous connecter.',
