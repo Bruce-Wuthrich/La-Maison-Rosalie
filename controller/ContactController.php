@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use model\Mailer;
 use model\manager\ContactMessageManager;
 
 require_once RACINE_PATH . '/controller/ControllerHelpers.php';
@@ -27,8 +28,14 @@ try {
         throw new DomainException('Trop de messages ont été envoyés. Merci de réessayer plus tard.');
     }
 
-    $contactMessageManager->create($_POST, $ipAddress);
+    $contactMessage = $contactMessageManager->create($_POST, $ipAddress);
+    if ($contactMessage === false) {
+        throw new RuntimeException('Le message de contact n’a pas été enregistré.');
+    }
     unset($_SESSION['form_data']['contact']);
+
+    // Bonus mailer : accusé de réception (sans effet si le SMTP n'est pas configuré)
+    Mailer::sendContactAcknowledgement($contactMessage);
     setFlashMessage('success', 'Votre message a bien été envoyé.');
 } catch (InvalidArgumentException|DomainException $exception) {
     setFlashMessage('error', $exception->getMessage());
