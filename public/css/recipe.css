@@ -522,7 +522,7 @@
 .comment-rating-input input:checked ~ label,
 .comment-rating-input label:hover,
 .comment-rating-input label:hover ~ label {
-    color: transparent;
+    color: #a87500;
     -webkit-text-stroke-color: #a87500;
     opacity: 1;
     transform: scale(1.06);

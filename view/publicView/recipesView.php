@@ -126,9 +126,16 @@ $recipeImagePath = static function ($recipe): string {
                             : 'Aucune recette ne correspond à votre recherche.'); ?>
                 </p>
             <?php } else { ?>
+                <p class="visually-hidden" data-live-search-status aria-live="polite"></p>
                 <div class="recipes-grid">
                     <?php foreach ($recipes as $recipe) { ?>
-                        <article class="recipe-card">
+                        <?php
+                        $searchableRecipe = trim(
+                            (string) $recipe->getTitle() . ' ' . (string) $recipe->getIngredientNames()
+                        );
+                        ?>
+                        <article class="recipe-card"
+                            data-search="<?php echo htmlspecialchars($searchableRecipe, ENT_QUOTES, 'UTF-8'); ?>">
                             <a class="recipe-card-image-link"
                                 href="?pg=recette&amp;slug=<?php echo rawurlencode((string) $recipe->getSlug()); ?>">
                                 <img class="recipe-card-image"
