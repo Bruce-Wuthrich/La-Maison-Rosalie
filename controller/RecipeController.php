@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use model\manager\CategoryManager;
 use model\manager\CommentManager;
+use model\manager\FavoriteManager;
 use model\manager\RecipeIngredientManager;
 use model\manager\StepManager;
 use model\manager\UserManager;
@@ -36,6 +37,8 @@ if ($page === 'recette') {
     $categories = [];
     $comments = [];
     $otherRecipes = [];
+    $recipeTags = [];
+    $isFavorite = false;
     $commentCount = 0;
     $commentHasNext = false;
     $commentFormData = pullFormData('comment');
@@ -62,6 +65,11 @@ if ($page === 'recette') {
         $steps = (new StepManager($db))->getByRecipeId($recipe->getId());
         $categories = (new CategoryManager($db))->getByRecipeId($recipe->getId());
         $otherRecipes = $recipeManager->getOthers($recipe->getId());
+        $recipeTags = $recipeManager->getTags($recipe->getId());
+        // Bonus favoris : cœur déjà rempli si le membre a enregistré la recette.
+        if ($userId !== null) {
+            $isFavorite = (new FavoriteManager($db))->isFavorite($userId, $recipe->getId());
+        }
 
         $commentManager = new CommentManager($db);
         $commentCount = $commentManager->countByRecipeId($recipe->getId());
@@ -109,6 +117,10 @@ if (!array_key_exists($difficulty, $difficultyOptions)) {
     $difficulty = '';
 }
 
+// Bonus favoris : "Mes favoris" seulement pour un membre connecté, ignoré sinon.
+$favoriteUserId = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
+$onlyFavorites = $favoriteUserId !== null && stringInput($_GET['favoris'] ?? null) === '1';
+
 $maxTotalTime = positiveInteger($_GET['temps'] ?? null);
 if ($maxTotalTime !== null && !array_key_exists($maxTotalTime, $timeOptions)) {
     $maxTotalTime = null;
@@ -119,7 +131,8 @@ try {
         $searchTerm,
         $categorySlug === '' ? null : $categorySlug,
         $difficulty === '' ? null : $difficulty,
-        $maxTotalTime
+        $maxTotalTime,
+        $onlyFavorites ? $favoriteUserId : null
     );
 } catch (Throwable $exception) {
     error_log('Impossible de charger les recettes : ' . $exception->getMessage());

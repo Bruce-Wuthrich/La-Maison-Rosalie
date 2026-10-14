@@ -17,52 +17,8 @@ $commentSortLabels = [
     'pire' => 'Les moins bien notés',
 ];
 
-// Tags visuels de la maquette : aucune nouvelle table ni requête SQL.
-$recipeTags = [
-    'chocolat-chaud-a-l-ancienne' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'rapide', 'count' => 3],
-        ['name' => 'famille', 'count' => 4],
-        ['name' => 'chocolat noir', 'count' => 4],
-        ['name' => 'populaire', 'count' => 4],
-        ['name' => 'enfants', 'count' => 4],
-    ],
-    'mousse-au-chocolat-noir' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'rapide', 'count' => 3],
-        ['name' => 'famille', 'count' => 4],
-        ['name' => 'chocolat noir', 'count' => 4],
-        ['name' => 'enfants', 'count' => 4],
-        ['name' => 'crémeux', 'count' => 2],
-    ],
-    'brownies-aux-noix' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'famille', 'count' => 4],
-        ['name' => 'four', 'count' => 2],
-        ['name' => 'chocolat noir', 'count' => 4],
-        ['name' => 'populaire', 'count' => 4],
-        ['name' => 'brownies', 'count' => 1],
-        ['name' => 'fête', 'count' => 2],
-        ['name' => 'enfants', 'count' => 4],
-    ],
-    'fondant-au-coeur-coulant' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'four', 'count' => 2],
-        ['name' => 'chocolat noir', 'count' => 4],
-        ['name' => 'populaire', 'count' => 4],
-        ['name' => 'fête', 'count' => 2],
-    ],
-    'glace-au-chocolat-sans-sorbetiere' => [
-        ['name' => 'chocolat', 'count' => 5],
-        ['name' => 'rapide', 'count' => 3],
-        ['name' => 'famille', 'count' => 4],
-        ['name' => 'populaire', 'count' => 4],
-        ['name' => 'enfants', 'count' => 4],
-        ['name' => 'sans cuisson', 'count' => 1],
-        ['name' => 'crémeux', 'count' => 2],
-    ],
-];
-$visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
+// Tags tirés de la base (catégories puis ingrédients), préparés par RecipeController.
+$visibleTags = $recipeTags;
 ?>
 
 <main class="recipe-page">
@@ -88,14 +44,32 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
             <div class="row align-items-center g-5">
                 <div class="col-12 col-lg-5">
                     <figure class="recipe-figure">
-                        <button class="recipe-favorite" type="button"
-                            data-recipe-slug="<?php echo $escape($recipe->getSlug()); ?>"
-                            aria-label="Ajouter aux favoris" aria-pressed="false">
+                        <?php if ($connectedUser !== null) { ?>
+                        <!-- Bonus favoris : enregistré en base pour le membre (POST ?pg=favori, sans rechargement avec JS) -->
+                        <form action="?pg=favori" method="post" data-favorite-form>
+                            <input type="hidden" name="csrf_token" value="<?php echo $escape($csrfToken); ?>">
+                            <input type="hidden" name="recipe_id" value="<?php echo (int) $recipe->getId(); ?>">
+                            <input type="hidden" name="slug" value="<?php echo $escape($recipe->getSlug()); ?>">
+                            <input type="hidden" name="favorite" value="<?php echo $isFavorite ? '0' : '1'; ?>">
+                            <button class="recipe-favorite<?php echo $isFavorite ? ' is-active' : ''; ?>" type="submit"
+                                aria-label="<?php echo $isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'; ?>"
+                                aria-pressed="<?php echo $isFavorite ? 'true' : 'false'; ?>">
+                            <svg viewBox="0 0 512 512" aria-hidden="true">
+                                <path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64C106.32 80 64.54 124.14 64 176.81c-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0 0 18 0c96.26-65.34 184.09-143.09 183-252.42C447.46 124.14 405.68 80 352.92 80Z" />
+                            </svg>
+                                <span class="recipe-favorite-tooltip" aria-hidden="true"><?php echo $isFavorite ? 'Enregistré' : 'Enregistrez'; ?></span>
+                            </button>
+                        </form>
+                        <?php } else { ?>
+                        <!-- Visiteur : le cœur ouvre la fenêtre de connexion -->
+                        <button class="recipe-favorite" type="button" data-auth-open
+                            aria-label="Se connecter pour ajouter aux favoris">
                             <svg viewBox="0 0 512 512" aria-hidden="true">
                                 <path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64C106.32 80 64.54 124.14 64 176.81c-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0 0 18 0c96.26-65.34 184.09-143.09 183-252.42C447.46 124.14 405.68 80 352.92 80Z" />
                             </svg>
                             <span class="recipe-favorite-tooltip" aria-hidden="true">Enregistrez</span>
                         </button>
+                        <?php } ?>
 
                         <img class="recipe-image"
                             src="<?php echo $escape($recipeImage); ?>"
@@ -422,7 +396,9 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
                     <?php foreach ($visibleTags as $tag) { ?>
                         <li>
                             <a class="recipe-tag"
-                                href="?pg=recettes&amp;recherche=<?php echo rawurlencode((string) $tag['name']); ?>">
+                                href="?pg=recettes&amp;<?php echo $tag['type'] === 'categorie'
+                                    ? 'categorie=' . rawurlencode((string) $tag['slug'])
+                                    : 'recherche=' . rawurlencode($tag['name']); ?>">
                                 <?php echo $escape($tag['name']); ?>(<?php echo (int) $tag['count']; ?>)
                             </a>
                         </li>
@@ -449,4 +425,5 @@ $visibleTags = $recipeTags[(string) $recipe->getSlug()] ?? [];
     <?php } ?>
 </main>
 
+<script src="js/favoris.js" defer></script>
 <?php require RACINE_PATH . '/view/inc/footer.php'; ?>
