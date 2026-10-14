@@ -1,13 +1,7 @@
 <?php require RACINE_PATH . '/view/inc/header.php'; ?>
 <?php require RACINE_PATH . '/view/inc/navbar.php'; ?>
 <?php
-$recipeFilters = [
-    '' => 'Toutes',
-    'gateaux' => 'Gâteaux',
-    'mousses' => 'Mousses',
-    'boissons' => 'Boissons',
-    'glace' => 'Glacé',
-];
+// $recipeFilters est préparé dans RecipeController à partir de la BDD.
 
 // Utilise le chemin de la BDD s'il existe, sinon l'image locale de la recette.
 $recipeImagePath = static function ($recipe): string {

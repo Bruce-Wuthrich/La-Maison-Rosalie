@@ -20,56 +20,74 @@ $recipeImagePath = static function ($recipe): string {
     <section class="hero-home">
         <h1 class="visually-hidden">Maison Rosalie</h1>
 
+        <?php
+        $heroCount = count($heroCategories);
+        $firstCategory = $heroCategories[0] ?? null;
+        $lastCategory = $heroCategories[$heroCount - 1] ?? null;
+        $nextCategory = $heroCategories[1] ?? $firstCategory;
+        ?>
+        <script type="application/json" id="heroCategoriesData"><?= json_encode(
+            $heroCategories,
+            JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+        ) ?></script>
+
         <div class="hero-emblem">
-            <button class="hero-wheel" type="button" aria-label="Faire tourner les catégories">
+            <button class="hero-wheel" type="button" aria-label="Faire tourner les catégories" <?= $heroCount < 2 ? 'disabled' : '' ?>>
                 <img class="hero-sunburst" src="assets/img/logo/sunburst-home.png" alt="" aria-hidden="true">
             </button>
 
             <img class="hero-logo" src="assets/img/logo/logo.svg?v=<?= (int) $iconVersion ?>" alt="Maison Rosalie">
 
-            <div class="hero-category-stack" aria-label="Catégories de recettes">
-                <button class="hero-category-preview" type="button" data-category-neighbor="previous"
-                    aria-label="Afficher la catégorie Mousses">Mousses</button>
-                <a class="hero-category-current is-active" href="?pg=recettes" aria-live="off"
-                    aria-expanded="false" aria-controls="heroCategoryPanel">Pâtisserie</a>
-                <button class="hero-category-preview" type="button" data-category-neighbor="next"
-                    aria-label="Afficher la catégorie Tartes">Tartes</button>
-            </div>
+            <?php if ($firstCategory !== null): ?>
+                <div class="hero-category-stack" aria-label="Catégories de recettes">
+                    <button class="hero-category-preview" type="button" data-category-neighbor="previous"
+                        aria-label="Afficher la catégorie <?= htmlspecialchars($lastCategory['name'], ENT_QUOTES, 'UTF-8') ?>"
+                        <?= $heroCount < 2 ? 'hidden disabled' : '' ?>><?= htmlspecialchars($lastCategory['name'], ENT_QUOTES, 'UTF-8') ?></button>
+                    <a class="hero-category-current is-active" href="<?= htmlspecialchars($firstCategory['href'], ENT_QUOTES, 'UTF-8') ?>" aria-live="off"
+                        aria-expanded="false" aria-controls="heroCategoryPanel"><?= htmlspecialchars($firstCategory['name'], ENT_QUOTES, 'UTF-8') ?></a>
+                    <button class="hero-category-preview" type="button" data-category-neighbor="next"
+                        aria-label="Afficher la catégorie <?= htmlspecialchars($nextCategory['name'], ENT_QUOTES, 'UTF-8') ?>"
+                        <?= $heroCount < 2 ? 'hidden disabled' : '' ?>><?= htmlspecialchars($nextCategory['name'], ENT_QUOTES, 'UTF-8') ?></button>
+                </div>
+            <?php else: ?>
+                <div class="hero-category-stack" aria-label="Catégories de recettes">
+                    <span class="hero-category-current">Catégories bientôt disponibles</span>
+                </div>
+            <?php endif; ?>
         </div>
 
-        <div class="hero-pagination" role="group" aria-label="Choisir une catégorie">
-            <button type="button" data-category-index="0" aria-label="Afficher la catégorie Tartes"></button>
-            <button type="button" data-category-index="1" aria-label="Afficher la catégorie Gâteaux"></button>
-            <button type="button" data-category-index="2" aria-label="Afficher la catégorie Glaces"></button>
-            <button type="button" data-category-index="3" aria-label="Afficher la catégorie Mousses"></button>
-            <button class="is-active" type="button" data-category-index="4" aria-label="Afficher la catégorie Pâtisserie" aria-current="true"></button>
-        </div>
-
-        <button class="hero-rotation-toggle" type="button" hidden
-            aria-label="Mettre en pause la rotation automatique" aria-pressed="false">Pause</button>
-
-        <button class="hero-category-backdrop" type="button"
-            aria-label="Fermer la présentation de la catégorie"></button>
-
-        <aside id="heroCategoryPanel" class="hero-category-panel" aria-hidden="true" inert>
-            <button class="hero-category-close" type="button" aria-label="Fermer la présentation de la catégorie">
-                <span aria-hidden="true">×</span>
-            </button>
-
-            <div class="hero-category-panel-content">
-                <h2 class="hero-category-panel-title">Pâtisserie</h2>
-                <p class="hero-category-panel-copy">
-                    Plongez dans l’univers gourmand des pâtisseries au chocolat, où il y en a pour tous les goûts.
-                    Explorez différentes textures et saveurs et laissez-vous inspirer par nos recettes.
-                </p>
-                <a class="hero-category-panel-link" href="?pg=recettes">
-                    Découvrir les recettes <span aria-hidden="true">⟶</span>
-                </a>
-                <img class="hero-category-panel-image"
-                    src="assets/img/recettes/fondant-au-coeur-coulant/principale.webp"
-                    alt="Fondant au chocolat au cœur coulant">
+        <?php if ($firstCategory !== null): ?>
+            <div class="hero-pagination" role="group" aria-label="Choisir une catégorie">
+                <?php foreach ($heroCategories as $index => $category): ?>
+                    <button type="button" data-category-index="<?= $index ?>"
+                        aria-label="Afficher la catégorie <?= htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8') ?>"
+                        <?= $index === 0 ? 'class="is-active" aria-current="true"' : '' ?>></button>
+                <?php endforeach; ?>
             </div>
-        </aside>
+
+            <button class="hero-rotation-toggle" type="button" hidden
+                aria-label="Mettre en pause la rotation automatique" aria-pressed="false">Pause</button>
+
+            <button class="hero-category-backdrop" type="button"
+                aria-label="Fermer la présentation de la catégorie"></button>
+
+            <aside id="heroCategoryPanel" class="hero-category-panel" aria-hidden="true" inert>
+                <button class="hero-category-close" type="button" aria-label="Fermer la présentation de la catégorie">
+                    <span aria-hidden="true">×</span>
+                </button>
+
+                <div class="hero-category-panel-content">
+                    <h2 class="hero-category-panel-title"><?= htmlspecialchars($firstCategory['name'], ENT_QUOTES, 'UTF-8') ?></h2>
+                    <p class="hero-category-panel-copy"><?= htmlspecialchars($firstCategory['description'], ENT_QUOTES, 'UTF-8') ?></p>
+                    <a class="hero-category-panel-link" href="<?= htmlspecialchars($firstCategory['href'], ENT_QUOTES, 'UTF-8') ?>">
+                        Découvrir les recettes <span aria-hidden="true">⟶</span>
+                    </a>
+                    <img class="hero-category-panel-image"
+                        src="<?= htmlspecialchars($firstCategory['image'], ENT_QUOTES, 'UTF-8') ?>"
+                        alt="<?= htmlspecialchars($firstCategory['imageAlt'], ENT_QUOTES, 'UTF-8') ?>">
+                </div>
+            </aside>
+        <?php endif; ?>
 
         <p class="hero-tagline">
             <span>Des créations d’exception</span>

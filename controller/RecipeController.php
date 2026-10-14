@@ -98,7 +98,18 @@ $searchTerm = stringInput($_GET['recherche'] ?? null);
 $searchTerm = function_exists('mb_substr')
     ? mb_substr($searchTerm, 0, 80)
     : substr($searchTerm, 0, 80);
-$allowedCategorySlugs = ['gateaux', 'mousses', 'boissons', 'glace'];
+// Les filtres affichés dans le catalogue doivent rester synchronisés avec la BDD.
+$recipeFilters = ['' => 'Toutes'];
+try {
+    foreach ((new CategoryManager($db))->getAll() as $category) {
+        $recipeFilters[(string) $category->getSlug()] = (string) $category->getTitle();
+    }
+} catch (Throwable $exception) {
+    error_log('Impossible de charger les catégories : ' . $exception->getMessage());
+    http_response_code(503);
+    $error = 'Impossible de charger les catégories pour le moment.';
+}
+$allowedCategorySlugs = array_keys($recipeFilters);
 
 // Un slug inconnu ou invalide affiche simplement toutes les recettes.
 if ($categorySlug !== '' && (
