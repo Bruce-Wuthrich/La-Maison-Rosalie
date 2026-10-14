@@ -211,7 +211,67 @@ Données de démonstration : 5 recettes, 4 catégories, 12 ingrédients, 20 éta
 
 ### Composants
 
-*À COMPLÉTER par Bryan* : boutons, cartes de recette, formulaires, fenêtres modales, notifications.
+L'interface de La Maison Rosalie a été développée en HTML5, CSS3 et JavaScript natif, avec l'utilisation de Bootstrap 5.3 pour certains composants et la mise en page responsive.
+
+L'objectif était de créer une expérience utilisateur moderne, fluide et accessible, tout en respectant l'identité visuelle de la maquette reçue de la designeuse (Vladyslava Yastrebova).
+
+#### Navigation et menu responsive
+
+La barre de navigation permet d'accéder aux différentes pages du site, de rechercher une recette et de se connecter à son compte.
+
+Sur ordinateur, les différentes actions sont directement accessibles depuis la navbar. Sur mobile, la recherche et la connexion sont intégrées au menu burger afin de libérer de l'espace.
+
+Le menu utilise le composant Collapse de Bootstrap, complété par du JavaScript pour gérer le déplacement des éléments en fonction de la largeur de l'écran.
+
+#### Hero et animations de l'accueil
+
+La page d'accueil possède un élément central en forme de soleil, servant de navigation interactive entre les catégories de recettes.
+
+Ce composant propose une rotation automatique, une navigation manuelle, des indicateurs de pagination et un panneau présentant la catégorie sélectionnée.
+
+Les catégories sont récupérées depuis la base de données par PHP, puis transmises au JavaScript. Le hero s'adapte ainsi aux catégories disponibles sans devoir modifier manuellement leurs noms dans le code.
+
+#### Cartes de recettes
+
+Les recettes sont présentées sous forme de cartes contenant une photographie, le nom, la catégorie, une description et plusieurs informations pratiques.
+
+Une animation de zoom sur l'image accompagne le survol de la carte.
+
+La disposition s'adapte à la taille de l'écran : trois colonnes sur grand écran, deux sur tablette et une sur mobile.
+
+#### Boutons et interactions
+
+Les boutons et les liens interactifs utilisent les couleurs principales de la charte graphique.
+
+Des changements de couleur, des transitions et des effets au survol permettent d'identifier les éléments interactifs.
+
+Les filtres de recettes possèdent également un état actif pour indiquer à l'utilisateur la sélection en cours.
+
+Sur les fiches recettes, le bouton Favoris prend la forme d'un cœur transparent avec un contour doré. Lorsqu'une recette est ajoutée aux favoris, le cœur se remplit.
+
+#### Formulaires et fenêtres modales
+
+Les formulaires utilisent des champs et des boutons cohérents avec l'identité visuelle du site.
+
+Les fenêtres de connexion et d'inscription sont accessibles depuis la navigation. Une transition animée permet de passer d'un formulaire à l'autre.
+
+La disposition des champs s'adapte à la taille de l'écran afin de faciliter leur utilisation sur mobile.
+
+#### Notifications
+
+Le site utilise des notifications temporaires pour informer l'utilisateur du résultat de certaines actions.
+
+Les messages de réussite et d'erreur possèdent des styles distincts. Les notifications peuvent être fermées manuellement et certains messages disparaissent automatiquement après quelques secondes.
+
+#### Responsive design et accessibilité
+
+L'interface a été adaptée aux ordinateurs, tablettes et smartphones grâce aux Media Queries CSS, aux grilles responsives et à certaines fonctionnalités de Bootstrap.
+
+Une attention particulière a été portée à la lisibilité, aux contrastes, aux états de focus et aux libellés accessibles des boutons.
+
+Les animations tiennent également compte de la préférence système `prefers-reduced-motion` afin de limiter les mouvements lorsque l'utilisateur le souhaite.
+
+L'ensemble des composants vise à conserver une expérience cohérente sur les différentes pages du site.
 
 Le logo a été créé par l'équipe (format SVG) et est utilisé dans la navigation, le hero et le pied de page.
 
