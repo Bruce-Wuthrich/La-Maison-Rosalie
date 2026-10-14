@@ -128,6 +128,7 @@ $controller = match ($page) {
     'commentaire'         => 'CommentController',  // com add/delete
     'favori'              => 'FavoriteController', // bonus favoris (POST)
     'verification'        => 'VerificationController', // lien de confirmation d'adresse e-mail (GET)
+    'sitemap'             => 'SitemapController',      // plan du site XML pour les moteurs de recherche
     'admin'               => 'AdminController',
     default               => null,
 };

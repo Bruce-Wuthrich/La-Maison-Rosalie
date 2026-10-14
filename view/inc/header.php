@@ -54,6 +54,9 @@
     <meta name="description" content="<?= htmlspecialchars($documentDescription, ENT_QUOTES, 'UTF-8') ?>">
     <meta name="robots" content="<?= $metaRobots ?>">
     <link rel="icon" href="assets/img/logo/picto.svg?v=<?= (int) $iconVersion ?>" type="image/svg+xml">
+    <link rel="icon" href="assets/img/logo/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/img/logo/apple-touch-icon.png">
+    <?php require RACINE_PATH . '/view/inc/seo.php'; ?>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
