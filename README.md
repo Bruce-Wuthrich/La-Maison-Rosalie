@@ -290,7 +290,26 @@ Les vues ne contiennent aucun accès aux données : les contrôleurs préparent 
 
 ## 11. Captures d'écran
 
-*À COMPLÉTER* : accueil, page recettes, fiche recette, fenêtre de connexion, page contact, version mobile.
+### Accueil
+![Page d'accueil](docs/captures/accueil.jpg)
+
+### Recettes
+![Page Recettes avec les filtres](docs/captures/recettes.jpg)
+
+### Fiche recette
+![Fiche recette des brownies](docs/captures/fiche-recette.jpg)
+
+### Connexion
+![Fenêtre de connexion](docs/captures/connexion.jpg)
+
+### Contact
+![Page Contact](docs/captures/contact.jpg)
+
+### À propos
+![Page À propos](docs/captures/a-propos.jpg)
+
+### Version mobile
+![Accueil, recettes et fiche recette sur mobile](docs/captures/mobile.jpg)
 
 ## 12. Documentation
 
