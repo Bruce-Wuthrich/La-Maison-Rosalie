@@ -4,6 +4,13 @@
 declare(strict_types=1);
 
 // Redirige après un POST pour éviter un nouvel envoi au rafraîchissement.
+// Lien absolu de confirmation d'adresse, construit depuis RACINE_URL (config) et jamais depuis l'en-tête Host envoyé par le navigateur.
+function verificationUrl(string $token): string
+{
+    $baseUrl = defined('RACINE_URL') ? rtrim(RACINE_URL, '/') : '';
+    return $baseUrl . '/?pg=verification&token=' . rawurlencode($token);
+}
+
 function redirectTo(string $location): never
 {
     header('Location: ' . $location);

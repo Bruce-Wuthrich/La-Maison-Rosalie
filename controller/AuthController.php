@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use model\Mailer;
+use model\manager\EmailVerificationManager;
 use model\manager\LoginAttemptManager;
 use model\manager\UserManager;
 
@@ -35,12 +36,20 @@ try {
 
         unset($_SESSION['form_data']['register']);
 
-        // Bonus mailer : e-mail de confirmation (sans effet si le SMTP n'est pas configuré)
-        Mailer::sendRegistrationConfirmation($registeredUser);
+        // Confirmation d'adresse : lien envoyé par e-mail. Sans SMTP configuré, le compte est confirmé tout de suite.
+        $emailVerificationManager = new EmailVerificationManager($db);
+        if (Mailer::isConfigured()) {
+            $token = $emailVerificationManager->createToken((int) $registeredUser->getId());
+            Mailer::sendRegistrationConfirmation($registeredUser, verificationUrl($token));
+            $registerMessage = 'Votre compte a bien été créé. Un e-mail vient de vous être envoyé : cliquez sur le lien pour confirmer votre adresse, puis connectez-vous.';
+        } else {
+            $emailVerificationManager->markVerified((int) $registeredUser->getId());
+            $registerMessage = 'Votre compte a bien été créé. Vous pouvez maintenant vous connecter.';
+        }
 
         respond(
             true,
-            'Votre compte a bien été créé. Vous pouvez maintenant vous connecter.',
+            $registerMessage,
             $redirect . '#authModal',
             201,
             ['username' => $registeredUser->getUsername()]
@@ -65,6 +74,14 @@ try {
         }
 
         if (!$userManager->connect($_POST)) {
+            // Bon mot de passe mais adresse pas confirmée : un nouveau lien est envoyé
+            $unverifiedUser = $userManager->getUnverifiedUser();
+            if ($unverifiedUser !== null) {
+                $token = (new EmailVerificationManager($db))->createToken((int) $unverifiedUser->getId());
+                Mailer::sendRegistrationConfirmation($unverifiedUser, verificationUrl($token));
+                throw new DomainException('Confirmez d’abord votre adresse e-mail : un nouveau lien de confirmation vient de vous être envoyé.', 403);
+            }
+
             $loginAttemptManager->add($email, $ipAddress);
             throw new DomainException('L’adresse e-mail ou le mot de passe est incorrect.', 401);
         }

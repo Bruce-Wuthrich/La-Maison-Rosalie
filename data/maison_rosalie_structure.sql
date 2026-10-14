@@ -17,6 +17,7 @@ CREATE TABLE users (
   password_hash VARCHAR(255) NOT NULL,
   role          ENUM('member', 'admin') NOT NULL DEFAULT 'member',
   created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  email_verified_at TIMESTAMP NULL DEFAULT NULL, -- NULL tant que le lien de confirmation n'est pas cliqué
   PRIMARY KEY (id),
   UNIQUE KEY uq_users_username (username),
   UNIQUE KEY uq_users_email (email)
@@ -170,6 +171,17 @@ CREATE TABLE contact_messages (
   KEY idx_contact_messages_ip_date (ip_address, created_at)
 ) ENGINE = InnoDB;
 
+-- Lien de confirmation d'adresse e-mail : un seul jeton actif par compte, stocké haché (SHA-256)
+CREATE TABLE email_verifications (
+  user_id    INT UNSIGNED NOT NULL,
+  token_hash CHAR(64)     NOT NULL,
+  expires_at DATETIME     NOT NULL,
+  PRIMARY KEY (user_id),
+  UNIQUE KEY uq_email_verifications_token (token_hash),
+  CONSTRAINT fk_email_verifications_user FOREIGN KEY (user_id)
+    REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 CREATE TABLE login_attempts (
   id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
   email        VARCHAR(254) NOT NULL,
@@ -192,6 +204,9 @@ INSERT INTO users (id, username, email, password_hash, role, created_at) VALUES
   (3, 'Bruce',  'bruce@example.com',      '$2y$10$bZecbBuP8LYznzBdKE.yqu.QOCdvTRKHynOTkr/DU6uXA9.txeXTS', 'member', NOW() - INTERVAL 35 DAY),
   (4, 'bryan',  'bryan@example.com',      '$2y$10$bZecbBuP8LYznzBdKE.yqu.QOCdvTRKHynOTkr/DU6uXA9.txeXTS', 'member', NOW() - INTERVAL 20 DAY),
   (5, 'Meidhy', 'meidhy@example.com',     '$2y$10$bZecbBuP8LYznzBdKE.yqu.QOCdvTRKHynOTkr/DU6uXA9.txeXTS', 'member', NOW() - INTERVAL 10 DAY);
+
+-- Comptes de démonstration : adresse déjà confirmée
+UPDATE users SET email_verified_at = created_at;
 
 INSERT INTO categories (id, title, slug, description) VALUES
   (1, 'Gâteaux', 'gateaux', 'Fondants, brownies et gâteaux de famille.'),
