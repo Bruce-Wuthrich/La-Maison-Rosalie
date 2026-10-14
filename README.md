@@ -184,13 +184,11 @@ Données de démonstration : 5 recettes, 4 catégories, 12 ingrédients, 20 éta
 
 ## 6. Les 5 recettes
 
-| N° | Recette | Catégorie | Difficulté | Préparation | Cuisson | Portions | Développeur |
-|---|---|---|---|---|---|---|---|
-| 1 | Chocolat chaud à l'ancienne | Boissons | Facile | 5 min | 10 min | 2 | *À COMPLÉTER* |
-| 2 | Mousse au chocolat noir | Mousses | Moyen | 25 min | 5 min | 6 | *À COMPLÉTER* |
-| 3 | Brownies aux noix | Gâteaux | Facile | 15 min | 25 min | 12 | *À COMPLÉTER* |
-| 4 | Fondant au cœur coulant | Gâteaux | Difficile | 20 min | 10 min | 4 | *À COMPLÉTER* |
-| 5 | Glace au chocolat sans sorbetière | Glacé | Moyen | 20 min | 5 min | 6 | *À COMPLÉTER* |
+| 1 | Chocolat chaud à l'ancienne | Boissons | Facile | 5 min | 10 min | 2 | Benny |
+| 2 | Mousse au chocolat noir | Mousses | Moyen | 25 min | 5 min | 6 | Bryan |
+| 3 | Brownies aux noix | Gâteaux | Facile | 15 min | 25 min | 12 | Bruce |
+| 4 | Fondant au cœur coulant | Gâteaux | Difficile | 20 min | 10 min | 4 | Meidhy |
+| 5 | Glace au chocolat sans sorbetière | Glacé | Moyen | 20 min | 5 min | 6 | Slava |
 
 4 catégories utilisées, au moins une recette de chaque difficulté, et 4 étapes illustrées par recette.
 
@@ -288,6 +286,7 @@ Les vues ne contiennent aucun accès aux données : les contrôleurs préparent 
 | PHPMailer 6.9.3 | github.com/PHPMailer/PHPMailer (licence LGPL 2.1, `lib/PHPMailer/LICENSE`), 3 fichiers copiés sans Composer | Envoi d'e-mails par SMTP authentifié et chiffré, que la fonction `mail()` de PHP ne gère pas |
 | Photos principales des recettes | Générées avec Canva, droits d'utilisation couverts par la licence Canva payée par Tanuki Corporation | Photo d'en-tête de chaque fiche |
 | Photos des étapes | Générées par intelligence artificielle (Canva) à partir de descriptions écrites par l'équipe. Aucun style d'artiste, marque, logo ni personne réelle n'a été demandé. | Illustrer chaque étape (FE-33) |
+| Photos des pages Accueil et À propos | Générées avec ChatGPT à partir de prompts originaux écrits par l'équipe | Illustrer l'histoire de la maison (FE-13, FE-40) |
 
 ## 11. Captures d'écran
 
