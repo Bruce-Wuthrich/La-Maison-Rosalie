@@ -1,36 +1,3 @@
-# La-Maison-Rosalie
-
-## Point de départ
-
-Le modèle et les 10 tables ont été créés ; l'import MariaDB fonctionne d'après les essais de bruce et Bryan. L'arborescence existe. Ces résultats ne signifient pas encore que T03 (toutes les contraintes) et T06 (import avec données, rejouable) sont terminés. Le dernier ZIP examiné contenait des fichiers PHP vides ; vérifier les changements de chaque membre avant de répartir le travail.
-
-Stack de préparation : PHP objet sans framework, PDO, MariaDB, HTML5, Bootstrap 5, CSS et JavaScript natif. Faire confirmer le choix objet par l'équipe et l'inscrire au README. Les maquettes sont fournies par les designers selon votre organisation : coordonner T04/T05 avec eux.
-
-
-## Choix de DB 
-
-Notre choix c'est porté sur MariaDB pour plusieur raison : 
-- elle est gratuite
-- elle fonctionne très bien avec PHP (Fonctionnement du backend uniquement en PHP)
-- elle utilise le langage SQL qui est le langage utilisé pour la base de donnée de ce projet
-- elle permet de protéger les données avec des utilisateurs et des mots de passe
-- elle est majoritairement utilisé en Europe
-
-## Choix des liaisons de la base de donnée
-En résumé :
-
-- Utilisateur:
-- peut écrire plusieurs recettes
-- peut écrire plusieurs commentaires et les cacher
-- peut noter les recettes disponibles sauf la sienne 
-- 
-
-
-
-
-- Admin
--  peut supprimer ou modifier les commentaires et recettes. 
-
 # La Maison Rosalie
 
 Site web du livre de recettes au chocolat de **La Maison Rosalie**, chocolaterie belge fondée en 1987 par la famille Moreau. Chaque visiteur peut parcourir les recettes, les suivre pas à pas avec une photo par étape, les noter en étoiles et laisser un commentaire une fois connecté.
@@ -80,6 +47,7 @@ Chaque développeur travaille sur sa propre branche. Toute fusion sur `main` pas
 - Bonus : feuille de style d'impression propre pour une fiche recette (voir ci-dessous).
 - Bonus : changement du nombre de portions avec recalcul des quantités sur la fiche recette.
 - Notifications temporaires après chaque action (succès ou erreur).
+- Référencement : adresse canonique, aperçus de partage (Open Graph), données structurées schema.org (`Recipe` sur chaque fiche), plan du site XML généré depuis la base, `robots.txt` et `llms.txt` pour les assistants IA.
 
 ### Bonus du cahier des charges (section 12)
 
@@ -193,7 +161,7 @@ Ouvrir ensuite http://maison-rosalie/
 Le site a été mis en ligne sur l'hébergement fourni par le CF2M (Nuxit) :
 
 1. Le domaine pointe sur le dossier `public/` : seul ce dossier est servi par le navigateur.
-2. Envoi par FTP de `controller/`, `lib/`, `model/`, `view/`, `public/` et d'un fichier `config-prod.php` (jamais commité) à la racine, au-dessus de `public/`. `index.php` le charge automatiquement s'il existe, à la place de `config-dev.php`.
+2. Envoi par FTP de `controller/`, `lib/`, `model/`, `view/`, `public/` et d'un fichier `config-prod.php` à la racine, au-dessus de `public/`. Ce fichier se crée en copiant le modèle `config-prod-exemple.php` puis en le remplissant avec les accès de l'hébergeur ; il n'est jamais commité. `index.php` le charge automatiquement s'il existe, à la place de `config-dev.php`. `RACINE_URL` y contient l'adresse publique en HTTPS.
 3. Fichiers `.htaccess` « Require all denied » dans `controller/`, `model/`, `view/` et `lib/`, et protection des fichiers `config-*` à la racine, en sécurité supplémentaire.
 4. Import de la base dans phpMyAdmin avec une copie du script sans `DROP/CREATE DATABASE` ni `USE` (la base est créée par l'hébergeur).
 5. Dossier `public/uploads/recettes/` accessible en écriture pour les photos de l'admin.
@@ -281,7 +249,8 @@ Le logo a été créé par l'équipe (format SVG) et est utilisé dans la naviga
 
 ```
 La-Maison-Rosalie/
-├── config-dev-exemple.php      modèle de configuration sans secret
+├── config-dev-exemple.php      modèle de configuration locale, sans secret
+├── config-prod-exemple.php     modèle de configuration pour la mise en ligne, sans secret
 ├── controller/                 contrôleurs (un par fonctionnalité) + ControllerHelpers.php
 ├── data/
 │   ├── maison_rosalie_structure.sql    script d'import unique (structure + démo)
