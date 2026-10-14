@@ -1,7 +1,5 @@
 # Rapport technique : La Maison Rosalie
 
-> Brouillon à finaliser en équipe. Les passages marqués *À COMPLÉTER* demandent l'avis de chacun. Longueur visée : 2 à 3 pages une fois exporté en PDF.
-
 ## 1. Choix de la stack
 
 | Couche | Choix | Raison |
