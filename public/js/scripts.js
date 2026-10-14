@@ -1,51 +1,18 @@
 const heroWheel = document.querySelector(".hero-wheel");
+const heroCategoriesData = document.getElementById("heroCategoriesData");
+let heroCategories = [];
 
-if (heroWheel) {
+if (heroCategoriesData) {
+  try {
+    heroCategories = JSON.parse(heroCategoriesData.textContent || "[]");
+  } catch (error) {
+    console.error("Impossible de lire les catégories du hero", error);
+  }
+}
+
+if (heroWheel && heroCategories.length > 0) {
   let rotation = 0;
-
-  const categories = [
-    {
-      name: "Tartes",
-      href: "?pg=recettes",
-      description:
-        "Découvrez des tartes chocolatées généreuses, croustillantes et fondantes, pensées pour toutes les occasions.",
-      image: "assets/img/recettes/fondant-au-coeur-coulant/principale.webp",
-      imageAlt: "Fondant au chocolat au cœur coulant",
-    },
-    {
-      name: "Gâteaux",
-      href: "?pg=recettes&categorie=gateaux",
-      description:
-        "Moelleux, brownies et fondants : retrouvez nos gâteaux au chocolat à partager en famille ou entre amis.",
-      image: "assets/img/recettes/brownies-aux-noix/principale.webp",
-      imageAlt: "Brownies au chocolat et aux noix",
-    },
-    {
-      name: "Glaces",
-      href: "?pg=recettes&categorie=glace",
-      description:
-        "Savourez des desserts glacés au chocolat, onctueux et simples à préparer, même sans sorbetière.",
-      image:
-        "assets/img/recettes/glace-au-chocolat-sans-sorbetiere/principale.webp",
-      imageAlt: "Glace au chocolat sans sorbetière",
-    },
-    {
-      name: "Mousses",
-      href: "?pg=recettes&categorie=mousses",
-      description:
-        "Légères et intenses, nos mousses au chocolat jouent avec les textures pour terminer le repas en douceur.",
-      image: "assets/img/recettes/mousse-au-chocolat-noir/principale.webp",
-      imageAlt: "Mousse au chocolat noir",
-    },
-    {
-      name: "Pâtisserie",
-      href: "?pg=recettes",
-      description:
-        "Plongez dans l’univers gourmand des pâtisseries au chocolat, où il y en a pour tous les goûts. Explorez différentes textures et saveurs et laissez-vous inspirer par nos recettes.",
-      image: "assets/img/recettes/fondant-au-coeur-coulant/principale.webp",
-      imageAlt: "Fondant au chocolat au cœur coulant",
-    },
-  ];
+  const categories = heroCategories;
   const heroHome = document.querySelector(".hero-home");
   const categoryLink = document.querySelector(".hero-category-current");
   const previousCategory = document.querySelector(
@@ -66,7 +33,7 @@ if (heroWheel) {
     ".hero-category-panel-image",
   );
   const categoryPanelLink = document.querySelector(".hero-category-panel-link");
-  let categoryIndex = 4;
+  let categoryIndex = 0;
   let nextCategoryIndex = categoryIndex;
   const rotationToggle = document.querySelector(".hero-rotation-toggle");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -177,15 +144,18 @@ if (heroWheel) {
       "aria-label",
       `Afficher la catégorie ${next.name}`,
     );
-    previousCategory.disabled = false;
-    nextCategory.disabled = false;
+    const canRotate = categories.length > 1;
+    previousCategory.hidden = !canRotate;
+    nextCategory.hidden = !canRotate;
+    previousCategory.disabled = !canRotate;
+    nextCategory.disabled = !canRotate;
     updateCategoryPanel(currentCategory);
 
     showActiveIndicator(categoryIndex);
 
     void categoryLink.offsetWidth;
     categoryLink.classList.add("is-active");
-    heroWheel.disabled = false;
+    heroWheel.disabled = categories.length < 2;
     categoryButtons.forEach((button) => {
       button.disabled = false;
     });
@@ -288,7 +258,7 @@ if (heroWheel) {
     }
   });
 
-  rotationToggle.hidden = reducedMotion.matches;
+  rotationToggle.hidden = reducedMotion.matches || categories.length < 2;
   rotationToggle.addEventListener("click", () => {
     userPaused = !userPaused;
     rotationToggle.textContent = userPaused ? "Reprendre" : "Pause";
@@ -308,7 +278,7 @@ if (heroWheel) {
   );
   document.addEventListener("visibilitychange", scheduleAutoRotation);
   reducedMotion.addEventListener("change", () => {
-    rotationToggle.hidden = reducedMotion.matches;
+    rotationToggle.hidden = reducedMotion.matches || categories.length < 2;
     if (reducedMotion.matches && heroWheel.disabled)
       showCategory(nextCategoryIndex);
     scheduleAutoRotation();
