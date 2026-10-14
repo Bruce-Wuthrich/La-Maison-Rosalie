@@ -334,6 +334,38 @@ if (heroWheel) {
   });
 }
 
+// Conserve un seul formulaire de recherche et un seul ensemble de contrôles
+// de compte : leurs écouteurs JS restent actifs lorsqu'on les déplace.
+const mobileNavActions = document.querySelector("#navbarMobileActions");
+const desktopNavLeft = document.querySelector(".navbar-actions-left");
+const desktopNavRight = document.querySelector(".navbar-actions-right");
+const mobileNavBreakpoint = window.matchMedia("(max-width: 767.98px)");
+
+if (mobileNavActions && desktopNavLeft && desktopNavRight) {
+  const searchElement = desktopNavLeft.querySelector("[data-navbar-search]");
+  const accountElements = [
+    desktopNavRight.querySelector("[data-auth-member]"),
+    desktopNavRight.querySelector("[data-auth-logout]"),
+    desktopNavRight.querySelector("[data-auth-open]"),
+  ].filter(Boolean);
+  const burgerToggle = desktopNavRight.querySelector(".navbar-toggler");
+
+  const syncNavbarActions = () => {
+    if (mobileNavBreakpoint.matches) {
+      if (searchElement) mobileNavActions.append(searchElement);
+      accountElements.forEach((element) => mobileNavActions.append(element));
+    } else {
+      if (searchElement) desktopNavLeft.append(searchElement);
+      accountElements.forEach((element) =>
+        desktopNavRight.insertBefore(element, burgerToggle),
+      );
+    }
+  };
+
+  syncNavbarActions();
+  mobileNavBreakpoint.addEventListener("change", syncNavbarActions);
+}
+
 const navbarSearch = document.querySelector("[data-navbar-search]");
 
 if (navbarSearch) {
@@ -348,7 +380,12 @@ if (navbarSearch) {
     { returnFocus = false, focusInput = false } = {},
   ) => {
     navbarSearch.classList.toggle("is-open", isOpen);
-    document.body.classList.toggle("search-open", isOpen);
+    // Sur mobile, la recherche est déjà dans le menu burger : ne pas
+    // conserver search-open après sa fermeture, car cela suspend la hero.
+    document.body.classList.toggle(
+      "search-open",
+      isOpen && !navbarSearch.closest("#navbarMobileActions"),
+    );
     searchToggle.setAttribute("aria-expanded", String(isOpen));
     searchToggle.setAttribute(
       "aria-label",
@@ -367,8 +404,19 @@ if (navbarSearch) {
 
   document.body.classList.toggle(
     "search-open",
-    navbarSearch.classList.contains("is-open"),
+    navbarSearch.classList.contains("is-open") &&
+      !navbarSearch.closest("#navbarMobileActions"),
   );
+
+  // Nettoie l'état de la recherche après fermeture du burger sur mobile.
+  // Sinon la pause de rotation du soleil peut rester active.
+  document
+    .querySelector("#navigationPrincipale")
+    ?.addEventListener("hidden.bs.collapse", () => {
+      if (navbarSearch.closest("#navbarMobileActions")) {
+        setSearchOpen(false);
+      }
+    });
 
   if (supportsHover) {
     navbarSearch.addEventListener("pointerenter", () => {

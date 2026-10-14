@@ -97,6 +97,8 @@ $activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '
 
 
             </ul>
+            <!-- Recherche et compte déplacés ici en mobile par scripts.js. -->
+            <div class="navbar-mobile-actions" id="navbarMobileActions"></div>
         </div>
     </div>
 </nav>
