@@ -15,6 +15,9 @@ class RatingMapping extends AbstractMapping{
     protected ?int $recipe_id = null; 
     protected ?int $rating = null; 
     protected ?string $rated_at = null;  
+    // Recette notée, utilisée par la page Mon compte pour afficher le titre et le lien.
+    protected ?string $recipe_title = null;
+    protected ?string $recipe_slug = null;
 
     public function getId(): ?int{
         return $this->id; 
@@ -66,5 +69,21 @@ class RatingMapping extends AbstractMapping{
 
     public function setRatedAt(string $ratedAt): void{
         $this->rated_at = $ratedAt;
+    }
+
+    public function getRecipeTitle(): ?string{
+        return $this->recipe_title;
+    }
+
+    public function setRecipeTitle(string $recipeTitle): void{
+        $this->recipe_title = $recipeTitle;
+    }
+
+    public function getRecipeSlug(): ?string{
+        return $this->recipe_slug;
+    }
+
+    public function setRecipeSlug(string $recipeSlug): void{
+        $this->recipe_slug = $recipeSlug;
     }
 }

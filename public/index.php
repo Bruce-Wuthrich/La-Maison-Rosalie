@@ -129,6 +129,7 @@ $controller = match ($page) {
     'favori'              => 'FavoriteController', // bonus favoris (POST)
     'verification'        => 'VerificationController', // lien de confirmation d'adresse e-mail (GET)
     'sitemap'             => 'SitemapController',      // plan du site XML pour les moteurs de recherche
+    'mon-compte'          => 'AccountController',  // espace membre : favoris, notes et avis
     'admin'               => 'AdminController',
     default               => null,
 };

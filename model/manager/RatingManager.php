@@ -59,4 +59,24 @@ class RatingManager implements ManagerInterface{
             'count' => (int) $row['count'],
         ];
     }
+
+    // Notes données par un membre, de la plus récente à la plus ancienne, avec la recette (page Mon compte).
+    public function getByUserId(int $userId): array{
+        $query = $this->db->prepare(
+            'SELECT ra.id, ra.user_id, ra.recipe_id, ra.rating, ra.rated_at,
+                    r.title AS recipe_title, r.slug AS recipe_slug
+             FROM ratings ra
+             INNER JOIN recipes r ON r.id = ra.recipe_id
+             WHERE ra.user_id = :user_id
+             ORDER BY ra.rated_at DESC, ra.id DESC'
+        );
+        $query->bindValue(':user_id', $userId, PDO::PARAM_INT);
+        $query->execute();
+
+        $ratings = [];
+        foreach ($query->fetchAll() as $row){
+            $ratings[] = new RatingMapping($row);
+        }
+        return $ratings;
+    }
 }

@@ -44,6 +44,7 @@ Chaque développeur travaille sur sa propre branche. Toute fusion sur `main` pas
 - Bonus : filtres de la page Recettes par catégorie, difficulté et temps total.
 - Bonus : panneau d'administration en 3 onglets (modération des avis, messages de contact, ajout, modification et suppression de recettes avec photos).
 - Bonus : recettes favorites par utilisateur (cœur sur la fiche, filtre « Mes favoris » sur la page Recettes).
+- Espace « Mon compte » pour chaque membre : ses recettes favorites, les notes qu'il a données et ses avis (avec leur statut de modération). Lien dans le menu une fois connecté, et lien « Administration » réservé aux administrateurs.
 - Bonus : feuille de style d'impression propre pour une fiche recette (voir ci-dessous).
 - Bonus : changement du nombre de portions avec recalcul des quantités sur la fiche recette.
 - Notifications temporaires après chaque action (succès ou erreur).
