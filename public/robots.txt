@@ -2,6 +2,7 @@
 User-agent: *
 Allow: /
 Disallow: /?pg=admin
+Disallow: /?pg=mon-compte
 Disallow: /?pg=verification
 
 Sitemap: https://chez-rosalie.webdev-cf2m.be/?pg=sitemap

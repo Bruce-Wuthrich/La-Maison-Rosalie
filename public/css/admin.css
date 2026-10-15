@@ -26,6 +26,18 @@
     opacity: 0.55;
 }
 
+/* Page Mon compte : le titre de la recette remplace le nom de l'auteur dans la carte d'avis */
+.comment-author-line h3 a {
+    color: var(--color-brown);
+    text-decoration: none;
+}
+
+.comment-author-line h3 a:hover,
+.comment-author-line h3 a:focus-visible {
+    color: var(--color-gold-text);
+    text-decoration: underline;
+}
+
 /* Admin : gestion des recettes (bonus) */
 .admin-recipe-grid {
     display: grid;

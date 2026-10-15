@@ -23,6 +23,7 @@ Le site n'utilise pas de framework. Toutes les requêtes passent par un point d'
 | `favori` | `FavoriteController` | POST uniquement (bonus favoris) |
 | `verification` | `VerificationController` | GET (lien de confirmation reçu par e-mail) |
 | `sitemap` | `SitemapController` | GET (plan du site XML) |
+| `mon-compte` | `AccountController` | GET uniquement (espace membre, onglets) |
 | `admin` | `AdminController` | GET (page, onglets) et POST (actions sur les recettes) |
 | toute autre valeur | aucun | réponse **404** et page d'erreur |
 
@@ -138,9 +139,9 @@ Ce fonctionnement repose sur trois fonctions de `controller/ControllerHelpers.ph
 
 ### Fichiers publics pour les robots
 
-- `public/robots.txt` : tout le site public peut être exploré, sauf `?pg=admin` et `?pg=verification`.
+- `public/robots.txt` : tout le site public peut être exploré, sauf `?pg=admin`, `?pg=mon-compte` et `?pg=verification`.
 - `public/llms.txt` : présentation du site pour les assistants IA (moteurs génératifs).
-- Chaque page publique contient une adresse canonique, des balises Open Graph et, selon la page, des données structurées schema.org en JSON-LD (`Recipe` et `BreadcrumbList` sur une fiche, `Organization` et `WebSite` sur l'accueil). Les pages admin et d'erreur sont en `noindex`, sans ces données.
+- Chaque page publique contient une adresse canonique, des balises Open Graph et, selon la page, des données structurées schema.org en JSON-LD (`Recipe` et `BreadcrumbList` sur une fiche, `Organization` et `WebSite` sur l'accueil). Les pages admin, Mon compte et d'erreur sont en `noindex`, sans ces données.
 
 ## 3. Comptes utilisateurs
 
@@ -338,6 +339,21 @@ La lecture se fait en GET sur `?pg=commentaires` (avec un **s**). Toutes les act
   - 200 "La recette est ajoutée à vos favoris." ou "La recette est retirée de vos favoris.", avec `"data": { "recipeId": 2, "favorite": true }`. Formulaire classique : retour sur la fiche avec le message.
   - 400 champ invalide ou jeton CSRF absent, 401 non connecté, 404 id et slug qui ne correspondent pas, 405 en GET, 503 base indisponible.
 
+### GET `?pg=mon-compte&onglet={onglet}`
+
+- **Rôle** : espace du membre connecté. Il y retrouve ses recettes favorites, les notes qu'il a données et les avis qu'il a écrits.
+- **Accès** : membre ou administrateur connecté (`requireLogin`). Le lien « Mon compte » du menu n'apparaît qu'une fois connecté ; un visiteur qui ouvre l'adresse est renvoyé vers l'accueil avec un message (401).
+
+| Paramètre | Type | Obligatoire | Règle |
+|---|---|---|---|
+| `onglet` | texte | non | `favoris` (par défaut), `notes` ou `avis`. Toute autre valeur revient à `favoris`. |
+
+- **Données** : uniquement celles du membre de la session, jamais d'un identifiant reçu dans l'adresse.
+  - Favoris : `RecipeManager::filter()` avec l'identifiant du membre, mêmes cartes que la page Recettes.
+  - Notes : `RatingManager::getByUserId()`, de la plus récente à la plus ancienne, avec le titre et le lien de la recette.
+  - Avis : `CommentManager::getByAuthorId()`, du plus récent au plus ancien. Les avis masqués par la modération apparaissent avec leur statut.
+- **Réponses** : 200 avec la page, 302 vers l'accueil pour un visiteur (401 en JSON), message d'erreur propre si la base ne répond pas. Page en `noindex`.
+
 ## 6. Contact
 
 ### GET `?pg=contact`
@@ -445,6 +461,7 @@ L'espace d'administration (bonus « panneau d'administration ») tient sur une s
 | `?pg=commentaire&action=delete` | POST | auteur ou admin | oui | non |
 | `?pg=commentaire&action=status` | POST | admin | oui | non |
 | `?pg=favori` | POST | connecté | oui | un favori par recette |
+| `?pg=mon-compte&onglet=` | GET | connecté | non | non |
 | `?pg=verification&token=` | GET | tous | non (jeton à usage unique) | 24 h de validité |
 | `?pg=sitemap` | GET | tous | non | non |
 | `?pg=admin&onglet=` | GET | admin | non | non |

@@ -94,6 +94,18 @@ $activeRecipeSlug = $page === 'recette' ? stringInput($_GET['slug'] ?? null) : '
                     <a href="?pg=contact" class="nav-link<?= $page === 'contact' ? ' is-active' : '' ?>"
                         <?= $page === 'contact' ? 'aria-current="page"' : '' ?>>Contact</a>
                 </li>
+                <?php // Espace membre : affiché ou masqué par auth.js lors d'une connexion sans rechargement ?>
+                <li class="nav-item" data-auth-member<?= $currentUser === null ? ' hidden' : '' ?>>
+                    <a href="?pg=mon-compte" class="nav-link<?= $page === 'mon-compte' ? ' is-active' : '' ?>"
+                        <?= $page === 'mon-compte' ? 'aria-current="page"' : '' ?>>Mon compte</a>
+                </li>
+                <?php // Lien admin rendu seulement pour un administrateur (la page vérifie aussi le rôle en base) ?>
+                <?php if (($currentUser['role'] ?? '') === 'admin'): ?>
+                    <li class="nav-item" data-auth-member>
+                        <a href="?pg=admin" class="nav-link<?= $page === 'admin' ? ' is-active' : '' ?>"
+                            <?= $page === 'admin' ? 'aria-current="page"' : '' ?>>Administration</a>
+                    </li>
+                <?php endif; ?>
 
 
             </ul>

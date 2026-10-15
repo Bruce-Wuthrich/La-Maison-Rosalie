@@ -27,6 +27,8 @@
 | `comments` | Avis (commentaire, note facultative stockée dans `ratings`) | `UNIQUE (author_id, recipe_id)` : un seul avis par personne et par recette, modifiable. `CHECK (CHAR_LENGTH(TRIM(message)) BETWEEN 3 AND 500)`, sujet de 120 caractères maximum, statut de publication |
 | `contact_messages` | Messages du formulaire | Statut `new`, `read` ou `processed`, adresse IP pour l'anti-spam |
 | `login_attempts` | Tentatives de connexion | Index sur l'email et l'IP avec la date |
+| `favorites` | Recettes favorites des membres (bonus) | Clé primaire composée `(user_id, recipe_id)` : aucun doublon, suppression en cascade |
+| `email_verifications` | Jetons de confirmation de l'adresse e-mail | Un jeton par compte, stocké haché (SHA-256), `UNIQUE`, valable 24 heures |
 
 **Intégrité** : supprimer une recette supprime en cascade ses étapes, ses ingrédients liés, ses catégories liées, ses notes et ses commentaires (`ON DELETE CASCADE`). Il ne reste aucune donnée orpheline.
 

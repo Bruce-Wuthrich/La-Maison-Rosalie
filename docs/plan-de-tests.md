@@ -193,6 +193,10 @@ curl.exe -i -X POST "http://maison-rosalie/?pg=noter" -d "recipe_id=1&slug=choco
 | T-165 | Bonus | Accusé de réception du contact | Envoyer un message valide (SMTP configuré) | E-mail reçu avec le sujet et le message | 14/10 : conforme | ✅ |
 | T-166 | QC-05 | SMTP injoignable | Mettre un mauvais port SMTP, s'inscrire et écrire via le contact | Compte et message enregistrés, aucune erreur visible | 14/10 : 201 et message enregistré, erreur écrite dans le journal | ✅ |
 | T-150 | FE-68 | HTML valide | Validateur W3C (Nu Html Checker) sur 15 pages : 8 pages visiteur (dont 404 et recherche), 2 pages membre, 5 pages admin | Aucune erreur | 14/10 : 0 erreur sur les 15 pages | ✅ |
+| T-136 | Bonus | Lien Mon compte | Visiteur, puis connexion d'un membre sans rechargement, puis déconnexion | Lien absent, puis visible dans le menu, puis masqué | 14/10 : conforme, sans rechargement | ✅ |
+| T-137 | Bonus | Onglets de Mon compte | Membre : `?pg=mon-compte`, puis Mes notes et Mes avis | Favoris en cartes, notes avec étoiles et lien vers la recette, avis avec leur statut, compteurs justes | 14/10 : 2 favoris, 5 notes, 2 avis pour marie | ✅ |
+| T-138 | SEC-06 | Mon compte sans session | `GET ?pg=mon-compte` déconnecté, puis en JSON | Retour à l'accueil avec un message, 401 en JSON | 14/10 : 302 puis 401 | ✅ |
+| T-139 | SEC-06 | Lien Administration | Menu d'un membre, puis d'un administrateur | Absent pour le membre, présent et repéré comme actif pour l'admin ; `?pg=admin` reste refusé au membre (403) | 14/10 : conforme | ✅ |
 | T-140 | Bonus | Impression d'une fiche | Bouton « Imprimer » sur chaque recette | Une page A4 propre : en-tête, ingrédients, étapes avec vignettes, sans navigation ni commentaires | 14/10 : les 5 recettes tiennent sur une page | ✅ |
 
 ## 11. Scénarios de la recette finale (section 13)

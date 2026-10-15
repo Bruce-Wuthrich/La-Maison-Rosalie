@@ -14,6 +14,7 @@
         'contact' => 'Contact',
         'mentions-legales' => 'Mentions légales',
         'admin' => 'Administration',
+        'mon-compte' => 'Mon compte',
     ];
     $pageDescriptions = [
         'accueil' => 'Découvrez Maison Rosalie, ses recettes au chocolat et son savoir-faire artisanal belge.',
@@ -22,6 +23,7 @@
         'contact' => 'Contactez Maison Rosalie pour poser une question ou obtenir des informations sur ses recettes au chocolat.',
         'mentions-legales' => 'Consultez les mentions légales, les informations sur les données personnelles et les conditions d’utilisation de Maison Rosalie.',
         'admin' => 'Espace d’administration de Maison Rosalie.',
+        'mon-compte' => 'Retrouvez vos recettes favorites, vos notes et vos avis sur Maison Rosalie.',
     ];
     $documentTitle = $pageTitles[$page] ?? 'Page introuvable';
     $documentDescription = $pageDescriptions[$page]
@@ -41,12 +43,12 @@
         'a-propos' => ['about.css'],
         'contact' => ['contact.css'],
         'mentions-legales' => ['legal.css'],
-        'admin' => ['recipes.css', 'recipe.css', 'admin.css'],
+        'admin', 'mon-compte' => ['recipes.css', 'recipe.css', 'admin.css'],
         'error' => ['home.css', 'error.css'],
         default => ['home.css', 'error.css'],
     };
     $stylesheets = array_merge(['base.css'], $pageStylesheets);
-    $metaRobots = in_array($stylesheetPage, ['admin', 'error'], true)
+    $metaRobots = in_array($stylesheetPage, ['admin', 'mon-compte', 'error'], true)
         ? 'noindex, nofollow'
         : 'index, follow';
     ?>
